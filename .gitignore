@@ -1,0 +1,32 @@
+# -----------------------------------------------------------------
+# .gitignore, bse from salcode
+# -----------------------------------------------------------------
+
+# ignore all files starting with . or ~
+.*
+~*
+
+
+# --------------------------------------------------------
+# BEGIN Explictly Allowed Files (i.e. do NOT ignore these)
+# --------------------------------------------------------
+
+# track these files, if they exist
+!.gitignore
+
+/AssetStore
+/Graphics
+/Sounds
+
+# ignore meta files
+*.meta
+
+# ignore packaged files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip

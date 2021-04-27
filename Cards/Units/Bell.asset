@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88f0a95d4fd75f42849c50375c9f699, type: 3}
+  m_Name: Bell
+  m_EditorClassIdentifier: 
+  cardName: Bell
+  description: Test Description
+  flavorText: Test Flavor Text
+  portrait: {fileID: 21300000, guid: 0695847f0318f5e45ae1c0557a653cdd, type: 3}
+  role: {fileID: 11400000, guid: 5b614c98d5d62eb428858480567ea379, type: 2}
+  tagList:
+  - {fileID: 11400000, guid: f4d170b166a17db4b8974f1a68571556, type: 2}
+  baseAttack: 100
+  baseSpeed: 1
+  baseTroopCount: 500
+  deployCost: 1
