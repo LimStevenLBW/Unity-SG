@@ -21,6 +21,7 @@ public class HexMesh : MonoBehaviour
         triangles = new List<int>();
         colors = new List<Color>();
     }
+
     public void Triangulate(HexCell[] cells)
     {
         hexMesh.Clear();
@@ -40,17 +41,26 @@ public class HexMesh : MonoBehaviour
         meshCollider.sharedMesh = hexMesh;
     }
 
-    private void Triangulate(HexCell cell)
+    void Triangulate(HexCell cell)
+    {
+        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+        {
+            Triangulate(d, cell);
+        }
+    }
+
+    private void Triangulate(HexDirection direction, HexCell cell)
     {
         Vector3 center = cell.transform.localPosition;
         for (int i = 0; i < 6; i++)
         {
             AddTriangle(
                 center,
-                center + HexMetrics.corners[i],
-                center + HexMetrics.corners[i + 1]
-            ); 
-            AddTriangleColor(cell.color);
+                center + HexMetrics.GetFirstCorner(direction),
+                center + HexMetrics.GetSecondCorner(direction)
+            );
+            HexCell neighbor = cell.GetNeighbor(direction) ?? cell; //null-coalescing
+            AddTriangleColor(cell.color, neighbor.color, neighbor.color);
         }
     }
 
@@ -64,11 +74,11 @@ public class HexMesh : MonoBehaviour
         triangles.Add(vertexIndex + 1);
         triangles.Add(vertexIndex + 2);
     }
-    void AddTriangleColor(Color color)
+    void AddTriangleColor(Color color1, Color color2, Color color3)
     {
-        colors.Add(color);
-        colors.Add(color);
-        colors.Add(color);
+        colors.Add(color1);
+        colors.Add(color2);
+        colors.Add(color3);
     }
 
     // Start is called before the first frame update
