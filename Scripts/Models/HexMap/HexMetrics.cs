@@ -73,4 +73,23 @@ public static class HexMetrics
         float h = step * HexMetrics.horizontalTerraceStepSize;
         return Color.Lerp(a, b, h);
     }
+
+    public static HexEdgeType GetEdgeType(int elevation1, int elevation2)
+    {
+        if (elevation1 == elevation2) //If elevations are the same, flat edge
+        {
+            return HexEdgeType.Flat;
+        }
+
+        int delta = elevation2 - elevation1;
+        if (delta == 1 || delta == -1) //If the level difference is exactly one step, then we have a slope
+        {
+            return HexEdgeType.Slope;
+        }
+
+        return HexEdgeType.Cliff; //in all other cases we have a cliff.
+    }
+
+ 
+
 }

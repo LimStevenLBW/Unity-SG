@@ -3,6 +3,12 @@ public enum HexDirection
     NE, E, SE, SW, W, NW
 }
 
+//Connection Types
+public enum HexEdgeType
+{
+    Flat, Slope, Cliff
+}
+
 /*
  * An extension method is a static method inside a static class that behaves like an instance method of some type. 
  * That type could be anything, a class, an interface, a struct, a primitive value, or an enum. 
@@ -13,6 +19,8 @@ public enum HexDirection
 */
 public static class HexDirectionExtensions
 {
+ 
+
     //Retrieves the opposite hexdirection enum
     public static HexDirection Opposite(this HexDirection direction)
     {
