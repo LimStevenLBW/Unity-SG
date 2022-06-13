@@ -5,14 +5,16 @@ using UnityEngine;
 public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
-    public Color color;
-    private int elevation;
-    public RectTransform uiRect; //Track Label Locaiton
+    public RectTransform uiRect; //Track Label Location
+    public HexGridChunk chunk;
 
+    private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
     public int Elevation
     {
         get { return elevation; }
         set {
+            if (elevation == value) return; // Skip computation if no change
+
             elevation = value;
             Vector3 position = transform.localPosition;
             position.y = value * HexMetrics.elevationStep;
@@ -26,6 +28,22 @@ public class HexCell : MonoBehaviour
             //uiPosition.z = elevation * -HexMetrics.elevationStep;
             uiPosition.z = -position.y;
             uiRect.localPosition = uiPosition;
+        }
+    }
+
+    private Color color;
+    public Color Color
+    {
+        get
+        {
+            return color;
+        }
+        set
+        {
+            if (color == value) return;
+
+            color = value;
+            Refresh();
         }
     }
 
@@ -58,6 +76,18 @@ public class HexCell : MonoBehaviour
         get
         {
             return transform.localPosition;
+        }
+    }
+    void Refresh()
+    {
+        if(chunk) chunk.Refresh();
+        for (int i = 0; i < neighbors.Length; i++)
+        {
+            HexCell neighbor = neighbors[i];
+            if (neighbor != null && neighbor.chunk != chunk)
+            {
+                neighbor.chunk.Refresh();
+            }
         }
     }
 

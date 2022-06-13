@@ -14,16 +14,16 @@ public class HexGrid : MonoBehaviour
     public Texture2D noiseSource;
     public HexGridChunk chunkPrefab;
 
-    private Canvas gridCanvas;
+    //private Canvas gridCanvas;
     private HexCell[] cells;
-    private HexMesh hexMesh;
+    //private HexMesh hexMesh;
     private HexGridChunk[] chunks;
  
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
-        gridCanvas = GetComponentInChildren<Canvas>();
-        hexMesh = GetComponentInChildren<HexMesh>();
+        //gridCanvas = GetComponentInChildren<Canvas>();
+        //hexMesh = GetComponentInChildren<HexMesh>();
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -76,7 +76,7 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-        cell.color = defaultColor;
+        //cell.Color = defaultColor;
 
         InitCellConnections(x, z, i, cell);
         CreateLabel(cell, position);
@@ -140,7 +140,7 @@ public class HexGrid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hexMesh.Triangulate(cells);
+        //hexMesh.Triangulate(cells);
     }
 
     // Update is called once per frame
@@ -177,10 +177,5 @@ public class HexGrid : MonoBehaviour
         //cell.color = color;
         //hexMesh.Triangulate(cells);
         return cells[index];
-    }
-
-    public void Refresh()
-    {
-        hexMesh.Triangulate(cells);
     }
 }
