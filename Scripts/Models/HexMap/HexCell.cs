@@ -22,9 +22,7 @@ public class HexCell : MonoBehaviour
             elevation = value;
             Vector3 position = transform.localPosition;
             position.y = value * HexMetrics.elevationStep;
-            position.y +=
-                (HexMetrics.SampleNoise(position).y * 2f - 1f) *
-                HexMetrics.elevationPerturbStrength;
+            position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
 
             transform.localPosition = position;
 
@@ -32,6 +30,23 @@ public class HexCell : MonoBehaviour
             //uiPosition.z = elevation * -HexMetrics.elevationStep;
             uiPosition.z = -position.y;
             uiRect.localPosition = uiPosition;
+
+            if (
+                hasOutgoingRiver &&
+                elevation < GetNeighbor(outgoingRiver).elevation
+            )
+            {
+                RemoveOutgoingRiver();
+            }
+            if (
+                hasIncomingRiver &&
+                elevation > GetNeighbor(incomingRiver).elevation
+            )
+            {
+                RemoveIncomingRiver();
+            }
+
+            Refresh();
         }
     }
     public Color Color
@@ -127,6 +142,34 @@ public class HexCell : MonoBehaviour
     {
         RemoveOutgoingRiver();
         RemoveIncomingRiver();
+    }
+    public void SetOutgoingRiver(HexDirection direction)
+    {
+        if (hasOutgoingRiver && outgoingRiver == direction)
+        {
+            return;
+        }
+
+        HexCell neighbor = GetNeighbor(direction);
+        if (!neighbor || elevation < neighbor.elevation) //Abort if neighbor has higher elevation(cannot flow rivers uphill)
+        {
+            return;
+        }
+
+        RemoveOutgoingRiver(); //Clear any previous outgoing river
+        if (hasIncomingRiver && incomingRiver == direction)
+        {
+            RemoveIncomingRiver();
+        }
+
+        hasOutgoingRiver = true;
+        outgoingRiver = direction;
+        RefreshSelfOnly();
+
+        neighbor.RemoveIncomingRiver(); //Remove and set an incoming river for the neighbor
+        neighbor.hasIncomingRiver = true;
+        neighbor.incomingRiver = direction.Opposite();
+        neighbor.RefreshSelfOnly();
     }
 
     //A Hex cell has 6 neighbors
