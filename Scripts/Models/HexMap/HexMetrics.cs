@@ -9,6 +9,7 @@ public static class HexMetrics
     public const float solidFactor = 0.75f;
     public const float blendFactor = 1f - solidFactor;
     public const float elevationStep = 3f;
+    public const int chunkSizeX = 5, chunkSizeZ = 5; //cell count = x * z, i.e 25
 
     //Terraced Edge Connections
     public const int terracesPerSlope = 2;
