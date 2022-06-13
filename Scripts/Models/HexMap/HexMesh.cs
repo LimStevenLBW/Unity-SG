@@ -6,16 +6,15 @@ using UnityEngine;
 public class HexMesh : MonoBehaviour
 {
     private Mesh hexMesh;
-    private List<Vector3> vertices;
-    private List<Color> colors;
-    private List<int> triangles;
     private MeshCollider meshCollider;
+    private static List<Vector3> vertices = new List<Vector3>();
+    private static List<Color> colors = new List<Color>();
+    private static List<int> triangles = new List<int>();
 
     public const float cellPerturbStrength = 4f;
 
     private void Awake()
     {
-
         GetComponent<MeshFilter>().mesh = hexMesh = new Mesh();
         meshCollider = gameObject.AddComponent<MeshCollider>();
 

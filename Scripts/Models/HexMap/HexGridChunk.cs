@@ -39,6 +39,7 @@ public class HexGridChunk : MonoBehaviour
         enabled = true;
     }
 
+    //Each frame, the Update methods of enabled components are invoked at some point, in arbitrary order. After that's finished, the same happens with LateUpdate methods.
     void LateUpdate()
     {
         hexMesh.Triangulate(cells);

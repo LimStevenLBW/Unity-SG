@@ -8,7 +8,11 @@ public class HexCell : MonoBehaviour
     public RectTransform uiRect; //Track Label Location
     public HexGridChunk chunk;
 
+    private bool hasIncomingRiver, hasOutgoingRiver;
+    private HexDirection incomingRiver, outgoingRiver;
+    private Color color;
     private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
+
     public int Elevation
     {
         get { return elevation; }
@@ -30,8 +34,6 @@ public class HexCell : MonoBehaviour
             uiRect.localPosition = uiPosition;
         }
     }
-
-    private Color color;
     public Color Color
     {
         get
@@ -45,6 +47,86 @@ public class HexCell : MonoBehaviour
             color = value;
             Refresh();
         }
+    }
+    public bool HasIncomingRiver
+    {
+        get
+        {
+            return hasIncomingRiver;
+        }
+    }
+    public bool HasOutgoingRiver
+    {
+        get
+        {
+            return hasOutgoingRiver;
+        }
+    }
+    public bool HasRiver
+    {
+        get
+        {
+            return hasIncomingRiver || hasOutgoingRiver;
+        }
+    }
+    public bool HasRiverBeginOrEnd
+    {
+        get
+        {
+            return hasIncomingRiver != hasOutgoingRiver;
+        }
+    }
+    public bool HasRiverThroughEdge(HexDirection direction)
+    {
+        return
+            hasIncomingRiver && incomingRiver == direction ||
+            hasOutgoingRiver && outgoingRiver == direction;
+    }
+
+    public HexDirection IncomingRiver
+    {
+        get
+        {
+            return incomingRiver;
+        }
+    }
+    public HexDirection OutgoingRiver
+    {
+        get
+        {
+            return outgoingRiver;
+        }
+    }
+    public void RemoveOutgoingRiver()
+    {
+        if (!hasOutgoingRiver)
+        {
+            return;
+        }
+        hasOutgoingRiver = false;
+        RefreshSelfOnly();
+
+        HexCell neighbor = GetNeighbor(outgoingRiver);
+        neighbor.hasIncomingRiver = false;
+        neighbor.RefreshSelfOnly();
+    }
+    public void RemoveIncomingRiver()
+    {
+        if (!hasIncomingRiver)
+        {
+            return;
+        }
+        hasIncomingRiver = false;
+        RefreshSelfOnly();
+
+        HexCell neighbor = GetNeighbor(incomingRiver);
+        neighbor.hasOutgoingRiver = false;
+        neighbor.RefreshSelfOnly();
+    }
+    public void RemoveRiver()
+    {
+        RemoveOutgoingRiver();
+        RemoveIncomingRiver();
     }
 
     //A Hex cell has 6 neighbors
@@ -89,6 +171,10 @@ public class HexCell : MonoBehaviour
                 neighbor.chunk.Refresh();
             }
         }
+    }
+    void RefreshSelfOnly()
+    {
+        chunk.Refresh();
     }
 
     void Start()
