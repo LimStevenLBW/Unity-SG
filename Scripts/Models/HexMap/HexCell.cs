@@ -49,6 +49,15 @@ public class HexCell : MonoBehaviour
             Refresh();
         }
     }
+    public float StreamBedY
+    {
+        get
+        { //Get vertical position of its stream bed
+            return
+                (elevation + HexMetrics.streamBedElevationOffset) *
+                HexMetrics.elevationStep;
+        }
+    }
     public Color Color
     {
         get
@@ -112,6 +121,8 @@ public class HexCell : MonoBehaviour
             return outgoingRiver;
         }
     }
+
+
     public void RemoveOutgoingRiver()
     {
         if (!hasOutgoingRiver)

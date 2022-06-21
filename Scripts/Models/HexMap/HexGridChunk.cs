@@ -8,22 +8,23 @@ using UnityEngine.UI;
  */
 public class HexGridChunk : MonoBehaviour
 {
+    public HexMesh terrain;
     HexCell[] cells;
 
-    HexMesh hexMesh;
+    //HexMesh hexMesh;
     Canvas gridCanvas;
 
     void Awake()
     {
         gridCanvas = GetComponentInChildren<Canvas>();
-        hexMesh = GetComponentInChildren<HexMesh>();
+        //hexMesh = GetComponentInChildren<HexMesh>();
 
         cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
     }
 
     void Start()
     {
-        hexMesh.Triangulate(cells);
+
     }
 
     public void AddCell(int index, HexCell cell)

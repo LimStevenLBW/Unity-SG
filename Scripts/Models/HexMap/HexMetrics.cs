@@ -4,8 +4,11 @@ using UnityEngine;
 
 public static class HexMetrics
 {
+    public const float outerToInner = 0.866025404f;
+    public const float innerToOuter = 1f / outerToInner;
     public const float outerRadius = 10f;
-    public const float innerRadius = outerRadius * 0.866025404f;
+    public const float innerRadius = outerRadius * outerToInner;
+
     public const float solidFactor = 0.75f;
     public const float blendFactor = 1f - solidFactor;
     public const float elevationStep = 3f;
@@ -18,6 +21,11 @@ public static class HexMetrics
     public static Texture2D noiseSource;
     public const float noiseScale = 0.003f;
     public const float elevationPerturbStrength = 1.5f; //Perturbing Cell Elevation
+
+    public const float cellPerturbStrength = 0f;
+
+    //River
+    public const float streamBedElevationOffset = -1f;
 
     private static Vector3[] corners = {
 
@@ -56,6 +64,14 @@ public static class HexMetrics
         return (corners[(int)direction] + corners[(int)direction + 1]) * blendFactor;
     }
 
+    //It takes an unperturbed point and returns a perturbed one
+    public static Vector3 Perturb(Vector3 position)
+    {
+        Vector4 sample = SampleNoise(position);
+        position.x += (sample.x * 2f - 1f) * cellPerturbStrength;
+        position.z += (sample.z * 2f - 1f) * cellPerturbStrength;
+        return position;
+    }
 
     //For terrace step interpolation
     public const float horizontalTerraceStepSize = 1f / terraceSteps;
@@ -102,5 +118,10 @@ public static class HexMetrics
             position.z * noiseScale
         );
     }
-
+    public static Vector3 GetSolidEdgeMiddle(HexDirection direction)
+    {
+        return
+            (corners[(int)direction] + corners[(int)direction + 1]) *
+            (0.5f * solidFactor);
+    }
 }
