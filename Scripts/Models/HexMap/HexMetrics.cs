@@ -13,6 +13,7 @@ public static class HexMetrics
     public const float blendFactor = 1f - solidFactor;
     public const float elevationStep = 3f;
     public const int chunkSizeX = 5, chunkSizeZ = 5; //cell count = x * z, i.e 25
+    public const float riverSurfaceElevationOffset = -0.5f;
 
     //Terraced Edge Connections
     public const int terracesPerSlope = 2;
@@ -21,11 +22,10 @@ public static class HexMetrics
     public static Texture2D noiseSource;
     public const float noiseScale = 0.003f;
     public const float elevationPerturbStrength = 1.5f; //Perturbing Cell Elevation
-
-    public const float cellPerturbStrength = 0f;
+    public const float cellPerturbStrength = 4f;
 
     //River
-    public const float streamBedElevationOffset = -1f;
+    public const float streamBedElevationOffset = -1.75f;
 
     private static Vector3[] corners = {
 

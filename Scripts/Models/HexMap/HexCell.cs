@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class HexCell : MonoBehaviour
 {
+
     public HexCoordinates coordinates;
     public RectTransform uiRect; //Track Label Location
     public HexGridChunk chunk;
 
+    [SerializeField]
+    private bool[] roads;
+
     private bool hasIncomingRiver, hasOutgoingRiver;
     private HexDirection incomingRiver, outgoingRiver;
     private Color color;
+    private Color defaultColor = Color.white;
+
     private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
 
     public int Elevation
@@ -46,6 +52,13 @@ public class HexCell : MonoBehaviour
                 RemoveIncomingRiver();
             }
 
+            for (int i = 0; i < roads.Length; i++) //If an elevation difference has become too great, an existing road has to be removed.
+            {
+                if (roads[i] && GetElevationDifference((HexDirection)i) > 1)
+                {
+                    SetRoad(i, false);
+                }
+            }
             Refresh();
         }
     }
@@ -58,6 +71,17 @@ public class HexCell : MonoBehaviour
                 HexMetrics.elevationStep;
         }
     }
+    //Retrieve vertical pos of its river surface
+    public float RiverSurfaceY
+    {
+        get
+        {
+            return
+                (elevation + HexMetrics.riverSurfaceElevationOffset) *
+                HexMetrics.elevationStep;
+        }
+    }
+
     public Color Color
     {
         get
@@ -121,7 +145,13 @@ public class HexCell : MonoBehaviour
             return outgoingRiver;
         }
     }
-
+    public HexDirection RiverBeginOrEndDirection
+    {
+        get
+        {
+            return hasIncomingRiver ? incomingRiver : outgoingRiver;
+        }
+    }
 
     public void RemoveOutgoingRiver()
     {
@@ -175,12 +205,11 @@ public class HexCell : MonoBehaviour
 
         hasOutgoingRiver = true;
         outgoingRiver = direction;
-        RefreshSelfOnly();
 
         neighbor.RemoveIncomingRiver(); //Remove and set an incoming river for the neighbor
         neighbor.hasIncomingRiver = true;
         neighbor.incomingRiver = direction.Opposite();
-        neighbor.RefreshSelfOnly();
+        SetRoad((int)direction, false);
     }
 
     //A Hex cell has 6 neighbors
@@ -231,9 +260,70 @@ public class HexCell : MonoBehaviour
         chunk.Refresh();
     }
 
+    //Method to check whether the cell has a road in a certain direction.
+    public bool HasRoadThroughEdge(HexDirection direction)
+    {
+        return roads[(int)direction];
+    }
+
+    //It is also handy to know whether a cell has at least one road, so add a property for that.
+    //Just loop through the array and return true as soon as you find a road. If there isn't any, return false.
+    public bool HasRoads
+    {
+        get
+        {
+            for (int i = 0; i < roads.Length; i++)
+            {
+                if (roads[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    //Both cells are refreshed. As the roads are local to the cells, we only have to refresh the cells themselves, not also their neighbors.
+    public void RemoveRoads()
+    {
+        for (int i = 0; i < neighbors.Length; i++)
+        {
+            if (roads[i])
+            {
+                SetRoad(i, false);
+            }
+        }
+    }
+
+    void SetRoad(int index, bool state)
+    {
+        roads[index] = state;
+        neighbors[index].roads[(int)((HexDirection)index).Opposite()] = state;
+        neighbors[index].RefreshSelfOnly();
+        RefreshSelfOnly();
+    }
+
+    //We cannot have both a river and a road going in the same direction. So make sure that there is room for the new road, before adding it.
+    public void AddRoad(HexDirection direction)
+    {
+        if (!roads[(int)direction] && !HasRiverThroughEdge(direction) && GetElevationDifference(direction) <= 1)
+        {
+            SetRoad((int)direction, true);
+        }
+    }
+
+    /**
+     * method that tells us the elevation difference in a certain direction.
+     */
+    public int GetElevationDifference(HexDirection direction)
+    {
+        int difference = elevation - GetNeighbor(direction).elevation;
+        return difference >= 0 ? difference : -difference;
+    }
+
     void Start()
     {
-        
+        color = defaultColor;
     }
 
     // Update is called once per frame

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class HexMapEditor : MonoBehaviour
 {
     enum OptionalToggle { Ignore, Yes, No }
-    OptionalToggle riverMode;
+    OptionalToggle riverMode, roadMode;
 
     public Color[] colors;
 
@@ -81,18 +81,28 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.Elevation = activeElevation;
             }
-        }
-
-        if (riverMode == OptionalToggle.No)
-        {
-            cell.RemoveRiver();
-        }
-        else if (isDrag && riverMode == OptionalToggle.Yes)
-        {
-            HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
-            if (otherCell)
+            if (riverMode == OptionalToggle.No)
             {
-                otherCell.SetOutgoingRiver(dragDirection);
+                cell.RemoveRiver();
+            }
+            if (roadMode == OptionalToggle.No)
+            {
+                cell.RemoveRoads();
+            }
+            if (isDrag)
+            {
+                HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
+                if (otherCell)
+                {
+                    if (riverMode == OptionalToggle.Yes)
+                    {
+                        otherCell.SetOutgoingRiver(dragDirection);
+                    }
+                    if (roadMode == OptionalToggle.Yes)
+                    {
+                        otherCell.AddRoad(dragDirection);
+                    }
+                }
             }
         }
         //hexGrid.Refresh();
@@ -159,5 +169,9 @@ public class HexMapEditor : MonoBehaviour
     public void SetRiverMode(int mode)
     {
         riverMode = (OptionalToggle)mode;
+    }
+    public void SetRoadMode(int mode)
+    {
+        roadMode = (OptionalToggle)mode;
     }
 }
