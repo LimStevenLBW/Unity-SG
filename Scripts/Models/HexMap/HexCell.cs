@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HexCell : MonoBehaviour
 {
-
     public HexCoordinates coordinates;
     public RectTransform uiRect; //Track Label Location
     public HexGridChunk chunk;
@@ -77,7 +76,16 @@ public class HexCell : MonoBehaviour
         get
         {
             return
-                (elevation + HexMetrics.riverSurfaceElevationOffset) *
+                (elevation + HexMetrics.waterElevationOffset) *
+                HexMetrics.elevationStep;
+        }
+    }
+    public float WaterSurfaceY
+    {
+        get
+        {
+            return
+                (waterLevel + HexMetrics.waterElevationOffset) *
                 HexMetrics.elevationStep;
         }
     }
@@ -94,6 +102,31 @@ public class HexCell : MonoBehaviour
 
             color = value;
             Refresh();
+        }
+    }
+    public int WaterLevel
+    {
+        get
+        {
+            return waterLevel;
+        }
+        set
+        {
+            if (waterLevel == value)
+            {
+                return;
+            }
+            waterLevel = value;
+            Refresh();
+        }
+    }
+
+    int waterLevel;
+    public bool IsUnderwater
+    {
+        get
+        {
+            return waterLevel > elevation;
         }
     }
     public bool HasIncomingRiver

@@ -9,11 +9,11 @@ public static class HexMetrics
     public const float outerRadius = 10f;
     public const float innerRadius = outerRadius * outerToInner;
 
-    public const float solidFactor = 0.75f;
+    public const float solidFactor = 1f; //Default value .75f, at 1f, there is no space between cells
     public const float blendFactor = 1f - solidFactor;
     public const float elevationStep = 3f;
-    public const int chunkSizeX = 5, chunkSizeZ = 5; //cell count = x * z, i.e 25
-    public const float riverSurfaceElevationOffset = -0.5f;
+    public const int chunkSizeX = 1, chunkSizeZ = 1; //cell count = x * z, i.e 25
+    public const float waterElevationOffset = -0.5f;
 
     //Terraced Edge Connections
     public const int terracesPerSlope = 2;
@@ -21,11 +21,29 @@ public static class HexMetrics
 
     public static Texture2D noiseSource;
     public const float noiseScale = 0.003f;
-    public const float elevationPerturbStrength = 1.5f; //Perturbing Cell Elevation
-    public const float cellPerturbStrength = 4f;
+    public const float elevationPerturbStrength = 0f; //Perturbing Cell Elevation //Default value 1.5f
+    public const float cellPerturbStrength = 0f;      //Default value 4f
 
     //River
     public const float streamBedElevationOffset = -1.75f;
+
+    public const float waterFactor = 0.6f;
+    public const float waterBlendFactor = 1f - waterFactor;
+
+    public static Vector3 GetWaterBridge(HexDirection direction)
+    {
+        return (corners[(int)direction] + corners[(int)direction + 1]) * waterBlendFactor;
+    }
+
+    public static Vector3 GetFirstWaterCorner(HexDirection direction)
+    {
+        return corners[(int)direction] * waterFactor;
+    }
+
+    public static Vector3 GetSecondWaterCorner(HexDirection direction)
+    {
+        return corners[(int)direction + 1] * waterFactor;
+    }
 
     private static Vector3[] corners = {
 

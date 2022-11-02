@@ -6,9 +6,9 @@ public class Oscillate : MonoBehaviour
 {
     //private float hoverHeight = (maxHeight + minHeight) / 2.0f;
     //private float hoverRange = maxHeight - minHeight;
-    private float hovSpeed = 2;
-    private float hovDist = 0.25f;
-    private float startingHeight;
+    public float hovSpeed = 3;
+    public float hovDist = 0.25f;
+    public float startingHeight;
 
     // Start is called before the first frame update
     void Start()

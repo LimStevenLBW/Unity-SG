@@ -6,7 +6,7 @@ using UnityEngine;
  * A template for a playable unit card
  * Last revision, 3/9/21
  */
-[CreateAssetMenu(fileName = "New Unit", menuName = "Card/Unit")]
+[CreateAssetMenu(fileName = "New Card", menuName = "Card/Unit")]
 public class CardUnit : Card
 {
     //Character class of the unit
