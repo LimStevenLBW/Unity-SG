@@ -8,7 +8,7 @@ using UnityEngine.UI;
  */
 public class CombatUnit : MonoBehaviour
 {
-    public UnitBase unitBase;
+    
     public Vector3 position;
 
     // Start is called before the first frame update

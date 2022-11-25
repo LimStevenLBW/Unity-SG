@@ -13,13 +13,15 @@ public class HexMapEditor : MonoBehaviour
     public HexGrid hexGrid;
     private int brushSize;
     private Color activeColor;
+
     private int activeElevation;
-    private int activeWaterLevel;
+    private int activeWaterLevel = 1;
 
     bool applyColor;
-    bool applyElevation = true;
+
     bool isDrag;
-    bool applyWaterLevel = true;
+    bool applyElevation;
+    bool applyWaterLevel;
 
     HexDirection dragDirection;
     HexCell previousCell;
@@ -170,10 +172,15 @@ public class HexMapEditor : MonoBehaviour
             activeColor = colors[index];
         }
     }
-    public void SetApplyElevation(bool toggle)
+    public void ToggleApplyElevation()
     {
-        applyElevation = toggle;
+        applyElevation = !applyElevation;
     }
+    public void ToggleWaterLevel()
+    {
+        applyWaterLevel = !applyWaterLevel;
+    }
+
     public void SetRiverMode(int mode)
     {
         riverMode = (OptionalToggle)mode;
@@ -182,11 +189,7 @@ public class HexMapEditor : MonoBehaviour
     {
         roadMode = (OptionalToggle)mode;
     }
-    public void SetApplyWaterLevel(bool toggle)
-    {
-        applyWaterLevel = toggle;
-    }
-
+  
     public void SetWaterLevel(float level)
     {
         activeWaterLevel = (int)level;

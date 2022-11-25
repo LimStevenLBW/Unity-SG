@@ -9,7 +9,7 @@ public static class HexMetrics
     public const float outerRadius = 10f;
     public const float innerRadius = outerRadius * outerToInner;
 
-    public const float solidFactor = 1f; //Default value .75f, at 1f, there is no space between cells
+    public const float solidFactor = .75f; //Default value .75f, at 1f, there is no space between cells
     public const float blendFactor = 1f - solidFactor;
     public const float elevationStep = 3f;
     public const int chunkSizeX = 1, chunkSizeZ = 1; //cell count = x * z, i.e 25
@@ -21,8 +21,8 @@ public static class HexMetrics
 
     public static Texture2D noiseSource;
     public const float noiseScale = 0.003f;
-    public const float elevationPerturbStrength = 0f; //Perturbing Cell Elevation //Default value 1.5f
-    public const float cellPerturbStrength = 0f;      //Default value 4f
+    public const float elevationPerturbStrength = 1.5f; //Perturbing Cell Elevation //Default value 1.5f
+    public const float cellPerturbStrength = 4f;      //Default value 4f
 
     //River
     public const float streamBedElevationOffset = -1.75f;

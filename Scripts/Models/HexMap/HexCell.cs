@@ -36,20 +36,7 @@ public class HexCell : MonoBehaviour
             uiPosition.z = -position.y;
             uiRect.localPosition = uiPosition;
 
-            if (
-                hasOutgoingRiver &&
-                elevation < GetNeighbor(outgoingRiver).elevation
-            )
-            {
-                RemoveOutgoingRiver();
-            }
-            if (
-                hasIncomingRiver &&
-                elevation > GetNeighbor(incomingRiver).elevation
-            )
-            {
-                RemoveIncomingRiver();
-            }
+            ValidateRivers();
 
             for (int i = 0; i < roads.Length; i++) //If an elevation difference has become too great, an existing road has to be removed.
             {
@@ -104,6 +91,10 @@ public class HexCell : MonoBehaviour
             Refresh();
         }
     }
+
+    /**
+     * Every hexcell keeps track of its own waterlevel
+     */
     public int WaterLevel
     {
         get
@@ -117,11 +108,13 @@ public class HexCell : MonoBehaviour
                 return;
             }
             waterLevel = value;
+            ValidateRivers();
             Refresh();
         }
     }
 
     int waterLevel;
+
     public bool IsUnderwater
     {
         get
@@ -225,7 +218,7 @@ public class HexCell : MonoBehaviour
         }
 
         HexCell neighbor = GetNeighbor(direction);
-        if (!neighbor || elevation < neighbor.elevation) //Abort if neighbor has higher elevation(cannot flow rivers uphill)
+        if (!IsValidRiverDestination(neighbor))
         {
             return;
         }
@@ -243,6 +236,27 @@ public class HexCell : MonoBehaviour
         neighbor.hasIncomingRiver = true;
         neighbor.incomingRiver = direction.Opposite();
         SetRoad((int)direction, false);
+    }
+
+    /*
+     * Validate the rivers when changing either the elevation or water level
+     */
+    void ValidateRivers()
+    {
+        if (
+            hasOutgoingRiver &&
+            !IsValidRiverDestination(GetNeighbor(outgoingRiver))
+        )
+        {
+            RemoveOutgoingRiver();
+        }
+        if (
+            hasIncomingRiver &&
+            !GetNeighbor(incomingRiver).IsValidRiverDestination(this)
+        )
+        {
+            RemoveIncomingRiver();
+        }
     }
 
     //A Hex cell has 6 neighbors
@@ -352,6 +366,12 @@ public class HexCell : MonoBehaviour
     {
         int difference = elevation - GetNeighbor(direction).elevation;
         return difference >= 0 ? difference : -difference;
+    }
+
+    bool IsValidRiverDestination(HexCell neighbor) {
+        return neighbor && (
+            elevation >= neighbor.elevation || waterLevel == neighbor.elevation
+        );
     }
 
     void Start()
