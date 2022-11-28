@@ -18,7 +18,7 @@ public class HexCell : MonoBehaviour
 
     private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
 
-    int urbanLevel;
+    int urbanLevel, farmLevel, plantLevel;
 
     public int Elevation
     {
@@ -65,6 +65,38 @@ public class HexCell : MonoBehaviour
             }
         }
     }
+    public int FarmLevel
+    {
+        get
+        {
+            return farmLevel;
+        }
+        set
+        {
+            if (farmLevel != value)
+            {
+                farmLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+
+    public int PlantLevel
+    {
+        get
+        {
+            return plantLevel;
+        }
+        set
+        {
+            if (plantLevel != value)
+            {
+                plantLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+
 
     public float StreamBedY
     {

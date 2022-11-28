@@ -574,8 +574,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec64382d09e282429fe8fd1745faef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  featurePrefab: {fileID: 7935307086412225207, guid: a12d416d0e2bf464791ec5a5e27ea537,
-    type: 3}
+  urbanCollections:
+  - prefabs:
+    - {fileID: 5311199550482093686, guid: 4c4f4c0005338934491ceadd983a5d0b, type: 3}
+    - {fileID: 3126098936621094918, guid: 36c82f84f284e1a499990d10cca277d1, type: 3}
+  - prefabs:
+    - {fileID: 6832739247611437561, guid: a2ac2f8b128dca142815845f67a7c2ae, type: 3}
+    - {fileID: 3354466144243280128, guid: d1a0fcfe468a4b14dbd2caae795f028d, type: 3}
+  - prefabs:
+    - {fileID: 7935307086412225207, guid: a12d416d0e2bf464791ec5a5e27ea537, type: 3}
+    - {fileID: 2014130974078380, guid: 1ecff1395d9cda048bd0d2e94e188890, type: 3}
+  farmCollections:
+  - prefabs:
+    - {fileID: 3598317491609635279, guid: ad7c542ffe57459488451c012fb6f343, type: 3}
+  - prefabs:
+    - {fileID: 3598317491609635279, guid: ad7c542ffe57459488451c012fb6f343, type: 3}
+  - prefabs:
+    - {fileID: 3598317491609635279, guid: ad7c542ffe57459488451c012fb6f343, type: 3}
+  plantCollections:
+  - prefabs:
+    - {fileID: 6600256434992488145, guid: 9eb6716ad93fb164dbd8854c47e3fa13, type: 3}
+    - {fileID: 325205306952675999, guid: 2685f9f717de28c45b076595c64119d6, type: 3}
+  - prefabs:
+    - {fileID: 325205306952675999, guid: 2685f9f717de28c45b076595c64119d6, type: 3}
+    - {fileID: 3557894279545952626, guid: b6ebbf046bedfa947b3195ed4a148c2d, type: 3}
+  - prefabs:
+    - {fileID: 3557894279545952626, guid: b6ebbf046bedfa947b3195ed4a148c2d, type: 3}
+    - {fileID: 3557894279545952626, guid: b6ebbf046bedfa947b3195ed4a148c2d, type: 3}
 --- !u!1 &6065546569283647291
 GameObject:
   m_ObjectHideFlags: 0
