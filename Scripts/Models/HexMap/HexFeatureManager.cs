@@ -5,8 +5,8 @@ using UnityEngine;
  */
 public class HexFeatureManager : MonoBehaviour
 {
-    //Referebce to prefab
-    public Transform featurePrefab;
+    //Reference to prefab
+    public HexFeatureCollection[] urbanCollections;
 
     Transform container;
     public void Clear() {
@@ -20,11 +20,44 @@ public class HexFeatureManager : MonoBehaviour
 
     public void Apply() { }
 
-    public void AddFeature(Vector3 position) {
-        Transform instance = Instantiate(featurePrefab);
+    public void AddFeature(HexCell cell, Vector3 position) {
+        HexHash hash = HexMetrics.SampleHashGrid(position);
+        /*
+        if (hash.a >= cell.UrbanLevel * 0.25f)
+        {
+            return; 
+        }
+        */
+
+        //Transform instance = Instantiate(urbanPrefabs[cell.UrbanLevel - 1]);
+
+        Transform prefab = PickPrefab(cell.UrbanLevel, hash.a, hash.b);
+        if (!prefab)
+        {
+            return;
+        }
+        Transform instance = Instantiate(prefab);
+
         position.y += instance.localScale.y * 0.5f;
         instance.localPosition = HexMetrics.Perturb(position);
+        instance.localRotation = Quaternion.Euler(0f, 360f * hash.c, 0f);
         instance.SetParent(container, false);
+    }
+
+    Transform PickPrefab(int level, float hash, float choice)
+    {
+        if (level > 0)
+        {
+            float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
+            for (int i = 0; i < thresholds.Length; i++)
+            {
+                if (hash < thresholds[i])
+                {
+                    return urbanCollections[i].Pick(choice);
+                }
+            }
+        }
+        return null;
     }
 
 }

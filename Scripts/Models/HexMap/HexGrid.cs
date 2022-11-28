@@ -18,10 +18,12 @@ public class HexGrid : MonoBehaviour
     private HexCell[] cells;
     //private HexMesh hexMesh;
     private HexGridChunk[] chunks;
- 
+
+    public int seed = 1234;
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
+        HexMetrics.InitializeHashGrid(seed);
         //gridCanvas = GetComponentInChildren<Canvas>();
         //hexMesh = GetComponentInChildren<HexMesh>();
 
@@ -33,7 +35,11 @@ public class HexGrid : MonoBehaviour
     }
     void OnEnable()
     {
-        HexMetrics.noiseSource = noiseSource;
+        if (!HexMetrics.noiseSource)
+        {
+            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.InitializeHashGrid(seed);
+        }
     }
 
     void CreateChunks()

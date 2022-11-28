@@ -84,7 +84,7 @@ public class HexGridChunk : MonoBehaviour
         //Place a single feature in the center of every cell
         if (!cell.IsUnderwater && !cell.HasRiver && !cell.HasRoads)
         {
-            features.AddFeature(cell.Position);
+            features.AddFeature(cell, cell.Position);
         }
     }
     private void Triangulate(HexDirection direction, HexCell cell)
@@ -121,7 +121,7 @@ public class HexGridChunk : MonoBehaviour
             //When not underwater and doesnt have a road going through it, add feature
             if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
             {
-                features.AddFeature((center + e.v1 + e.v5) * (1f / 3f));
+                features.AddFeature(cell, (center + e.v1 + e.v5) * (1f / 3f));
             }
         }
 
@@ -249,7 +249,7 @@ public class HexGridChunk : MonoBehaviour
 
         if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
         {
-            features.AddFeature((center + e.v1 + e.v5) * (1f / 3f));
+            features.AddFeature(cell, (center + e.v1 + e.v5) * (1f / 3f));
         }
     }
     void TriangulateRoadAdjacentToRiver(HexDirection direction, HexCell cell, Vector3 center, EdgeVertices e)

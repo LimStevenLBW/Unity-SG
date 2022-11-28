@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,6 +29,11 @@ public static class HexMetrics
 
     public const float waterFactor = 0.6f;
     public const float waterBlendFactor = 1f - waterFactor;
+
+    //Hash Grid
+    public const int hashGridSize = 256;
+    static HexHash[] hashGrid;
+    public const float hashGridScale = 0.25f;
 
     public static Vector3 GetWaterBridge(HexDirection direction)
     {
@@ -141,5 +146,60 @@ public static class HexMetrics
         return
             (corners[(int)direction] + corners[(int)direction + 1]) *
             (0.5f * solidFactor);
+    }
+    public static void InitializeHashGrid(int seed)
+    {
+        hashGrid = new HexHash[hashGridSize * hashGridSize];
+        Random.State currentState = Random.state;
+        Random.InitState(seed);
+        for (int i = 0; i < hashGrid.Length; i++)
+        {
+            hashGrid[i] = HexHash.Create();
+        }
+        Random.state = currentState;
+    }
+
+    /* it uses the 
+     * XZ coordinates of a 
+     * position to retrieve a value. 
+     * The hash index is found by clamping the coordinates to integer values, then taking the remainder of the integer division by the grid size.
+     */
+    public static HexHash SampleHashGrid(Vector3 position)
+    {
+        int x = (int)(position.x * hashGridScale) % hashGridSize;
+        if (x < 0)
+        {
+            x += hashGridSize;
+        }
+        int z = (int)(position.z * hashGridScale) % hashGridSize;
+        if (z < 0)
+        {
+            z += hashGridSize;
+        }
+        return hashGrid[x + z * hashGridSize];
+    }
+
+    /* EXAMPLE
+     *  For level 1, let's use a 40% chance for a hovel. The other building won't appear at all. This requires the threshold triplet (0.4, 0, 0).
+        For level 2, let's replace the hovels with larger buildings, and add a 20% chance for additional hovels. Still no high-rises. 
+        That suggests the threshold triplet (0.2, 0.4, 0).
+        For level 3, let's upgrade the medium buildings to high-rises, replace the hovels again, and add another 20% change for more hovels. 
+        The thresholds for that would be (0.2, 0.2, 0.4).
+        So the idea is that we upgrade existing building and add new ones in empty lots as the urban level increases. 
+        To replace an existing building, we have to use the same hash value ranges. If hashes between 0 and 0.4 were hovels at level 1,
+        the same range should produce high-rises at level 3. Specifically, at level 3 high-rises should spawn for hash values in the 0–0.4 range, 
+        the two-story houses in the 0.4–0.6 range, and the hovels in the 0.6–0.8 range. If we check them from highest to lowest,
+        we can do this with the threshold triplet (0.4, 0.6, 0.8). 
+        The level 2 thresholds then become (0, 0.4, 0.6), and the level 1 thresholds become (0, 0, 0.4).
+    */
+    static float[][] featureThresholds = {
+        new float[] {0.0f, 0.0f, 0.4f},
+        new float[] {0.0f, 0.4f, 0.5f},
+        new float[] {0.4f, 0.5f, 0.6f}
+    };
+
+    public static float[] GetFeatureThresholds(int level)
+    {
+        return featureThresholds[level];
     }
 }
