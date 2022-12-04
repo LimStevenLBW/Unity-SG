@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class HexMapEditor : MonoBehaviour
 {
     enum OptionalToggle { Ignore, Yes, No }
-    OptionalToggle riverMode, roadMode;
+    OptionalToggle riverMode, roadMode, walledMode;
 
     public Color[] colors;
 
@@ -114,6 +114,10 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.RemoveRoads();
             }
+            if (walledMode != OptionalToggle.Ignore)
+            {
+                cell.Walled = walledMode == OptionalToggle.Yes;
+            }
             if (isDrag)
             {
                 HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
@@ -217,7 +221,11 @@ public class HexMapEditor : MonoBehaviour
     {
         roadMode = (OptionalToggle)mode;
     }
-  
+    public void SetWalledMode(int mode)
+    {
+        walledMode = (OptionalToggle)mode;
+    }
+
     public void SetWaterLevel(float level)
     {
         activeWaterLevel = (int)level;

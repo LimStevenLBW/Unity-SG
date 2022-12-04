@@ -10,6 +10,7 @@ public class HexCell : MonoBehaviour
 
     [SerializeField]
     private bool[] roads;
+    bool walled; // Because the walls are placed in between cells, we have to refresh both the edited cell and its neighbors.
 
     private bool hasIncomingRiver, hasOutgoingRiver;
     private HexDirection incomingRiver, outgoingRiver;
@@ -422,6 +423,22 @@ public class HexCell : MonoBehaviour
         return neighbor && (
             elevation >= neighbor.elevation || waterLevel == neighbor.elevation
         );
+    }
+
+    public bool Walled
+    {
+        get
+        {
+            return walled;
+        }
+        set
+        {
+            if (walled != value)
+            {
+                walled = value;
+                Refresh();
+            }
+        }
     }
 
     void Start()

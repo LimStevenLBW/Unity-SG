@@ -438,15 +438,25 @@ public class HexGridChunk : MonoBehaviour
                 );
             }
         }
+        bool hasRiver = cell.HasRiverThroughEdge(direction);
+        bool hasRoad = cell.HasRoadThroughEdge(direction);
+
+        if (hasRiver)
+        {
+		
+		}
 
         if (cell.GetEdgeType(direction) == HexEdgeType.Slope)
         {
-            TriangulateEdgeTerraces(e1, cell, e2, neighbor, cell.HasRoadThroughEdge(direction));
+            TriangulateEdgeTerraces(e1, cell, e2, neighbor, hasRoad);
         }
         else
         {
-            TriangulateEdgeStrip(e1, cell.Color, e2, neighbor.Color, cell.HasRoadThroughEdge(direction));
+            TriangulateEdgeStrip(e1, cell.Color, e2, neighbor.Color, hasRoad);
         }
+
+      
+        features.AddWall(e1, cell, e2, neighbor, hasRiver, hasRoad);
 
         HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
         if (direction <= HexDirection.E && nextNeighbor != null)
@@ -557,6 +567,8 @@ public class HexGridChunk : MonoBehaviour
             terrain.AddTriangle(bottom, left, right);
             terrain.AddTriangleColor(bottomCell.Color, leftCell.Color, rightCell.Color);
         }
+        //Dealing with gaps in walls
+        features.AddWall(bottom, bottomCell, left, leftCell, right, rightCell);
     }
 
 
@@ -934,7 +946,9 @@ public class HexGridChunk : MonoBehaviour
                 new Vector2(1f, 0f), new Vector2(1.5f, -0.2f)
             );
         }
-    }
 
+
+    }
+   
 }
 
