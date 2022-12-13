@@ -102,7 +102,7 @@ public class HexFeatureManager : MonoBehaviour {
 		}
 	}
 
-	public void AddWall (
+	public void AddCornerWall (
 		Vector3 c1, HexCell cell1,
 		Vector3 c2, HexCell cell2,
 		Vector3 c3, HexCell cell3
@@ -110,32 +110,32 @@ public class HexFeatureManager : MonoBehaviour {
 		if (cell1.Walled) {
 			if (cell2.Walled) {
 				if (!cell3.Walled) {
-					AddWallSegment(c3, cell3, c1, cell1, c2, cell2);
+					AddCornerWallSegment(c3, cell3, c1, cell1, c2, cell2);
 				}
 			}
 			else if (cell3.Walled) {
-				AddWallSegment(c2, cell2, c3, cell3, c1, cell1);
+				AddCornerWallSegment(c2, cell2, c3, cell3, c1, cell1);
 			}
 			else {
-				AddWallSegment(c1, cell1, c2, cell2, c3, cell3);
+				AddCornerWallSegment(c1, cell1, c2, cell2, c3, cell3);
 			}
 		}
 		else if (cell2.Walled) {
 			if (cell3.Walled) {
-				AddWallSegment(c1, cell1, c2, cell2, c3, cell3);
+				AddCornerWallSegment(c1, cell1, c2, cell2, c3, cell3);
 			}
 			else {
-				AddWallSegment(c2, cell2, c3, cell3, c1, cell1);
+				AddCornerWallSegment(c2, cell2, c3, cell3, c1, cell1);
 			}
 		}
 		else if (cell3.Walled) {
-			AddWallSegment(c3, cell3, c1, cell1, c2, cell2);
+			AddCornerWallSegment(c3, cell3, c1, cell1, c2, cell2);
 		}
 	}
 
 	void AddWallSegment (
-		Vector3 nearLeft, Vector3 farLeft, Vector3 nearRight, Vector3 farRight
-	) {
+		Vector3 nearLeft, Vector3 farLeft, Vector3 nearRight, Vector3 farRight, bool addTower = false
+    ) {
 		nearLeft = HexMetrics.Perturb(nearLeft);
 		farLeft = HexMetrics.Perturb(farLeft);
 		nearRight = HexMetrics.Perturb(nearRight);
@@ -168,9 +168,23 @@ public class HexFeatureManager : MonoBehaviour {
 		walls.AddQuadUnperturbed(v2, v1, v4, v3);
 
 		walls.AddQuadUnperturbed(t1, t2, v3, v4);
-	}
 
-	void AddWallSegment (
+        if (addTower)
+        {
+            //Let's begin by placing a tower in the middle of every wall segment.
+            Transform towerInstance = Instantiate(wallTower);
+            towerInstance.transform.localPosition = (left + right) * 0.5f;
+            //Fix orientation
+            Vector3 rightDirection = right - left;
+            rightDirection.y = 0f;
+            towerInstance.transform.right = rightDirection;
+
+            towerInstance.SetParent(container, false);
+        }
+    }
+
+    /* Three corner vertices as parameters. */
+    void AddCornerWallSegment (
 		Vector3 pivot, HexCell pivotCell,
 		Vector3 left, HexCell leftCell,
 		Vector3 right, HexCell rightCell
@@ -178,15 +192,21 @@ public class HexFeatureManager : MonoBehaviour {
 		if (pivotCell.IsUnderwater) {
 			return;
 		}
-
+       
 		bool hasLeftWall = !leftCell.IsUnderwater &&
 			pivotCell.GetEdgeType(leftCell) != HexEdgeType.Cliff;
-		bool hasRighWall = !rightCell.IsUnderwater &&
+		bool hasRightWall = !rightCell.IsUnderwater &&
 			pivotCell.GetEdgeType(rightCell) != HexEdgeType.Cliff;
 
 		if (hasLeftWall) {
-			if (hasRighWall) {
-				AddWallSegment(pivot, left, pivot, right);
+			if (hasRightWall) {
+                bool hasTower = false;
+                if (leftCell.Elevation == rightCell.Elevation) //If flat ground(no slope)
+                {
+                    HexHash hash = HexMetrics.SampleHashGrid((pivot + left + right) * (1f / 3f));
+                    hasTower = hash.e < HexMetrics.wallTowerThreshold;
+                }
+                AddWallSegment(pivot, left, pivot, right, hasTower); //Add a wall tower when it is in a corner
 			}
 			else if (leftCell.Elevation < rightCell.Elevation) {
 				AddWallWedge(pivot, left, right);
@@ -195,7 +215,7 @@ public class HexFeatureManager : MonoBehaviour {
 				AddWallCap(pivot, left);
 			}
 		}
-		else if (hasRighWall) {
+		else if (hasRightWall) {
 			if (rightCell.Elevation < leftCell.Elevation) {
 				AddWallWedge(right, pivot, left);
 			}

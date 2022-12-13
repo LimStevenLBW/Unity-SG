@@ -9256,11 +9256,11 @@ MonoBehaviour:
   jumpSpeed: 370
   panBorderThiccness: 5
   scrollDistance: 25
-  cameraYMinPos: 30
+  cameraYMinPos: 10
   cameraYMaxPos: 200
-  cameraXMinPos: 0
-  cameraXMaxPos: 300
-  cameraZMinPos: -100
+  cameraXMinPos: 10
+  cameraXMaxPos: 190
+  cameraZMinPos: -50
   cameraZMaxPos: 150
 --- !u!1 &1902843142
 GameObject:

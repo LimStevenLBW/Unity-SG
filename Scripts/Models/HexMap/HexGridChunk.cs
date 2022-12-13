@@ -531,7 +531,6 @@ public class HexGridChunk : MonoBehaviour
                 TriangulateCornerTerraces(
                     left, leftCell, right, rightCell, bottom, bottomCell
                 );
-                return;
             }
             else
             {
@@ -568,7 +567,7 @@ public class HexGridChunk : MonoBehaviour
             terrain.AddTriangleColor(bottomCell.Color, leftCell.Color, rightCell.Color);
         }
         //Dealing with gaps in walls
-        features.AddWall(bottom, bottomCell, left, leftCell, right, rightCell);
+        features.AddCornerWall(bottom, bottomCell, left, leftCell, right, rightCell);
     }
 
 

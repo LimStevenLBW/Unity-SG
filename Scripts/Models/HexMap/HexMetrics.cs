@@ -22,7 +22,7 @@ public static class HexMetrics
     public static Texture2D noiseSource;
     public const float noiseScale = 0.003f;
     public const float elevationPerturbStrength = 1.5f; //Perturbing Cell Elevation //Default value 1.5f
-    public const float cellPerturbStrength = 4f;      //Default value 4f
+    public const float cellPerturbStrength = 1f;      //Default value 4f
 
     //River
     public const float streamBedElevationOffset = -1.75f;
@@ -36,10 +36,11 @@ public static class HexMetrics
     public const float hashGridScale = 0.25f;
 
     //Walls
-    public const float wallHeight = 3f;
+    public const float wallHeight = 4f;
+    public const float wallYOffset = -1f; //Sink into ground slightly
     public const float wallThickness = 0.75f;
     public const float wallElevationOffset = verticalTerraceStepSize;
-
+    public const float wallTowerThreshold = 0.75f; //spawns towers about 75% of the time on corners
 
     public static Vector3 GetWaterBridge(HexDirection direction)
     {
@@ -225,7 +226,7 @@ public static class HexMetrics
         near.z += (far.z - near.z) * 0.5f;
         float v =
             near.y < far.y ? wallElevationOffset : (1f - wallElevationOffset);
-        near.y += (far.y - near.y) * v;
+        near.y += (far.y - near.y) * v + wallYOffset; 
         return near;
     }
 
