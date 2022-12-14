@@ -16,7 +16,7 @@ public class HexMapEditor : MonoBehaviour
 
     private int activeElevation;
     private int activeWaterLevel = 1;
-    private int activeUrbanLevel, activeFarmLevel, activePlantLevel;
+    private int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
 
     bool applyColor;
 
@@ -24,7 +24,7 @@ public class HexMapEditor : MonoBehaviour
     bool applyElevation;
     bool applyWaterLevel;
     bool applyUrbanLevel;
-    bool applyFarmLevel, applyPlantLevel;
+    bool applyFarmLevel, applyPlantLevel, applySpecialIndex;
 
     HexDirection dragDirection;
     HexCell previousCell;
@@ -94,6 +94,10 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.WaterLevel = activeWaterLevel;
             }
+            if (applySpecialIndex)
+            {
+                cell.SpecialIndex = activeSpecialIndex;
+            }
             if (applyUrbanLevel)
             {
                 cell.UrbanLevel = activeUrbanLevel;
@@ -118,6 +122,7 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.Walled = walledMode == OptionalToggle.Yes;
             }
+
             if (isDrag)
             {
                 HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
@@ -195,7 +200,7 @@ public class HexMapEditor : MonoBehaviour
     {
         applyElevation = !applyElevation;
     }
-    public void ToggleWaterLevel()
+    public void ToggleApplyWaterLevel()
     {
         applyWaterLevel = !applyWaterLevel;
     }
@@ -211,6 +216,10 @@ public class HexMapEditor : MonoBehaviour
     public void ToggleApplyPlantLevel()
     {
         applyPlantLevel = !applyPlantLevel;
+    }
+    public void ToggleApplySpecialIndex()
+    {
+        applySpecialIndex = !applySpecialIndex;
     }
 
     public void SetRiverMode(int mode)
@@ -229,6 +238,10 @@ public class HexMapEditor : MonoBehaviour
     public void SetWaterLevel(float level)
     {
         activeWaterLevel = (int)level;
+    }
+    public void SetSpecialIndex(float index)
+    {
+        activeSpecialIndex = (int)index;
     }
 
     public void SetUrbanLevel(float level)

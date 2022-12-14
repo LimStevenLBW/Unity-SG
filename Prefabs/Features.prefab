@@ -74,3 +74,5 @@ MonoBehaviour:
   wallTower: {fileID: 6600256434992488145, guid: e39546b2ee093e145a656c8be08eb929,
     type: 3}
   bridge: {fileID: 6731211119852183417, guid: f3d50e99059bc1c46bdb00d0170c9716, type: 3}
+  specialFeatures:
+  - {fileID: 3834990503052937287, guid: 358d7cfb746c0cc428c0ee1c0b28b346, type: 3}

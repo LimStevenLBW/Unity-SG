@@ -19,7 +19,9 @@ public class HexCell : MonoBehaviour
 
     private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
 
-    int urbanLevel, farmLevel, plantLevel;
+    int urbanLevel, farmLevel, plantLevel, waterLevel;
+
+    int specialIndex; // determine the special feature it has, if any.
 
     public int Elevation
     {
@@ -98,7 +100,6 @@ public class HexCell : MonoBehaviour
         }
     }
 
-
     public float StreamBedY
     {
         get
@@ -164,7 +165,30 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    int waterLevel;
+    public int SpecialIndex
+    {
+        get
+        {
+            return specialIndex;
+        }
+        set
+        {
+            if (specialIndex != value && !HasRiver)
+            {
+                specialIndex = value;
+                RemoveRoads();
+                RefreshSelfOnly();
+            }
+        }
+    }
+
+    public bool IsSpecial
+    {
+        get
+        {
+            return specialIndex > 0;
+        }
+    }
 
     public bool IsUnderwater
     {
@@ -282,10 +306,12 @@ public class HexCell : MonoBehaviour
 
         hasOutgoingRiver = true;
         outgoingRiver = direction;
+        specialIndex = 0;
 
         neighbor.RemoveIncomingRiver(); //Remove and set an incoming river for the neighbor
         neighbor.hasIncomingRiver = true;
         neighbor.incomingRiver = direction.Opposite();
+        neighbor.specialIndex = 0;
         SetRoad((int)direction, false);
     }
 
@@ -404,7 +430,8 @@ public class HexCell : MonoBehaviour
     //We cannot have both a river and a road going in the same direction. So make sure that there is room for the new road, before adding it.
     public void AddRoad(HexDirection direction)
     {
-        if (!roads[(int)direction] && !HasRiverThroughEdge(direction) && GetElevationDifference(direction) <= 1)
+        if (!roads[(int)direction] && 
+            !HasRiverThroughEdge(direction) && GetElevationDifference(direction) <= 1 && !IsSpecial && !GetNeighbor(direction).IsSpecial)
         {
             SetRoad((int)direction, true);
         }
