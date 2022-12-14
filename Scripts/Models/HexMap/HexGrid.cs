@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class HexGrid : MonoBehaviour
 {
-    int cellCountX, cellCountZ;
-    public int chunkCountX = 4, chunkCountZ = 3; // Chunk count = x * z
-    public Color defaultColor = Color.white;
+    int chunkCountX, chunkCountZ;
+    public int cellCountX = 20, cellCountZ = 15;
+    //public Color defaultColor = Color.white;
+    public Color[] colors;
 
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
@@ -20,18 +22,45 @@ public class HexGrid : MonoBehaviour
     private HexGridChunk[] chunks;
 
     public int seed = 1234;
+
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
+        HexMetrics.colors = colors;
+        CreateMap(cellCountX, cellCountZ);
         //gridCanvas = GetComponentInChildren<Canvas>();
         //hexMesh = GetComponentInChildren<HexMesh>();
+    }
 
-        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+    public bool CreateMap(int cellCountX, int cellCountZ)
+    {
+        if (
+            cellCountX <= 0 || cellCountX % HexMetrics.chunkSizeX != 0 ||
+            cellCountZ <= 0 || cellCountZ % HexMetrics.chunkSizeZ != 0
+        )
+        {
+            Debug.LogError("Unsupported map size.");
+            return false;
+        }
+
+        if (chunks != null)
+        {
+            for (int i = 0; i < chunks.Length; i++)
+            {
+                Destroy(chunks[i].gameObject);
+            }
+        }
+
+        this.cellCountX = cellCountX;
+        this.cellCountZ = cellCountZ;
+        chunkCountX = this.cellCountX / HexMetrics.chunkSizeX;
+        chunkCountZ = this.cellCountZ / HexMetrics.chunkSizeZ;
 
         CreateChunks();
         CreateCells();
+
+        return true;
     }
     void OnEnable()
     {
@@ -39,6 +68,7 @@ public class HexGrid : MonoBehaviour
         {
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
+            HexMetrics.colors = colors;
         }
     }
 
@@ -197,5 +227,41 @@ public class HexGrid : MonoBehaviour
             return null;
         }
         return cells[x + z * cellCountX];
+    }
+    public void Save(BinaryWriter writer)
+    {
+        writer.Write(cellCountX);
+        writer.Write(cellCountZ);
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Save(writer);
+        }
+    }
+
+    public void Load(BinaryReader reader, int header)
+    {
+        int x = 20, z = 15;
+        if (header >= 1)
+        {
+            x = reader.ReadInt32();
+            z = reader.ReadInt32();
+        }
+
+        if (x != cellCountX || z != cellCountZ)
+        {
+            if (!CreateMap(x, z))
+            {
+                return;
+            }
+        }
+
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Load(reader);
+        }
+        for (int i = 0; i < chunks.Length; i++)
+        {
+            chunks[i].Refresh();
+        }
     }
 }

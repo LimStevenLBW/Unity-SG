@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class HexCell : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class HexCell : MonoBehaviour
 
     private bool hasIncomingRiver, hasOutgoingRiver;
     private HexDirection incomingRiver, outgoingRiver;
-    private Color color;
-    private Color defaultColor = Color.white;
+    //private Color color;
+    int terrainTypeIndex;
+
+    //private Color defaultColor = Color.white;
 
     private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
 
@@ -30,17 +33,7 @@ public class HexCell : MonoBehaviour
             if (elevation == value) return; // Skip computation if no change
 
             elevation = value;
-            Vector3 position = transform.localPosition;
-            position.y = value * HexMetrics.elevationStep;
-            position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
-
-            transform.localPosition = position;
-
-            Vector3 uiPosition = uiRect.localPosition;
-            //uiPosition.z = elevation * -HexMetrics.elevationStep;
-            uiPosition.z = -position.y;
-            uiRect.localPosition = uiPosition;
-
+            RefreshPosition();
             ValidateRivers();
 
             for (int i = 0; i < roads.Length; i++) //If an elevation difference has become too great, an existing road has to be removed.
@@ -133,14 +126,31 @@ public class HexCell : MonoBehaviour
     {
         get
         {
-            return color;
+            return HexMetrics.colors[terrainTypeIndex];
         }
-        set
+
+        /*set
         {
             if (color == value) return;
 
             color = value;
             Refresh();
+        }
+        */
+    }
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
+        }
+        set
+        {
+            if (terrainTypeIndex != value)
+            {
+                terrainTypeIndex = value;
+                Refresh();
+            }
         }
     }
 
@@ -470,7 +480,7 @@ public class HexCell : MonoBehaviour
 
     void Start()
     {
-        color = defaultColor;
+        //color = defaultColor;
     }
 
     // Update is called once per frame
@@ -479,5 +489,99 @@ public class HexCell : MonoBehaviour
          
     }
 
+    public void Save(BinaryWriter writer)
+    {
+        //The various levels and indices of our cells are stored as integers. However, they only cover a small value range. 
+        //They certainly stay inside the 0–255 range each. 
+        //This means that only the first byte of each integer will be used. The other three will always be zero.
+        writer.Write((byte)terrainTypeIndex);
+        writer.Write((byte)elevation);
+        writer.Write((byte)waterLevel);
+        writer.Write((byte)urbanLevel);
+        writer.Write((byte)farmLevel);
+        writer.Write((byte)plantLevel);
+        writer.Write((byte)specialIndex);
+        writer.Write(walled);
 
+        if (hasIncomingRiver)
+        {
+            writer.Write((byte)(incomingRiver + 128));
+        }
+        else
+        {
+            writer.Write((byte)0);
+        }
+        if (hasOutgoingRiver)
+        {
+            writer.Write((byte)(outgoingRiver + 128));
+        }
+        else
+        {
+            writer.Write((byte)0);
+        }
+
+        int roadFlags = 0;
+        for (int i = 0; i < roads.Length; i++) {
+            if (roads[i])
+            {
+                roadFlags |= 1 << i;
+            }
+        }
+        writer.Write((byte)roadFlags);
+    }
+
+    public void Load(BinaryReader reader)
+    {
+        terrainTypeIndex = reader.ReadByte();
+        elevation = reader.ReadByte();
+        RefreshPosition();
+        waterLevel = reader.ReadByte();
+        urbanLevel = reader.ReadByte();
+        farmLevel = reader.ReadByte();
+        plantLevel = reader.ReadByte();
+        specialIndex = reader.ReadByte();
+        walled = reader.ReadBoolean();
+
+        byte riverData = reader.ReadByte();
+        if (riverData >= 128)
+        {
+            hasIncomingRiver = true;
+            incomingRiver = (HexDirection)(riverData - 128);
+        }
+        else
+        {
+            hasIncomingRiver = false;
+        }
+        riverData = reader.ReadByte();
+        if (riverData >= 128)
+        {
+            hasOutgoingRiver = true;
+            outgoingRiver = (HexDirection)(riverData - 128);
+        }
+        else
+        {
+            hasOutgoingRiver = false;
+        }
+
+        int roadFlags = reader.ReadByte();
+        for (int i = 0; i < roads.Length; i++)
+        {
+            roads[i] = (roadFlags & (1 << i)) != 0;
+        }
+    }
+
+    void RefreshPosition()
+    {
+        Vector3 position = transform.localPosition;
+        position.y = elevation * HexMetrics.elevationStep;
+        position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
+
+        transform.localPosition = position;
+
+        Vector3 uiPosition = uiRect.localPosition;
+        //uiPosition.z = elevation * -HexMetrics.elevationStep;
+        uiPosition.z = -position.y;
+        uiRect.localPosition = uiPosition;
+
+    }
 }

@@ -12,7 +12,7 @@ public static class HexMetrics
     public const float solidFactor = .75f; //Default value .75f, at 1f, there is no space between cells
     public const float blendFactor = 1f - solidFactor;
     public const float elevationStep = 3f;
-    public const int chunkSizeX = 1, chunkSizeZ = 1; //cell count = x * z, i.e 25
+    public const int chunkSizeX = 5, chunkSizeZ = 5; //cell count = x * z, i.e 25
     public const float waterElevationOffset = -0.5f;
 
     //Terraced Edge Connections
@@ -43,6 +43,9 @@ public static class HexMetrics
     public const float wallTowerThreshold = 0.75f; //spawns towers about 75% of the time on corners
 
     public const float bridgeDesignLength = 7f;
+
+    //Save Metrics
+    public static Color[] colors;
 
     public static Vector3 GetWaterBridge(HexDirection direction)
     {
