@@ -42,6 +42,8 @@ public static class HexMetrics
     public const float wallElevationOffset = verticalTerraceStepSize;
     public const float wallTowerThreshold = 0.75f; //spawns towers about 75% of the time on corners
 
+    public const float bridgeDesignLength = 7f;
+
     public static Vector3 GetWaterBridge(HexDirection direction)
     {
         return (corners[(int)direction] + corners[(int)direction + 1]) * waterBlendFactor;
