@@ -694,6 +694,7 @@ public class HexGridChunk : MonoBehaviour
 
     void TriangulateEdgeFan(Vector3 center, EdgeVertices edge, Color color)
     {
+
         terrain.AddTriangle(center, edge.v1, edge.v2);
         terrain.AddTriangleColor(color);
 

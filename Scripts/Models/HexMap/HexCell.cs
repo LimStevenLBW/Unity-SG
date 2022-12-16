@@ -149,6 +149,13 @@ public class HexCell : MonoBehaviour
             if (terrainTypeIndex != value)
             {
                 terrainTypeIndex = value;
+
+               
+                if (terrainTypeIndex > 5)
+                {
+                    Debug.Log(terrainTypeIndex);
+                    terrainTypeIndex = 0;
+                }
                 Refresh();
             }
         }
