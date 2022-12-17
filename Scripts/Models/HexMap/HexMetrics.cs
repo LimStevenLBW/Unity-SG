@@ -45,7 +45,7 @@ public static class HexMetrics
     public const float bridgeDesignLength = 7f;
 
     //Save Metrics
-    public static Color[] colors;
+    //public static Color[] colors;
 
     public static Vector3 GetWaterBridge(HexDirection direction)
     {

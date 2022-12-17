@@ -27,7 +27,7 @@ public class HexGrid : MonoBehaviour
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
-        HexMetrics.colors = colors;
+       // HexMetrics.colors = colors;
         CreateMap(cellCountX, cellCountZ);
         //gridCanvas = GetComponentInChildren<Canvas>();
         //hexMesh = GetComponentInChildren<HexMesh>();
@@ -68,7 +68,7 @@ public class HexGrid : MonoBehaviour
         {
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
-            HexMetrics.colors = colors;
+           // HexMetrics.colors = colors;
         }
     }
 

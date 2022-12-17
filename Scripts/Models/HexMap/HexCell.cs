@@ -121,7 +121,7 @@ public class HexCell : MonoBehaviour
                 HexMetrics.elevationStep;
         }
     }
-
+    /*
     public Color Color
     {
         get
@@ -129,15 +129,15 @@ public class HexCell : MonoBehaviour
             return HexMetrics.colors[terrainTypeIndex];
         }
 
-        /*set
+        set
         {
             if (color == value) return;
 
             color = value;
             Refresh();
         }
-        */
-    }
+       
+    } */
     public int TerrainTypeIndex
     {
         get
