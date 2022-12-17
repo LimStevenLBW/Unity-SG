@@ -493,7 +493,7 @@ public class HexGridChunk : MonoBehaviour
         else
         {
             TriangulateEdgeStrip(e1, color1, cell.TerrainTypeIndex,
-                             e2, color2, cell.TerrainTypeIndex, hasRoad);
+                                 e2, color2, neighbor.TerrainTypeIndex, hasRoad);
         }
 
       
@@ -760,7 +760,8 @@ public class HexGridChunk : MonoBehaviour
         terrain.AddTriangleTerrainTypes(types);
     }
 
-    void TriangulateEdgeStrip(EdgeVertices e1, Color c1, float type1, EdgeVertices e2, Color c2,  float type2, bool hasRoad = false)
+    void TriangulateEdgeStrip(EdgeVertices e1, Color c1, float type1, 
+                              EdgeVertices e2, Color c2,  float type2, bool hasRoad = false)
     {
         terrain.AddQuad(e1.v1, e1.v2, e2.v1, e2.v2);
         terrain.AddQuad(e1.v2, e1.v3, e2.v2, e2.v3);
