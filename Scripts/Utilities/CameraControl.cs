@@ -6,11 +6,13 @@ public class CameraControl : MonoBehaviour
 {
     public bool isControlEnabled;
     
-    public float panSpeed = 120.0f;
+    public float panSpeed = 100.0f;
+    public float panSpeedBoost = 2;
     public float jumpSpeed = 370.0f; //Unused?
     public float panBorderThiccness = 5.0f;
     public float scrollDistance = 25.0f;
 
+    public HexGrid hexGrid;
     public float cameraYMinPos = 30;
     public float cameraYMaxPos = 200;
 
@@ -40,23 +42,42 @@ public class CameraControl : MonoBehaviour
         {
             Vector3 pos = transform.position;
 
-
-            if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= panBorderThiccness)
+            //Pan Left
+            if (Input.GetKey(KeyCode.A) && Input.mousePosition.x <= panBorderThiccness) 
             {
-                if(pos.x > cameraXMinPos) pos.x -= panSpeed * Time.deltaTime;
+                if (pos.x > cameraXMinPos) pos.x -= (panSpeedBoost * panSpeed) * Time.deltaTime;
+            }
+            else if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= panBorderThiccness)
+            {
+                if (pos.x > cameraXMinPos) pos.x -= panSpeed * Time.deltaTime;
             }
 
-            if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - panBorderThiccness)
+            //Pan Right
+            if (Input.GetKey(KeyCode.D) && Input.mousePosition.x >= Screen.width - panBorderThiccness)
+            {
+                if (pos.x < cameraXMaxPos) pos.x += (panSpeedBoost * panSpeed) * Time.deltaTime;
+            }
+            else if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - panBorderThiccness)
             {
                 if (pos.x < cameraXMaxPos) pos.x += panSpeed * Time.deltaTime;
             }
-            
-            if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThiccness)
+
+            //Pan Forward
+            if (Input.GetKey(KeyCode.W) && Input.mousePosition.y >= Screen.height - panBorderThiccness)
+            {
+                if (pos.z < cameraZMaxPos) pos.z += (panSpeedBoost * panSpeed) * Time.deltaTime;
+            }
+            else if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThiccness)
             {
                 if (pos.z < cameraZMaxPos) pos.z += panSpeed * Time.deltaTime;
             }
 
-            if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= panBorderThiccness)
+            //Pan Backward
+            if (Input.GetKey(KeyCode.S) && Input.mousePosition.y <= panBorderThiccness)
+            {
+                if (pos.z > cameraZMinPos) pos.z -= (panSpeedBoost * panSpeed) * Time.deltaTime;
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= panBorderThiccness)
             {
                 if (pos.z > cameraZMinPos) pos.z -= panSpeed * Time.deltaTime;
             }
@@ -125,9 +146,13 @@ public class CameraControl : MonoBehaviour
         cameraZoomPosition = transform.position.y;
         isControlEnabled = true;
     }
+
+    public void UpdateClampPositions(int cellCountX, int cellCountZ)
+    {
+        cameraXMinPos = 20;
+        cameraXMaxPos = (cellCountX - 0.5f) * (2f * HexMetrics.innerRadius) -20;
+        cameraZMinPos = -30;
+        cameraZMaxPos = (cellCountZ - 1) * (1.5f * HexMetrics.outerRadius) - 50;
+    }
 }
-
-
-    
-
 

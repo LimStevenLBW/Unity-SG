@@ -6,8 +6,9 @@ using System.IO;
 
 public class HexGrid : MonoBehaviour
 {
-    int chunkCountX, chunkCountZ;
+    private int chunkCountX, chunkCountZ;
     public int cellCountX = 20, cellCountZ = 15;
+    
     //public Color defaultColor = Color.white;
     public Color[] colors;
 
@@ -15,6 +16,7 @@ public class HexGrid : MonoBehaviour
     public Text cellLabelPrefab;
     public Texture2D noiseSource;
     public HexGridChunk chunkPrefab;
+    public CameraControl cameraControl;
 
     //private Canvas gridCanvas;
     private HexCell[] cells;
@@ -59,6 +61,7 @@ public class HexGrid : MonoBehaviour
 
         CreateChunks();
         CreateCells();
+        cameraControl.UpdateClampPositions(this.cellCountX, this.cellCountZ);
 
         return true;
     }
