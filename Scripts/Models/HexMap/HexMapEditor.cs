@@ -10,7 +10,7 @@ public class HexMapEditor : MonoBehaviour
     OptionalToggle riverMode, roadMode, walledMode;
 
     //public Color[] colors;
-
+    public Material terrainMaterial;
     public HexGrid hexGrid;
     private int brushSize;
     //private Color activeColor;
@@ -22,18 +22,19 @@ public class HexMapEditor : MonoBehaviour
 
     //bool applyColor;
 
+    bool editMode = true;
     bool isDrag;
     bool applyElevation;
     bool applyWaterLevel;
     bool applyUrbanLevel;
-    bool applyFarmLevel, applyPlantLevel, applySpecialIndex;
+    bool applyFarmLevel, applyPlantLevel, applySpecialIndex, showGrid;
 
     HexDirection dragDirection;
     HexCell previousCell;
 
     void Awake()
     {
-        //SelectColor(0);
+        terrainMaterial.DisableKeyword("GRID_ON");
     }
 
     // Start is called before the first frame update
@@ -72,7 +73,7 @@ public class HexMapEditor : MonoBehaviour
                 isDrag = false;
             }
 
-            EditCells(currentCell);
+            if(editMode) EditCells(currentCell);
             previousCell = currentCell;
         }
         else
@@ -270,5 +271,23 @@ public class HexMapEditor : MonoBehaviour
     {
         activePlantLevel = (int)level;
     }
-    
+
+    public void ToggleShowGrid()
+    {
+        showGrid = !showGrid;
+        if (showGrid)
+        {
+         
+            terrainMaterial.EnableKeyword("GRID_ON");
+        }
+        else
+        {
+            terrainMaterial.DisableKeyword("GRID_ON");
+        }
+    }
+    public void ToggleEditMode()
+    {
+        editMode = !editMode;
+        
+    }
 }

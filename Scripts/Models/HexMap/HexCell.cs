@@ -25,6 +25,7 @@ public class HexCell : MonoBehaviour
     int urbanLevel, farmLevel, plantLevel, waterLevel;
 
     int specialIndex; // determine the special feature it has, if any.
+    int distance; //From this cell to selected cell
 
     public int Elevation
     {
