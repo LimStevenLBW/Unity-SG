@@ -14737,7 +14737,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 26192696}
         m_TargetAssemblyTypeName: HexMapEditor, Assembly-CSharp
-        m_MethodName: ToggleShowGrid
+        m_MethodName: ToggleEditMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14747,7 +14747,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!1 &2040641079
 GameObject:
   m_ObjectHideFlags: 0

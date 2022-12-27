@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 
 public class HexCell : MonoBehaviour
@@ -91,6 +92,18 @@ public class HexCell : MonoBehaviour
                 plantLevel = value;
                 RefreshSelfOnly();
             }
+        }
+    }
+    public int Distance
+    {
+        get
+        {
+            return distance;
+        }
+        set
+        {
+            distance = value;
+            UpdateDistanceLabel();
         }
     }
 
@@ -592,4 +605,12 @@ public class HexCell : MonoBehaviour
         uiRect.localPosition = uiPosition;
 
     }
+
+    void UpdateDistanceLabel()
+    {
+        Text label = uiRect.GetComponent<Text>();
+        label.text = distance.ToString();
+    }
+
 }
+

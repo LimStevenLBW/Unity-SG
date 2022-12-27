@@ -131,6 +131,10 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.Walled = walledMode == OptionalToggle.Yes;
             }
+            else
+            {
+                hexGrid.FindDistancesTo(cell);
+            }
 
             if (isDrag)
             {
