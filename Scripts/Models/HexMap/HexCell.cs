@@ -28,6 +28,11 @@ public class HexCell : MonoBehaviour
     int specialIndex; // determine the special feature it has, if any.
     int distance; //From this cell to selected cell
 
+    public int SearchPhase { get; set; } 
+    //0 means the cell has not yet been reached, 
+    //1 indicated that the cell is currently in the frontier, 
+    //2 means it has been taken out of the frontier.
+
     public int Elevation
     {
         get { return elevation; }
@@ -103,7 +108,7 @@ public class HexCell : MonoBehaviour
         set
         {
             distance = value;
-            UpdateDistanceLabel();
+            //UpdateDistanceLabel();
         }
     }
 
@@ -284,6 +289,39 @@ public class HexCell : MonoBehaviour
             return hasIncomingRiver ? incomingRiver : outgoingRiver;
         }
     }
+    public Vector3 Position
+    {
+        get
+        {
+            return transform.localPosition;
+        }
+    }
+    public bool Walled
+    {
+        get
+        {
+            return walled;
+        }
+        set
+        {
+            if (walled != value)
+            {
+                walled = value;
+                Refresh();
+            }
+        }
+    }
+    public int SearchPriority
+    {
+        get
+        {
+            return distance + SearchHeuristic;
+        }
+    }
+
+    public HexCell PathFrom { get; set; }
+    public int SearchHeuristic { get; set; }
+    public HexCell NextWithSamePriority { get; set; }
 
     public void RemoveOutgoingRiver()
     {
@@ -298,6 +336,7 @@ public class HexCell : MonoBehaviour
         neighbor.hasIncomingRiver = false;
         neighbor.RefreshSelfOnly();
     }
+
     public void RemoveIncomingRiver()
     {
         if (!hasIncomingRiver)
@@ -391,13 +430,7 @@ public class HexCell : MonoBehaviour
             elevation, otherCell.elevation
         );
     }
-    public Vector3 Position
-    {
-        get
-        {
-            return transform.localPosition;
-        }
-    }
+
     void Refresh()
     {
         if(chunk) chunk.Refresh();
@@ -481,22 +514,6 @@ public class HexCell : MonoBehaviour
         return neighbor && (
             elevation >= neighbor.elevation || waterLevel == neighbor.elevation
         );
-    }
-
-    public bool Walled
-    {
-        get
-        {
-            return walled;
-        }
-        set
-        {
-            if (walled != value)
-            {
-                walled = value;
-                Refresh();
-            }
-        }
     }
 
     void Start()
@@ -606,10 +623,30 @@ public class HexCell : MonoBehaviour
 
     }
 
+    /*
     void UpdateDistanceLabel()
     {
         Text label = uiRect.GetComponent<Text>();
-        label.text = distance.ToString();
+        label.text = distance == int.MaxValue ? "" : distance.ToString();
+    }
+    */
+    public void SetLabel(string text)
+    {
+        UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
+        label.text = text;
+    }
+
+    public void DisableHighlight()
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.enabled = false;
+    }
+
+    public void EnableHighlight(Color color)
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.color = color;
+        highlight.enabled = true;
     }
 
 }

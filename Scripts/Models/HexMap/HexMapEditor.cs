@@ -15,7 +15,7 @@ public class HexMapEditor : MonoBehaviour
     private int brushSize;
     //private Color activeColor;
 
-    private int activeTerrainTypeIndex;
+    private int activeTerrainTypeIndex = -1;
     private int activeElevation;
     private int activeWaterLevel = 1;
     private int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
@@ -30,7 +30,7 @@ public class HexMapEditor : MonoBehaviour
     bool applyFarmLevel, applyPlantLevel, applySpecialIndex, showGrid;
 
     HexDirection dragDirection;
-    HexCell previousCell;
+    HexCell previousCell, searchFromCell, searchToCell;
 
     void Awake()
     {
@@ -63,18 +63,50 @@ public class HexMapEditor : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(inputRay, out hit))
         {
-            HexCell currentCell = hexGrid.GetCell(hit.point);
-            if (previousCell && previousCell != currentCell)
+            HexCell selectedCell = hexGrid.GetCell(hit.point);
+
+            if (previousCell && previousCell != selectedCell)
             {
-                ValidateDrag(currentCell);
+                ValidateDrag(selectedCell);
             }
             else
             {
                 isDrag = false;
             }
 
-            if(editMode) EditCells(currentCell);
-            previousCell = currentCell;
+            if (editMode)
+            {
+                EditCells(selectedCell);
+            }
+            else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != selectedCell)
+            {
+               if (searchFromCell != selectedCell) 
+               {
+                    if (searchFromCell)
+                    {
+                        searchFromCell.DisableHighlight();
+                    }
+
+                    searchFromCell = selectedCell;
+                    searchFromCell.EnableHighlight(Color.green);
+  
+                    if (searchToCell)
+                    {
+                        hexGrid.FindPath(searchFromCell, searchToCell,24);
+                    }
+               }
+            }
+            else if (searchFromCell && searchFromCell != selectedCell)
+            {
+                if (searchToCell != selectedCell)
+                {
+                    searchToCell = selectedCell;
+                    hexGrid.FindPath(searchFromCell, searchToCell, 24);
+                }
+            }
+
+
+            previousCell = selectedCell;
         }
         else
         {
@@ -131,10 +163,10 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.Walled = walledMode == OptionalToggle.Yes;
             }
-            else
-            {
-                hexGrid.FindDistancesTo(cell);
-            }
+
+            ///bool editing = (activeTerrainTypeIndex > -1 || applyElevation || applyWaterLevel || applySpecialIndex || applyUrbanLevel
+            //    || applyFarmLevel || applyPlantLevel || riverMode != OptionalToggle.Ignore || roadMode != OptionalToggle.Ignore || walledMode != OptionalToggle.Ignore);
+           
 
             if (isDrag)
             {

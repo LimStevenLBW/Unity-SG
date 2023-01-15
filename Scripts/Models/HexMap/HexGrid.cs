@@ -24,6 +24,10 @@ public class HexGrid : MonoBehaviour
     private HexGridChunk[] chunks;
 
     public int seed = 1234;
+    HexCellPriorityQueue searchFrontier;
+    int searchFrontierPhase;
+    HexCell currentPathFrom, currentPathTo;
+    bool currentPathExists;
 
     void Awake()
     {
@@ -46,6 +50,7 @@ public class HexGrid : MonoBehaviour
             return false;
         }
 
+        ClearPath();
         if (chunks != null)
         {
             for (int i = 0; i < chunks.Length; i++)
@@ -172,7 +177,7 @@ public class HexGrid : MonoBehaviour
     {
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-        label.text = cell.coordinates.ToStringOnSeparateLines();
+        //label.text = cell.coordinates.ToStringOnSeparateLines(); //Display Cell Coordinates
         cell.uiRect = label.rectTransform;
     }
 
@@ -243,6 +248,8 @@ public class HexGrid : MonoBehaviour
 
     public void Load(BinaryReader reader, int header)
     {
+        ClearPath();
+        //StopAllCoroutines();
         int x = 20, z = 15;
         if (header >= 1)
         {
@@ -268,12 +275,177 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void FindDistancesTo(HexCell cell)
+    public void FindPath(HexCell fromCell, HexCell toCell, int speed)
     {
+        StopAllCoroutines();
+        //StartCoroutine(Search(fromCell, toCell, speed));
+        ClearPath();
+        currentPathFrom = fromCell;
+        currentPathTo = toCell;
+        currentPathExists = Search(fromCell, toCell, speed);
+        ShowPath(speed);
+    }
+
+    /*
+     * Breadth-First Search using the selected cell as the tree root
+     */
+    bool Search(HexCell fromCell, HexCell toCell, int speed)
+    {
+        searchFrontierPhase += 2;
+        if (searchFrontier == null)
+        {
+            searchFrontier = new HexCellPriorityQueue();
+        }
+        else
+        {
+            searchFrontier.Clear();
+        }
+
+        /*
         for (int i = 0; i < cells.Length; i++)
         {
-            cells[i].Distance =
-                cell.coordinates.DistanceTo(cells[i].coordinates) / 2;
+           // cells[i].Distance = int.MaxValue; //if distance at max value, hexcell will determine that it should not display coordinates
+            cells[i].SetLabel(null); //Hide labels
+            cells[i].DisableHighlight();
         }
+        fromCell.EnableHighlight(Color.green);
+        */
+
+        //WaitForSeconds delay = new WaitForSeconds(1 / 60f);
+        fromCell.SearchPhase = searchFrontierPhase;
+        fromCell.Distance = 0;
+        searchFrontier.Enqueue(fromCell);
+
+        while (searchFrontier.Count > 0)
+        {
+            //yield return delay;
+            HexCell current = searchFrontier.Dequeue();
+            current.SearchPhase += 1;
+
+            if (current == toCell)
+            {
+                return true;
+                /*
+                while (current != fromCell)
+                {
+                    int turn = current.Distance / speed;
+                    current.SetLabel(turn.ToString());
+                    current.EnableHighlight(Color.blue);
+                    current = current.PathFrom;
+                }
+                toCell.EnableHighlight(Color.red);
+                break; //We can stop once we find destination cell
+                */
+            }
+
+            int currentTurn = current.Distance / speed;
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+                {
+                    continue;
+                }
+                if (neighbor.IsUnderwater)
+                {
+                    continue;
+                }
+
+                HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                if (edgeType == HexEdgeType.Cliff)
+                {
+                    continue;
+                }
+
+                int moveCost;
+                if (current.HasRoadThroughEdge(d))
+                {
+                    moveCost = 1;
+                }
+                else if (current.Walled != neighbor.Walled)
+                {
+                    continue; //Walls block movement
+                }
+                else
+                {
+                    moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;              //MOVEMENT COSTS
+                    moveCost += neighbor.UrbanLevel + neighbor.FarmLevel +
+                        neighbor.PlantLevel;
+                }
+
+                int distance = current.Distance + moveCost;
+                int turn = distance / speed;
+                if (turn > currentTurn)
+                {
+                    distance = turn * speed + moveCost;
+                }
+
+                //add a neighbor to the frontier. When a cell is added, it is not guaranteed to be the shortest distance, we need to check
+                if (neighbor.SearchPhase < searchFrontierPhase)
+                {
+                    neighbor.SearchPhase = searchFrontierPhase;
+                    neighbor.Distance = distance;
+                    //neighbor.SetLabel(turn.ToString());
+                    neighbor.PathFrom = current;
+                    neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates);
+                    searchFrontier.Enqueue(neighbor);
+                }
+                else if (distance < neighbor.Distance)
+                {
+                    int oldPriority = neighbor.SearchPriority;
+                    neighbor.Distance = distance;
+                    //neighbor.SetLabel(turn.ToString());
+                    neighbor.PathFrom = current;
+                    searchFrontier.Change(neighbor, oldPriority);
+                }
+
+                /*
+                frontier.Sort(
+                    (x, y) => x.SearchPriority.CompareTo(y.SearchPriority)
+                );
+                */
+            }
+           
+        }
+        return false;
+    }
+    void ShowPath(int speed)
+    {
+        if (currentPathExists)
+        {
+            HexCell current = currentPathTo;
+            while (current != currentPathFrom)
+            {
+                int turn = current.Distance / speed;
+                current.SetLabel(turn.ToString());
+                current.EnableHighlight(Color.white);
+                current = current.PathFrom;
+            }
+        }
+        currentPathFrom.EnableHighlight(Color.blue);
+        currentPathTo.EnableHighlight(Color.red);
+    }
+
+    void ClearPath()
+    {
+        if (currentPathExists)
+        {
+            HexCell current = currentPathTo;
+            while (current != currentPathFrom)
+            {
+                current.SetLabel(null);
+                current.DisableHighlight();
+                current = current.PathFrom;
+            }
+            current.DisableHighlight();
+            currentPathExists = false;
+        }
+        else if (currentPathFrom)
+        {
+            currentPathFrom.DisableHighlight();
+            currentPathTo.DisableHighlight();
+        }
+        currentPathFrom = currentPathTo = null;
     }
 }
