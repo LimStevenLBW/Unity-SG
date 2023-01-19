@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Assets.Scripts.Models.Unit;
 
 public class HexCell : MonoBehaviour
 {
@@ -28,7 +29,8 @@ public class HexCell : MonoBehaviour
     int specialIndex; // determine the special feature it has, if any.
     int distance; //From this cell to selected cell
 
-    public int SearchPhase { get; set; } 
+    public int SearchPhase { get; set; }
+    public HexUnit Unit { get; set; }
     //0 means the cell has not yet been reached, 
     //1 indicated that the cell is currently in the frontier, 
     //2 means it has been taken out of the frontier.
@@ -434,6 +436,11 @@ public class HexCell : MonoBehaviour
     void Refresh()
     {
         if(chunk) chunk.Refresh();
+
+        if (Unit)
+        {
+            Unit.ValidateLocation();
+        }
         for (int i = 0; i < neighbors.Length; i++)
         {
             HexCell neighbor = neighbors[i];
@@ -446,6 +453,10 @@ public class HexCell : MonoBehaviour
     void RefreshSelfOnly()
     {
         chunk.Refresh();
+        if (Unit)
+        {
+            Unit.ValidateLocation();
+        }
     }
 
     //Method to check whether the cell has a road in a certain direction.

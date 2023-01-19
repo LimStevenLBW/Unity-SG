@@ -1031,6 +1031,11 @@ public class HexGridChunk : MonoBehaviour
 
 
     }
-   
+
+    public void ShowUI(bool visible)
+    {
+        gridCanvas.gameObject.SetActive(visible);
+    }
+
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
-
+using Assets.Scripts.Models.Unit;
 public class HexMapEditor : MonoBehaviour
 {
     enum OptionalToggle { Ignore, Yes, No }
@@ -22,18 +22,19 @@ public class HexMapEditor : MonoBehaviour
 
     //bool applyColor;
 
-    bool editMode = true;
     bool isDrag;
     bool applyElevation;
     bool applyWaterLevel;
     bool applyUrbanLevel;
     bool applyFarmLevel, applyPlantLevel, applySpecialIndex, showGrid;
+    bool editMode = false;
 
     HexDirection dragDirection;
-    HexCell previousCell, searchFromCell, searchToCell;
+    HexCell previousCell;
 
     void Awake()
     {
+        ToggleEditMode();
         terrainMaterial.DisableKeyword("GRID_ON");
     }
 
@@ -47,23 +48,35 @@ public class HexMapEditor : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            HandleInput();
+            if (Input.GetMouseButton(0))
+            {
+                HandleInput();
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    DestroyUnit();
+                }
+                else
+                {
+                    CreateUnit();
+                }
+                return;
+            }
         }
-        else
-        {
-            previousCell = null;
-        }
-
+        previousCell = null;
     }
+
     void HandleInput()
     {
-        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit))
+        HexCell selectedCell = GetCellUnderCursor();
+
+        if (selectedCell)
         {
-            HexCell selectedCell = hexGrid.GetCell(hit.point);
 
             if (previousCell && previousCell != selectedCell)
             {
@@ -74,36 +87,7 @@ public class HexMapEditor : MonoBehaviour
                 isDrag = false;
             }
 
-            if (editMode)
-            {
-                EditCells(selectedCell);
-            }
-            else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != selectedCell)
-            {
-               if (searchFromCell != selectedCell) 
-               {
-                    if (searchFromCell)
-                    {
-                        searchFromCell.DisableHighlight();
-                    }
-
-                    searchFromCell = selectedCell;
-                    searchFromCell.EnableHighlight(Color.green);
-  
-                    if (searchToCell)
-                    {
-                        hexGrid.FindPath(searchFromCell, searchToCell,24);
-                    }
-               }
-            }
-            else if (searchFromCell && searchFromCell != selectedCell)
-            {
-                if (searchToCell != selectedCell)
-                {
-                    searchToCell = selectedCell;
-                    hexGrid.FindPath(searchFromCell, searchToCell, 24);
-                }
-            }
+            EditCells(selectedCell);
 
 
             previousCell = selectedCell;
@@ -113,6 +97,32 @@ public class HexMapEditor : MonoBehaviour
             previousCell = null;
         }
     }
+
+    HexCell GetCellUnderCursor()
+    {
+        return
+            hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+    }
+
+    void CreateUnit()
+    {
+        HexCell cell = GetCellUnderCursor();
+        if (cell && !cell.Unit)
+        {
+            hexGrid.AddUnit(
+                Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
+            );
+        }
+    }
+    void DestroyUnit()
+    {
+        HexCell cell = GetCellUnderCursor();
+        if (cell && cell.Unit)
+        {
+            hexGrid.RemoveUnit(cell.Unit);
+        }
+    }
+
     void EditCell(HexCell cell)
     {
         if (cell)
@@ -324,6 +334,10 @@ public class HexMapEditor : MonoBehaviour
     public void ToggleEditMode()
     {
         editMode = !editMode;
-        
+        hexGrid.ClearPath();
+    }
+    public void ShowUI(bool visible)
+    {
+        hexGrid.ShowUI(visible);
     }
 }
