@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Assets.Scripts.Models.Unit;
+using Assets.Scripts.Models.HexMap.HexHelpers;
 
 public class HexCell : MonoBehaviour
 {
@@ -29,11 +30,23 @@ public class HexCell : MonoBehaviour
     int specialIndex; // determine the special feature it has, if any.
     int distance; //From this cell to selected cell
 
-    public int SearchPhase { get; set; }
-    public HexUnit Unit { get; set; }
+    //outdated?
     //0 means the cell has not yet been reached, 
     //1 indicated that the cell is currently in the frontier, 
     //2 means it has been taken out of the frontier.
+    public int SearchPhase { get; set; }
+
+
+    public int Index { get; set; }
+
+    private int visibility;
+
+    public HexUnit Unit { get; set; }
+
+    public HexCellShaderData ShaderData {
+        get;
+        set;
+    }
 
     public int Elevation
     {
@@ -101,6 +114,15 @@ public class HexCell : MonoBehaviour
             }
         }
     }
+
+    public bool IsVisible
+    {
+        get
+        {
+            return visibility > 0;
+        }
+    }
+
     public int Distance
     {
         get
@@ -171,13 +193,7 @@ public class HexCell : MonoBehaviour
             {
                 terrainTypeIndex = value;
 
-               
-                if (terrainTypeIndex > 5)
-                {
-                    Debug.Log(terrainTypeIndex);
-                    terrainTypeIndex = 0;
-                }
-                Refresh();
+                ShaderData.RefreshTerrain(this);
             }
         }
     }
@@ -583,7 +599,9 @@ public class HexCell : MonoBehaviour
     {
         terrainTypeIndex = reader.ReadByte();
         elevation = reader.ReadByte();
+        ShaderData.RefreshTerrain(this);
         RefreshPosition();
+
         waterLevel = reader.ReadByte();
         urbanLevel = reader.ReadByte();
         farmLevel = reader.ReadByte();
@@ -658,6 +676,25 @@ public class HexCell : MonoBehaviour
         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
         highlight.color = color;
         highlight.enabled = true;
+    }
+
+    //Fog of War
+    public void IncreaseVisibility()
+    {
+        visibility += 1;
+        if (visibility == 1)
+        {
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+
+    public void DecreaseVisibility()
+    {
+        visibility -= 1;
+        if (visibility == 0)
+        {
+            ShaderData.RefreshVisibility(this);
+        }
     }
 
 }

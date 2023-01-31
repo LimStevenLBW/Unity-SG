@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Assets.Scripts.Models.Unit;
+using Assets.Scripts.Models.HexMap.HexHelpers;
 
 public class HexGrid : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class HexGrid : MonoBehaviour
     bool currentPathExists;
     List<HexUnit> units = new List<HexUnit>();
     public HexUnit unitPrefab;
+    HexCellShaderData cellShaderData;
 
     void Awake()
     {
@@ -38,7 +40,9 @@ public class HexGrid : MonoBehaviour
         HexMetrics.InitializeHashGrid(seed);
         //HexMetrics.colors = colors;
         HexUnit.unitPrefab = unitPrefab;
+        cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         CreateMap(cellCountX, cellCountZ);
+        
         //gridCanvas = GetComponentInChildren<Canvas>();
         //hexMesh = GetComponentInChildren<HexMesh>();
     }
@@ -68,6 +72,7 @@ public class HexGrid : MonoBehaviour
         this.cellCountZ = cellCountZ;
         chunkCountX = this.cellCountX / HexMetrics.chunkSizeX;
         chunkCountZ = this.cellCountZ / HexMetrics.chunkSizeZ;
+        cellShaderData.Initialize(cellCountX, cellCountZ);
 
         CreateChunks();
         CreateCells();
@@ -126,6 +131,8 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+        cell.Index = i;
+        cell.ShaderData = cellShaderData;
         //cell.Color = defaultColor;
 
         InitCellConnections(x, z, i, cell);
@@ -360,7 +367,7 @@ public class HexGrid : MonoBehaviour
                 */
             }
 
-            int currentTurn = current.Distance / speed;
+            int currentTurn = (current.Distance - 1) / speed;
 
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
@@ -397,7 +404,7 @@ public class HexGrid : MonoBehaviour
                 }
 
                 int distance = current.Distance + moveCost;
-                int turn = distance / speed;
+                int turn = (distance - 1) / speed;
                 if (turn > currentTurn)
                 {
                     distance = turn * speed + moveCost;
@@ -432,6 +439,65 @@ public class HexGrid : MonoBehaviour
         }
         return false;
     }
+
+    List<HexCell> GetVisibleCells(HexCell fromCell, int range)
+    {
+        List<HexCell> visibleCells = ListPool<HexCell>.Get();
+
+        searchFrontierPhase += 2;
+        if (searchFrontier == null)
+        {
+            searchFrontier = new HexCellPriorityQueue();
+        }
+        else
+        {
+            searchFrontier.Clear();
+        }
+
+        fromCell.SearchPhase = searchFrontierPhase;
+        fromCell.Distance = 0;
+        searchFrontier.Enqueue(fromCell);
+
+        while (searchFrontier.Count > 0)
+        {
+            HexCell current = searchFrontier.Dequeue();
+            current.SearchPhase += 1;
+            visibleCells.Add(current);
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (
+                    neighbor == null ||
+                    neighbor.SearchPhase > searchFrontierPhase
+                )
+                {
+                    continue;
+                }
+                int distance = current.Distance + 1;
+                if (distance > range)
+                {
+                    continue;
+                }
+                if (neighbor.SearchPhase < searchFrontierPhase)
+                {
+                    neighbor.SearchPhase = searchFrontierPhase;
+                    neighbor.Distance = distance;
+                    neighbor.SearchHeuristic = 0;
+                    searchFrontier.Enqueue(neighbor);
+                }
+                else if (distance < neighbor.Distance)
+                {
+                    int oldPriority = neighbor.SearchPriority;
+                    neighbor.Distance = distance;
+                    searchFrontier.Change(neighbor, oldPriority);
+                }
+            }
+        }
+        return visibleCells;
+    }
+
+
     void ShowPath(int speed)
     {
         if (currentPathExists)
@@ -439,7 +505,7 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                int turn = current.Distance / speed;
+                int turn = (current.Distance - 1) / speed;
                 current.SetLabel(turn.ToString());
                 current.EnableHighlight(Color.white);
                 current = current.PathFrom;
@@ -471,6 +537,26 @@ public class HexGrid : MonoBehaviour
         currentPathFrom = currentPathTo = null;
     }
 
+    public void IncreaseVisibility(HexCell fromCell, int range)
+    {
+        List<HexCell> cells = GetVisibleCells(fromCell, range);
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cells[i].IncreaseVisibility();
+        }
+        ListPool<HexCell>.Add(cells);
+    }
+
+    public void DecreaseVisibility(HexCell fromCell, int range)
+    {
+        List<HexCell> cells = GetVisibleCells(fromCell, range);
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cells[i].DecreaseVisibility();
+        }
+        ListPool<HexCell>.Add(cells);
+    }
+
     void ClearUnits()
     {
         for (int i = 0; i < units.Count; i++)
@@ -482,6 +568,7 @@ public class HexGrid : MonoBehaviour
     public void AddUnit(HexUnit unit, HexCell location, float orientation)
     {
         units.Add(unit);
+        unit.Grid = this;
         unit.transform.SetParent(transform, false);
         unit.Location = location;
         unit.Orientation = orientation;
@@ -516,5 +603,23 @@ public class HexGrid : MonoBehaviour
         {
             return currentPathExists;
         }
+    }
+
+    public List<HexCell> GetPath()
+    {
+        if (!currentPathExists)
+        {
+            return null;
+        }
+
+        List<HexCell> path = ListPool<HexCell>.Get();
+        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+        {
+            path.Add(c);
+        }
+
+        path.Add(currentPathFrom);
+        path.Reverse();
+        return path;
     }
 }
