@@ -432,7 +432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useCollider: 0
   useCellData: 1
-  useUVCoordinates: 0
+  useUVCoordinates: 1
   useUV2Coordinates: 0
 --- !u!1 &5334895986423684227
 GameObject:

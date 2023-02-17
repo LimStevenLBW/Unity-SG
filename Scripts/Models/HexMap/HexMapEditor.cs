@@ -27,14 +27,14 @@ public class HexMapEditor : MonoBehaviour
     bool applyWaterLevel;
     bool applyUrbanLevel;
     bool applyFarmLevel, applyPlantLevel, applySpecialIndex, showGrid;
-    bool editMode = false;
+    bool editMode = true;
 
     HexDirection dragDirection;
     HexCell previousCell;
 
     void Awake()
     {
-        ToggleEditMode();
+        SetFogOfWar();
         terrainMaterial.DisableKeyword("GRID_ON");
     }
 
@@ -331,13 +331,27 @@ public class HexMapEditor : MonoBehaviour
             terrainMaterial.DisableKeyword("GRID_ON");
         }
     }
-    public void ToggleEditMode()
+    public void ToggleEditMode() //Invoked same time as HexGameUI's version, will need to be cleaned up
     {
         editMode = !editMode;
+        SetFogOfWar();
+        //grid.ShowUI(!toggle);
         hexGrid.ClearPath();
     }
     public void ShowUI(bool visible)
     {
-        hexGrid.ShowUI(visible);
+        //hexGrid.ShowUI(visible);
+    }
+
+    public void SetFogOfWar()
+    {
+        if (editMode)
+        {
+            Shader.EnableKeyword("HEX_MAP_EDIT_MODE");
+        }
+        else
+        {
+            Shader.DisableKeyword("HEX_MAP_EDIT_MODE");
+        }
     }
 }

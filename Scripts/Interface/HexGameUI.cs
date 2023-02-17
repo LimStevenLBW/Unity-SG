@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using Assets.Scripts.Models.Unit;
 
@@ -15,11 +10,11 @@ namespace Assets.Scripts.Interface
         HexCell currentCell;
         HexUnit selectedUnit;
 
-        public void SetEditMode(bool toggle)
+        public void ToggleEditMode()
         {
-            enabled = !toggle;
+            //enabled = !enabled;
             //grid.ToggleShowGrid();
-            grid.ShowUI(!toggle); 
+            //grid.ShowUI(enabled); 
         }
 
         bool UpdateCurrentCell()
@@ -72,7 +67,7 @@ namespace Assets.Scripts.Interface
             {
                 if (currentCell && selectedUnit.IsValidDestination(currentCell))
                 {
-                    grid.FindPath(selectedUnit.Location, currentCell, 24);
+                    grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
                 }
                 else
                 {

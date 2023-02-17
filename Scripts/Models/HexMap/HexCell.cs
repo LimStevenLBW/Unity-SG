@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Assets.Scripts.Models.Unit;
@@ -28,6 +26,7 @@ public class HexCell : MonoBehaviour
     int urbanLevel, farmLevel, plantLevel, waterLevel;
 
     int specialIndex; // determine the special feature it has, if any.
+
     int distance; //From this cell to selected cell
 
     //outdated?
@@ -36,6 +35,7 @@ public class HexCell : MonoBehaviour
     //2 means it has been taken out of the frontier.
     public int SearchPhase { get; set; }
 
+    public bool IsExplored { get; private set; }
 
     public int Index { get; set; }
 
@@ -593,9 +593,10 @@ public class HexCell : MonoBehaviour
             }
         }
         writer.Write((byte)roadFlags);
+        writer.Write(IsExplored);
     }
 
-    public void Load(BinaryReader reader)
+    public void Load(BinaryReader reader, int header)
     {
         terrainTypeIndex = reader.ReadByte();
         elevation = reader.ReadByte();
@@ -635,6 +636,10 @@ public class HexCell : MonoBehaviour
         {
             roads[i] = (roadFlags & (1 << i)) != 0;
         }
+
+
+        IsExplored = header >= 3 ? reader.ReadBoolean() : false;
+        ShaderData.RefreshVisibility(this);
     }
 
     void RefreshPosition()
@@ -684,6 +689,7 @@ public class HexCell : MonoBehaviour
         visibility += 1;
         if (visibility == 1)
         {
+            IsExplored = true; // Mark this cell as explored
             ShaderData.RefreshVisibility(this);
         }
     }
