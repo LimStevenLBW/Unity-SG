@@ -35,7 +35,19 @@ public class HexCell : MonoBehaviour
     //2 means it has been taken out of the frontier.
     public int SearchPhase { get; set; }
 
-    public bool IsExplored { get; private set; }
+    bool explored;
+    public bool IsExplored
+    {
+        get
+        {
+            return explored && Explorable;
+        }
+        private set
+        {
+            explored = value;
+        }
+    }
+    public bool Explorable { get; set; }
 
     public int Index { get; set; }
 
@@ -54,7 +66,14 @@ public class HexCell : MonoBehaviour
         set {
             if (elevation == value) return; // Skip computation if no change
 
+            int originalViewElevation = ViewElevation;
             elevation = value;
+
+            if (ViewElevation != originalViewElevation)
+            {
+                ShaderData.ViewElevationChanged();
+            }
+
             RefreshPosition();
             ValidateRivers();
 
@@ -119,7 +138,7 @@ public class HexCell : MonoBehaviour
     {
         get
         {
-            return visibility > 0;
+            return visibility > 0 && Explorable;
         }
     }
 
@@ -213,7 +232,15 @@ public class HexCell : MonoBehaviour
             {
                 return;
             }
+
+            int originalViewElevation = ViewElevation;
             waterLevel = value;
+            if (ViewElevation != originalViewElevation)
+            {
+                ShaderData.ViewElevationChanged();
+            }
+
+
             ValidateRivers();
             Refresh();
         }
@@ -702,6 +729,21 @@ public class HexCell : MonoBehaviour
             ShaderData.RefreshVisibility(this);
         }
     }
+    public int ViewElevation
+    {
+        get
+        {
+            return elevation >= waterLevel ? elevation : waterLevel;
+        }
+    }
 
+    public void ResetVisibility()
+    {
+        if (visibility > 0)
+        {
+            visibility = 0;
+            ShaderData.RefreshVisibility(this);
+        }
+    }
 }
 

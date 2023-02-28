@@ -17,8 +17,15 @@ namespace Assets.Scripts.Models.Unit
         const float travelSpeed = 4f;
         const float rotationSpeed = 180f;
         List<HexCell> pathToTravel;
+
         public HexGrid Grid { get; set; }
-        const int visionRange = 3;
+        public int VisionRange
+        {
+            get
+            {
+                return 10;
+            }
+        }
 
         public int Speed
         {
@@ -36,8 +43,8 @@ namespace Assets.Scripts.Models.Unit
                 transform.localPosition = location.Position;
                 if (currentTravelLocation)
                 {
-                    Grid.IncreaseVisibility(location, visionRange);
-                    Grid.DecreaseVisibility(currentTravelLocation, visionRange);
+                    Grid.IncreaseVisibility(location, VisionRange);
+                    Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
                     currentTravelLocation = null;
                 }
             }
@@ -54,13 +61,13 @@ namespace Assets.Scripts.Models.Unit
                 if (location)
                 {
                     //location.DecreaseVisibility();
-                    Grid.DecreaseVisibility(location, visionRange);
+                    Grid.DecreaseVisibility(location, VisionRange);
                     location.Unit = null;
                 }
                 location = value;
                 value.Unit = this;
                 //value.IncreaseVisibility();
-                Grid.IncreaseVisibility(value, visionRange);
+                Grid.IncreaseVisibility(value, VisionRange);
                 transform.localPosition = value.Position;
             }
         }
@@ -133,7 +140,7 @@ namespace Assets.Scripts.Models.Unit
         {
             if (location)
             {
-                Grid.DecreaseVisibility(location, visionRange);
+                Grid.DecreaseVisibility(location, VisionRange);
             }
             location.Unit = null;
             Destroy(gameObject);
@@ -158,7 +165,7 @@ namespace Assets.Scripts.Models.Unit
             Vector3 a, b, c = pathToTravel[0].Position;
             //transform.localPosition = c;
             yield return LookAt(pathToTravel[1].Position);
-            Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], visionRange);
+            Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange);
 
             float t = Time.deltaTime * travelSpeed;
 
@@ -169,13 +176,13 @@ namespace Assets.Scripts.Models.Unit
                 b = pathToTravel[i - 1].Position;
                 c = (b + currentTravelLocation.Position) * 0.5f;
 
-                Grid.IncreaseVisibility(pathToTravel[i], visionRange);
+                Grid.IncreaseVisibility(pathToTravel[i], VisionRange);
                 for (; t < 1f; t += Time.deltaTime * travelSpeed)
                 {
                     transform.localPosition = Bezier.GetPoint(a, b, c, t);
                     yield return null;
                 }
-                Grid.DecreaseVisibility(pathToTravel[i], visionRange);
+                Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
                 t -= 1f;
             }
             currentTravelLocation = null;
@@ -184,7 +191,7 @@ namespace Assets.Scripts.Models.Unit
             //b = pathToTravel[pathToTravel.Count - 1].Position;
             b = location.Position;
             c = b;
-            Grid.IncreaseVisibility(location, visionRange);
+            Grid.IncreaseVisibility(location, VisionRange);
 
             for (; t < 1f; t += Time.deltaTime * travelSpeed)
             {
