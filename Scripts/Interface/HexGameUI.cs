@@ -4,46 +4,22 @@ using Assets.Scripts.Models.Unit;
 
 namespace Assets.Scripts.Interface
 {
+    /*
+     * Handles interaction in the overworld
+     */
     class HexGameUI : MonoBehaviour
     {
         public HexGrid grid;
-        HexCell currentCell;
+        
         HexUnit selectedUnit;
-
-        public void ToggleEditMode()
-        {
-            //enabled = !enabled;
-            //grid.ToggleShowGrid();
-            //grid.ShowUI(enabled); 
-        }
-
-        bool UpdateCurrentCell()
-        {
-            HexCell cell =
-                grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
-            if (cell != currentCell)
-            {
-                currentCell = cell;
-                return true;
-            }
-            return false;
-        }
-
-        void DoSelection()
-        {
-            grid.ClearPath();
-            UpdateCurrentCell();
-            if (currentCell)
-            {
-                selectedUnit = currentCell.Unit;
-            }
-        }
+        HexCell selectedCell;
 
         void Update()
         {
+            //As long as the pointer is not above a UI element from the event system...
             if (!EventSystem.current.IsPointerOverGameObject())
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0)) //LEFT CLICK
                 {
                     DoSelection();
                 }
@@ -61,13 +37,68 @@ namespace Assets.Scripts.Interface
             }
         }
 
+        public void ToggleEditMode()
+        {
+            //enabled = !enabled;
+            //grid.ToggleShowGrid();
+            //grid.ShowUI(enabled); 
+        }
+
+        /*
+         * Handle what the user selects
+         */
+        void DoSelection()
+        {
+            grid.ClearPath(); //Clear any current paths
+
+
+            UpdateSelectedCell();
+
+            if (selectedCell)
+            {
+                selectedUnit = selectedCell.Unit;
+            }
+        }
+
+        /*
+         * A cell can be selected either by clicking the unit or the hexgrid cell itself
+         */
+        bool UpdateSelectedCell()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            //Most people will try to select the unit, not the cell.
+            HexUnit unit = grid.GetUnit(ray);
+            HexCell cell;
+
+            if (unit)
+            {
+                cell = unit.Location;
+                Debug.Log("Casted");
+            }
+            else
+            {
+                //Get the grid cell at mouse position
+                cell = grid.GetCell(ray);
+            }
+
+            if (cell != selectedCell)
+            {
+                selectedCell = cell;
+                return true;
+            }
+
+            return false;
+        }
+
         void DoPathfinding()
         {
-            if (UpdateCurrentCell())
+            //If a new cell has been selected
+            if (UpdateSelectedCell())
             {
-                if (currentCell && selectedUnit.IsValidDestination(currentCell))
+                if (selectedCell && selectedUnit.IsValidDestination(selectedCell))
                 {
-                    grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
+                    grid.FindPath(selectedUnit.Location, selectedCell, selectedUnit);
                 }
                 else
                 {
@@ -80,7 +111,7 @@ namespace Assets.Scripts.Interface
         {
             if (grid.HasPath)
             {
-                //selectedUnit.Location = currentCell;
+                //selectedUnit.Location = selectedCell;
                 selectedUnit.Travel(grid.GetPath());
                 grid.ClearPath();
             }

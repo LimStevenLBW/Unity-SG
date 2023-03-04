@@ -149,9 +149,9 @@ public class CameraControl : MonoBehaviour
 
     public void UpdateClampPositions(int cellCountX, int cellCountZ)
     {
-        cameraXMinPos = 20;
+       // cameraXMinPos = 20;
         cameraXMaxPos = (cellCountX - 0.5f) * (2f * HexMetrics.innerRadius) -20;
-        cameraZMinPos = -30;
+       // cameraZMinPos = -30;
         cameraZMaxPos = (cellCountZ - 1) * (1.5f * HexMetrics.outerRadius) - 50;
     }
 }

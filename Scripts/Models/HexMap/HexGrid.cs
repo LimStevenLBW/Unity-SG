@@ -229,7 +229,7 @@ public class HexGrid : MonoBehaviour
     }
 
     /**
-     * Return the cell at a given position
+     * Return the hex cell at the given position
      */
     public HexCell GetCell(Vector3 position)
     {
@@ -243,6 +243,10 @@ public class HexGrid : MonoBehaviour
         //hexMesh.Triangulate(cells);
         return cells[index];
     }
+
+    /**
+     * Return the hex cell at the given coordinates
+     */
     public HexCell GetCell(HexCoordinates coordinates)
     {
         int z = coordinates.Z;
@@ -257,6 +261,33 @@ public class HexGrid : MonoBehaviour
         }
         return cells[x + z * cellCountX];
     }
+
+    /**
+     * Return the hex cell pointed to by raycast
+     */
+    public HexCell GetCell(Ray ray)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            return GetCell(hit.point);
+        }
+        return null;
+    }
+
+    public HexUnit GetUnit(Ray ray)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if(hit.collider.gameObject.GetComponent<HexUnit>() != null)
+            {
+                return hit.collider.gameObject.GetComponent<HexUnit>();
+            }
+        }
+        return null;
+    }
+
     public void Save(BinaryWriter writer)
     {
         writer.Write(cellCountX);
@@ -576,15 +607,6 @@ public class HexGrid : MonoBehaviour
     {
         units.Remove(unit);
         unit.Die();
-    }
-    public HexCell GetCell(Ray ray)
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
-            return GetCell(hit.point);
-        }
-        return null;
     }
 
     public void ShowUI(bool visible)

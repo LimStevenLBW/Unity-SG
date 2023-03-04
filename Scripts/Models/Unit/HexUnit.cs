@@ -19,6 +19,7 @@ namespace Assets.Scripts.Models.Unit
         List<HexCell> pathToTravel;
 
         public HexGrid Grid { get; set; }
+
         public int VisionRange
         {
             get
