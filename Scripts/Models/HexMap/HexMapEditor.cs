@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
 using Assets.Scripts.Models.Unit;
+
 public class HexMapEditor : MonoBehaviour
 {
     enum OptionalToggle { Ignore, Yes, No }

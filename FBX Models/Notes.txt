@@ -1,0 +1,20 @@
+Create a new diffuse material and add the face texture to it to deal with lack of transparency(black texture)
+
+bake axis conversions to deal with offcentered animations
+
+
+export
+no leaf bones
+
+
+To create a new smart uv project, dont forget to apply skin modifier, otherwise it wont have any faces to map
+
+eevee does not support texture baking, change bake type to diffuse to avoid lighting changes, turn off direct and indirect
+
+
+
+We need to disable ACTIONS in the FBX to reduce filesize:
+. To reduce the file size, turn off the exporting of any parts you do not want and disable All Actions
+For armature animations typically you just leave the armature enabled which is necessary for that type of animation.
+ Reducing what is output makes the export and future import much faster.
+
