@@ -22,10 +22,23 @@ public class CameraControl : MonoBehaviour
     public float cameraZMinPos = -200;
     public float cameraZMaxPos = 200;
 
-    private float scrollSpeed;
+    private float scrollSpeed = 20;
     private float scroll;
     private float cameraZoomPosition;
 
+    private Vector3 pos;
+    private Quaternion rot;
+
+    //Rotation
+    public Texture2D cursorTexture;
+    public Vector2 hotSpot = Vector2.zero;
+
+    //0 INACTIVE
+    //1 MOVING (unused)
+    //2 ROTATING
+    private int CAMERA_MODE = 0;
+    private Vector3 lastMouseCoordinate = Vector3.zero;
+    public float rotationSpeed = (float)0.5;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +53,36 @@ public class CameraControl : MonoBehaviour
     {
         if (isControlEnabled)
         {
-            Vector3 pos = transform.position;
+            rot = transform.rotation;
+
+            if (Input.GetMouseButton(1) && CAMERA_MODE != 2)
+            {
+               Cursor.SetCursor(cursorTexture, hotSpot, CursorMode.Auto);
+               CAMERA_MODE = 2;
+            }
+            else if (!Input.GetMouseButton(1) && CAMERA_MODE != 0)
+            {
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); // Reset
+                CAMERA_MODE = 0;
+                lastMouseCoordinate = Vector3.zero;
+            }
+
+            if(CAMERA_MODE == 2)
+            {
+                Vector3 mouseDelta = Input.mousePosition - lastMouseCoordinate;
+                if(mouseDelta.y > 0.5)
+                {
+                    transform.Rotate(-rotationSpeed, 0, 0);
+                }
+                else if(mouseDelta.y < -0.5)
+                {
+                    transform.Rotate(rotationSpeed, 0, 0);
+                }
+
+                lastMouseCoordinate = Input.mousePosition;
+            }
+
+            pos = transform.position;
 
             //Pan Left
             if (Input.GetKey(KeyCode.A) && Input.mousePosition.x <= panBorderThiccness) 

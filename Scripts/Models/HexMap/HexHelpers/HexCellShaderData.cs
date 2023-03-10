@@ -21,7 +21,7 @@ namespace Assets.Scripts.Models.HexMap.HexHelpers
         {
             if (cellTexture)
             {
-                cellTexture.Resize(x, z);
+                cellTexture.Reinitialize(x, z);
             }
             else
             {
