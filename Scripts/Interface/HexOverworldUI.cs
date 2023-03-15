@@ -11,7 +11,7 @@ namespace Assets.Scripts.Interface
     {
         public HexGrid grid;
         
-        HexUnit selectedUnit;
+        PlayerFormation selectedUnit;
         HexCell selectedCell;
 
         void Update()
@@ -57,7 +57,8 @@ namespace Assets.Scripts.Interface
 
             if (selectedCell)
             {
-                selectedUnit = selectedCell.Unit;
+                Debug.Log("Re-Enable");
+                //selectedUnit = selectedCell.Unit;
                 EnableHighlight(selectedUnit);
             }
 
@@ -71,7 +72,7 @@ namespace Assets.Scripts.Interface
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             //Most people will try to select the unit, not the cell.
-            HexUnit unit = grid.GetUnit(ray);
+            PlayerFormation unit = grid.GetFormation(ray);
             HexCell cell;
 
             //If we get the unit, we can get the cell easily
@@ -123,12 +124,12 @@ namespace Assets.Scripts.Interface
             }
         }
 
-        void EnableHighlight(HexUnit unit)
+        void EnableHighlight(PlayerFormation unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = true;
         }
 
-        void DisableHighlight(HexUnit unit)
+        void DisableHighlight(PlayerFormation unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = false;
         }

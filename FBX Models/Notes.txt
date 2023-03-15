@@ -18,3 +18,12 @@ We need to disable ACTIONS in the FBX to reduce filesize:
 For armature animations typically you just leave the armature enabled which is necessary for that type of animation.
  Reducing what is output makes the export and future import much faster.
 
+-----------------------
+EXPORTING(WHY IS MY CHARACTER BACKWARDS)
+
+In Blender, +Y is forward and +Z is up (yes, this means we all do our modeling with the model facing backwards), 
+but in Unity, +Z is forward and +Y is up. Thus when creating an exporter, it's simply a matter of swapping the Y and Z values in the vectors
+ (a little more for quaternions and matrices). 
+
+This is why the fbx exporter has the forward and up options: it takes care of the swaps for you, all you need to do is tell the fbx exporter
+ the correct settings (and maybe ensure your model has the correct orientation (with rotation applied) in blender).

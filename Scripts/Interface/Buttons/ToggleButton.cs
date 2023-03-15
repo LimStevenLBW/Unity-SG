@@ -5,31 +5,38 @@ using UnityEngine;
 
 namespace Buttons
 {
-    internal sealed class ToggleButton : Button, IPointerClickHandler
+    internal class ToggleButton : Button, IPointerClickHandler
     {
-        public GameObject AttachedObject;
-
+        public GameObject AttachedObject; 
+        
         /**
          * Registered IPointerClickHandler callback
          */
         public override void OnPointerClick(PointerEventData e)
         {
-            //Call Super to play attached audio clip
-            base.OnPointerClick(e);
-            ToggleVisibility(AttachedObject);
-
-        }
-        public void ToggleVisibility(GameObject AttachedObject)
-        {
-            if (AttachedObject.activeInHierarchy)
+            if (!AttachedObject.activeInHierarchy)
             {
-                AttachedObject.SetActive(false);
+                PlayAudioClip(base.AudioClickOpen);
+                AttachedObject.SetActive(true);
             }
             else
             {
-                AttachedObject.SetActive(true);
+                PlayAudioClip(base.AudioClickClose);
+                AttachedObject.SetActive(false);
             }
+           
 
+        }
+
+        public override void OnPointerEnter(PointerEventData e)
+        {
+            PlayAudioClip(base.AudioHover);
+        }
+
+        public override void PlayAudioClip(AudioClip clip)
+        {
+            AudioPlayer.clip = clip;
+            AudioPlayer.Play();
         }
     }
 }

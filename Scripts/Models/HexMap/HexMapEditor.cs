@@ -36,13 +36,17 @@ public class HexMapEditor : MonoBehaviour
     void Awake()
     {
         SetFogOfWar();
-        terrainMaterial.DisableKeyword("GRID_ON");
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        showGrid = true;
+        if (showGrid)
+        {
+
+            terrainMaterial.EnableKeyword("GRID_ON");
+        }
     }
 
     // Update is called once per frame
@@ -54,18 +58,6 @@ public class HexMapEditor : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 HandleInput();
-                return;
-            }
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    DestroyUnit();
-                }
-                else
-                {
-                    CreateUnit();
-                }
                 return;
             }
         }
@@ -105,24 +97,6 @@ public class HexMapEditor : MonoBehaviour
             hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
     }
 
-    void CreateUnit()
-    {
-        HexCell cell = GetCellUnderCursor();
-        if (cell && !cell.Unit)
-        {
-            hexGrid.AddUnit(
-                Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
-            );
-        }
-    }
-    void DestroyUnit()
-    {
-        HexCell cell = GetCellUnderCursor();
-        if (cell && cell.Unit)
-        {
-            hexGrid.RemoveUnit(cell.Unit);
-        }
-    }
 
     void EditCell(HexCell cell)
     {

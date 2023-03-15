@@ -9,7 +9,7 @@ public class CameraControl : MonoBehaviour
     public float panSpeed = 100.0f;
     public float panSpeedBoost = 2;
     public float jumpSpeed = 370.0f; //Unused?
-    public float panBorderThiccness = 5.0f;
+    public float panBorderThiccness = 1.0f;
     public float scrollDistance = 25.0f;
 
     public HexGrid hexGrid;
@@ -27,18 +27,18 @@ public class CameraControl : MonoBehaviour
     private float cameraZoomPosition;
 
     private Vector3 pos;
-    private Quaternion rot;
+    //private Quaternion rot;
 
     //Rotation
     public Texture2D cursorTexture;
-    public Vector2 hotSpot = Vector2.zero;
+    private Vector2 hotSpot = Vector2.zero;
 
     //0 INACTIVE
     //1 MOVING (unused)
     //2 ROTATING
     private int CAMERA_MODE = 0;
     private Vector3 lastMouseCoordinate = Vector3.zero;
-    public float rotationSpeed = (float)0.5;
+    public float rotationSpeed = (float)0.85;
 
     // Start is called before the first frame update
     void Start()
@@ -53,109 +53,121 @@ public class CameraControl : MonoBehaviour
     {
         if (isControlEnabled)
         {
-            rot = transform.rotation;
-
-            if (Input.GetMouseButton(1) && CAMERA_MODE != 2)
-            {
-               Cursor.SetCursor(cursorTexture, hotSpot, CursorMode.Auto);
-               CAMERA_MODE = 2;
-            }
-            else if (!Input.GetMouseButton(1) && CAMERA_MODE != 0)
-            {
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); // Reset
-                CAMERA_MODE = 0;
-                lastMouseCoordinate = Vector3.zero;
-            }
-
-            if(CAMERA_MODE == 2)
-            {
-                Vector3 mouseDelta = Input.mousePosition - lastMouseCoordinate;
-                if(mouseDelta.y > 0.5)
-                {
-                    transform.Rotate(-rotationSpeed, 0, 0);
-                }
-                else if(mouseDelta.y < -0.5)
-                {
-                    transform.Rotate(rotationSpeed, 0, 0);
-                }
-
-                lastMouseCoordinate = Input.mousePosition;
-            }
+            //rot = transform.rotation;
+            HandleRotation();
 
             pos = transform.position;
+            HandlePanning();
 
-            //Pan Left
-            if (Input.GetKey(KeyCode.A) && Input.mousePosition.x <= panBorderThiccness) 
-            {
-                if (pos.x > cameraXMinPos) pos.x -= (panSpeedBoost * panSpeed) * Time.deltaTime;
-            }
-            else if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= panBorderThiccness)
-            {
-                if (pos.x > cameraXMinPos) pos.x -= panSpeed * Time.deltaTime;
-            }
+            HandleScrolling();
 
-            //Pan Right
-            if (Input.GetKey(KeyCode.D) && Input.mousePosition.x >= Screen.width - panBorderThiccness)
-            {
-                if (pos.x < cameraXMaxPos) pos.x += (panSpeedBoost * panSpeed) * Time.deltaTime;
-            }
-            else if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - panBorderThiccness)
-            {
-                if (pos.x < cameraXMaxPos) pos.x += panSpeed * Time.deltaTime;
-            }
+        }
+    }
 
-            //Pan Forward
-            if (Input.GetKey(KeyCode.W) && Input.mousePosition.y >= Screen.height - panBorderThiccness)
-            {
-                if (pos.z < cameraZMaxPos) pos.z += (panSpeedBoost * panSpeed) * Time.deltaTime;
-            }
-            else if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThiccness)
-            {
-                if (pos.z < cameraZMaxPos) pos.z += panSpeed * Time.deltaTime;
-            }
+    private void HandleRotation()
+    {
+        if (Input.GetKey(KeyCode.R) && CAMERA_MODE != 2)
+        {
+            Cursor.SetCursor(cursorTexture, hotSpot, CursorMode.Auto);
+            CAMERA_MODE = 2;
+        }
+        else if (!Input.GetKey(KeyCode.R) && CAMERA_MODE != 0)
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); // Reset
+            CAMERA_MODE = 0;
+            lastMouseCoordinate = Vector3.zero;
+        }
 
-            //Pan Backward
-            if (Input.GetKey(KeyCode.S) && Input.mousePosition.y <= panBorderThiccness)
+        if (CAMERA_MODE == 2)
+        {
+            Vector3 mouseDelta = Input.mousePosition - lastMouseCoordinate;
+            if (mouseDelta.y > 0.5)
             {
-                if (pos.z > cameraZMinPos) pos.z -= (panSpeedBoost * panSpeed) * Time.deltaTime;
+                transform.Rotate(-rotationSpeed, 0, 0);
             }
-            else if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= panBorderThiccness)
+            else if (mouseDelta.y < -0.5)
             {
-                if (pos.z > cameraZMinPos) pos.z -= panSpeed * Time.deltaTime;
+                transform.Rotate(rotationSpeed, 0, 0);
             }
 
+            lastMouseCoordinate = Input.mousePosition;
+        }
+    }
 
-            transform.position = pos;
+    private void HandlePanning()
+    {
+        //Pan Left
+        if (Input.GetKey(KeyCode.A) && Input.mousePosition.x <= panBorderThiccness)
+        {
+            if (pos.x > cameraXMinPos) pos.x -= (panSpeedBoost * panSpeed) * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= panBorderThiccness)
+        {
+            if (pos.x > cameraXMinPos) pos.x -= panSpeed * Time.deltaTime;
+        }
 
-            //Check which direction the user is scrolling and store it
-            scroll = Input.GetAxis("Mouse ScrollWheel");
-            //Zoom In
-            if (scroll > 0)
-            {
-                // cameraZoomPosition = transform.position.y;
-                cameraZoomPosition -= scrollDistance;
-            }
-            else if (scroll < 0) //Zoom Out
-            {
-                // cameraZoomPosition = transform.position.y;
-                cameraZoomPosition += scrollDistance;
-            }
+        //Pan Right
+        if (Input.GetKey(KeyCode.D) && Input.mousePosition.x >= Screen.width - panBorderThiccness)
+        {
+            if (pos.x < cameraXMaxPos) pos.x += (panSpeedBoost * panSpeed) * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - panBorderThiccness)
+        {
+            if (pos.x < cameraXMaxPos) pos.x += panSpeed * Time.deltaTime;
+        }
 
-            //Restrict the camera y position
-            cameraZoomPosition = Mathf.Clamp(cameraZoomPosition, cameraYMinPos, cameraYMaxPos);
+        //Pan Forward
+        if (Input.GetKey(KeyCode.W) && Input.mousePosition.y >= Screen.height - panBorderThiccness)
+        {
+            if (pos.z < cameraZMaxPos) pos.z += (panSpeedBoost * panSpeed) * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThiccness)
+        {
+            if (pos.z < cameraZMaxPos) pos.z += panSpeed * Time.deltaTime;
+        }
 
-            //Check if the current position matches the destination height
-            if (Mathf.Abs(cameraZoomPosition - transform.position.y) > 1)
-            {
-                //Speed will deaccelerate as camera approaches target position
-                scrollSpeed = (cameraZoomPosition - transform.position.y) * 5f;
-                transform.Translate(Vector3.up * scrollSpeed * Time.deltaTime, Space.World);
-            }
+        //Pan Backward
+        if (Input.GetKey(KeyCode.S) && Input.mousePosition.y <= panBorderThiccness)
+        {
+            if (pos.z > cameraZMinPos) pos.z -= (panSpeedBoost * panSpeed) * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= panBorderThiccness)
+        {
+            if (pos.z > cameraZMinPos) pos.z -= panSpeed * Time.deltaTime;
+        }
 
+        transform.position = pos; // Submit Result
+    }
+
+    private void HandleScrolling()
+    {
+        //Check which direction the user is scrolling and store it
+        scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        //Zoom In
+        if (scroll > 0)
+        {
+            // cameraZoomPosition = transform.position.y;
+            cameraZoomPosition -= scrollDistance;
+        }
+        else if (scroll < 0) //Zoom Out
+        {
+            // cameraZoomPosition = transform.position.y;
+            cameraZoomPosition += scrollDistance;
+        }
+
+        //Restrict the camera y position
+        cameraZoomPosition = Mathf.Clamp(cameraZoomPosition, cameraYMinPos, cameraYMaxPos);
+
+        //Check if the current position matches the destination height
+        if (Mathf.Abs(cameraZoomPosition - transform.position.y) > 1)
+        {
+            //Speed will deaccelerate as camera approaches target position
+            scrollSpeed = (cameraZoomPosition - transform.position.y) * 5f;
+            transform.Translate(Vector3.up * scrollSpeed * Time.deltaTime, Space.World);
         }
 
     }
-
     /* Quickly pans the camera in the direction of the given vector and sets it behind the target object
      * Disables user camera control while in effect
      */
@@ -196,5 +208,7 @@ public class CameraControl : MonoBehaviour
        // cameraZMinPos = -30;
         cameraZMaxPos = (cellCountZ - 1) * (1.5f * HexMetrics.outerRadius) - 50;
     }
+
+
 }
 

@@ -12,21 +12,16 @@ public class HexCell : MonoBehaviour
 
     [SerializeField]
     private bool[] roads;
+
     bool walled; // Because the walls are placed in between cells, we have to refresh both the edited cell and its neighbors.
 
     private bool hasIncomingRiver, hasOutgoingRiver;
     private HexDirection incomingRiver, outgoingRiver;
-    //private Color color;
     int terrainTypeIndex;
 
-    //private Color defaultColor = Color.white;
-
     private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
-
     int urbanLevel, farmLevel, plantLevel, waterLevel;
-
     int specialIndex; // determine the special feature it has, if any.
-
     int distance; //From this cell to selected cell
 
     //outdated?
@@ -35,7 +30,16 @@ public class HexCell : MonoBehaviour
     //2 means it has been taken out of the frontier.
     public int SearchPhase { get; set; }
 
+    public bool Explorable { get; set; }
+
+    public int Index { get; set; }
+
+    private int visibility;
+
+    public PlayerFormation formationController { get; set; }
+    public UnitController unitController { get; set; }
     bool explored;
+
     public bool IsExplored
     {
         get
@@ -47,13 +51,7 @@ public class HexCell : MonoBehaviour
             explored = value;
         }
     }
-    public bool Explorable { get; set; }
 
-    public int Index { get; set; }
-
-    private int visibility;
-
-    public HexUnit Unit { get; set; }
 
     public HexCellShaderData ShaderData {
         get;
@@ -480,9 +478,9 @@ public class HexCell : MonoBehaviour
     {
         if(chunk) chunk.Refresh();
 
-        if (Unit)
+        if (formationController)
         {
-            Unit.ValidateLocation();
+            formationController.ValidateLocation();
         }
         for (int i = 0; i < neighbors.Length; i++)
         {
@@ -496,9 +494,9 @@ public class HexCell : MonoBehaviour
     void RefreshSelfOnly()
     {
         chunk.Refresh();
-        if (Unit)
+        if (formationController)
         {
-            Unit.ValidateLocation();
+            formationController.ValidateLocation();
         }
     }
 

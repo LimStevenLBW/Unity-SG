@@ -8,11 +8,12 @@ namespace Buttons
      */
    internal class Button : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
     {
-        [SerializeField] private AudioSource AudioPlayer;
-        [SerializeField] private AudioClip AudioHover;
-        [SerializeField] private AudioClip AudioClick;
+        [SerializeField] internal AudioSource AudioPlayer;
+        [SerializeField] internal AudioClip AudioHover;
+        [SerializeField] internal AudioClip AudioClickOpen;
+        [SerializeField] internal AudioClip AudioClickClose;
 
-        void PlayAudioClip(AudioClip clip)
+        public virtual void PlayAudioClip(AudioClip clip)
         {
             AudioPlayer.clip = clip;
             AudioPlayer.Play();
@@ -21,10 +22,10 @@ namespace Buttons
         /**
          * Registered IPointerEnterHandler callback
          */
-        public void OnPointerEnter(PointerEventData e)
+        public virtual void OnPointerEnter(PointerEventData e)
         {
-            PlayAudioClip(AudioHover);
-            Debug.Log("Button Hovered");
+            //PlayAudioClip(AudioHover);
+            //Debug.Log("Button Hovered");
         }
 
         /**
@@ -32,8 +33,8 @@ namespace Buttons
          */
         public virtual void OnPointerClick(PointerEventData e)
         {
-            PlayAudioClip(AudioClick);
-            Debug.Log("Button Clicked");
+            //PlayAudioClip(AudioClickOpen);
+            //Debug.Log("Button Clicked");
         }
 
 

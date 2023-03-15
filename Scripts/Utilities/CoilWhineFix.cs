@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 namespace Assets.Scripts.Utilities
 {
+    //Doesnt work in full screen Unity play mode
     public class CoilWhineFix : MonoBehaviour
     {
         #if UNITY_EDITOR
-        public int frameRate = 120;
+        [SerializeField] public int frameRate = 60;
 
         
         void Start()
