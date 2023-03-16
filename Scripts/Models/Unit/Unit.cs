@@ -30,7 +30,7 @@ public class Unit : ScriptableObject
 
     //Level
     public int baseLevel = 1;
-    private int currentLevel;
+    private int Level;
     private double exp;
     public double expGrowthRate = 1;
 
@@ -69,7 +69,7 @@ public class Unit : ScriptableObject
     //Troops
     public int baseTroopCount = 10;
     private int currentTroopCount;
-    private int maxTroopCount;
+    private int maxTroopCount; //With buffs, we can go past the normal troop count during combat
     private int TroopCount;
 
     //Leadership Stats, these will be within the range of 1-99. In some cases can even affect combat.
@@ -93,6 +93,33 @@ public class Unit : ScriptableObject
     //Status Effects
     private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
+
+    public void InitUnit()
+    {
+        maxTroopCount = baseTroopCount;
+        maxStamina = baseStamina;
+
+        //Should only be called when we first get the unit, move later
+        Power = basePower;
+        Armor = baseArmor;
+        Speed = baseSpeed;
+        Crit = baseSpeed;
+        CritBoost = baseCritBoost;
+        TroopCount = baseTroopCount;
+        Stamina = baseStamina;
+
+        //Initialize Combat Stats
+        currentTroopCount = TroopCount;
+        maxTroopCount = TroopCount;
+        currentStamina = Stamina;
+        maxStamina = Stamina;
+        currentPower = Power;
+        currentArmor = Armor;
+        currentSpeed = Speed;
+        currentSpeed = Crit;
+        currentCritBoost = CritBoost;
+    }
+
     public string GetRank()
     {
         if (rank == Rank.X) return "X";
@@ -107,8 +134,8 @@ public class Unit : ScriptableObject
     }
     public string GetName() { return unitName; }
    
-    public int GetLevel() { return currentLevel; }
-    public void SetLevel(int value) { currentLevel = value; }
+    public int GetLevel() { return Level; }
+    public void SetLevel(int value) { Level = value; }
     public double GetExp() { return exp; }
     public void SetExp(double value) { exp = value; }
     //----------------------------------------------------------------

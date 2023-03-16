@@ -32,7 +32,7 @@ public class HexGrid : MonoBehaviour
     bool currentPathExists;
 
     //Unit Manager contains interaction involving units and formations
-    public HexUnitManager unitManager;
+    public UnitManager unitManager;
 
     HexCellShaderData cellShaderData;
 

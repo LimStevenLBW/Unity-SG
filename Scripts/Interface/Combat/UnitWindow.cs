@@ -21,16 +21,29 @@ public class UnitWindow : MonoBehaviour
     public TextMeshProUGUI speedText;
     public TextMeshProUGUI critText;
 
+    public PortraitCamera portraitCamera;
+
     // Start is called before the first frame update
     public void Awake()
     {
+        
     }
 
     public void SetValues(UnitController unitController)
     {
-        Unit unit = unitController.GetUnit();
+        Unit unit = unitController.unit;
+
         if (unit)
         {
+
+            /* portraitCamera.transform.position = unitController.transform.position + new Vector3(0, 16, -35);
+
+             Vector3 eulerRotation = new Vector3(portraitCamera.transform.eulerAngles.x, unitController.transform.eulerAngles.y, transform.eulerAngles.z);
+
+             portraitCamera.transform.rotation = Quaternion.Euler(eulerRotation);
+             */
+            portraitCamera.SetTargetObject(unitController);
+
             nameText.SetText("" + unit.GetName());
             rankText.SetText("" + unit.GetRank());
             troopsText.SetText(unit.GetCurrentTroopCount() + " / " + unit.GetMaxTroopCount());

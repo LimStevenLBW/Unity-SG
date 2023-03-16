@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexUnitManager : MonoBehaviour
+public class UnitManager : MonoBehaviour
 {
     //Temporary for creating Units
     public List<PlayerFormation> units = new List<PlayerFormation>();
@@ -23,7 +23,8 @@ public class HexUnitManager : MonoBehaviour
 
     void Awake()
     {
-
+        testUnit1.unit.InitUnit();
+        testUnit2.unit.InitUnit();
     }
     void OnEnable()
     {

@@ -223,9 +223,4 @@ public class UnitController : MonoBehaviour
 
         return moveCost;
     }
-
-    public Unit GetUnit()
-    {
-        return unit;
-    }
 }
