@@ -5,13 +5,13 @@ using Assets.Scripts.Models.Unit;
 namespace Assets.Scripts.Interface
 {
     /*
-     * Handles interaction in combat
+     * Handles interaction in the overworld
      */
-    class CombatUI : MonoBehaviour
+    class ManagerOverworldUI : MonoBehaviour
     {
         public HexGrid grid;
         
-        UnitController selectedUnit;
+        PlayerFormation selectedUnit;
         HexCell selectedCell;
 
         void Update()
@@ -51,15 +51,14 @@ namespace Assets.Scripts.Interface
         {
             grid.ClearPath(); //Clear any current paths
 
-            Debug.Log("clicked");
-
             DisableHighlight(selectedUnit);
 
             UpdateSelection();
 
             if (selectedCell)
             {
-                selectedUnit = selectedCell.unitController;
+                Debug.Log("Re-Enable");
+                //selectedUnit = selectedCell.Unit;
                 EnableHighlight(selectedUnit);
             }
 
@@ -73,7 +72,7 @@ namespace Assets.Scripts.Interface
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             //Most people will try to select the unit, not the cell.
-            UnitController unit = grid.GetUnit(ray);
+            PlayerFormation unit = grid.GetFormation(ray);
             HexCell cell;
 
             //If we get the unit, we can get the cell easily
@@ -125,12 +124,12 @@ namespace Assets.Scripts.Interface
             }
         }
 
-        void EnableHighlight(UnitController unit)
+        void EnableHighlight(PlayerFormation unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = true;
         }
 
-        void DisableHighlight(UnitController unit)
+        void DisableHighlight(PlayerFormation unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = false;
         }

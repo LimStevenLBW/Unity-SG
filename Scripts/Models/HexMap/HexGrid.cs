@@ -40,7 +40,7 @@ public class HexGrid : MonoBehaviour
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
-        //HexMetrics.colors = colors;
+
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
 
         cellShaderData.Grid = this;
@@ -50,6 +50,17 @@ public class HexGrid : MonoBehaviour
         
         //gridCanvas = GetComponentInChildren<Canvas>();
         //hexMesh = GetComponentInChildren<HexMesh>();
+    }
+
+    void OnEnable()
+    {
+        if (!HexMetrics.noiseSource)
+        {
+            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.InitializeHashGrid(seed);
+
+            ResetVisibility();
+        }
     }
 
     public bool CreateMap(int cellCountX, int cellCountZ)
@@ -85,16 +96,6 @@ public class HexGrid : MonoBehaviour
         cameraControl.UpdateClampPositions(this.cellCountX, this.cellCountZ);
 
         return true;
-    }
-    void OnEnable()
-    {
-        if (!HexMetrics.noiseSource)
-        {
-            HexMetrics.noiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(seed);
-            // HexMetrics.colors = colors;
-            ResetVisibility();
-        }
     }
 
     void CreateChunks()

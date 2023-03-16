@@ -93,6 +93,20 @@ public class Unit : ScriptableObject
     //Status Effects
     private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
+    public string GetRank()
+    {
+        if (rank == Rank.X) return "X";
+        if (rank == Rank.S) return "S";
+        if (rank == Rank.A) return "A";
+        if (rank == Rank.B) return "B";
+        if (rank == Rank.C) return "C";
+        if (rank == Rank.D) return "D";
+
+        return "?";
+
+    }
+    public string GetName() { return unitName; }
+   
     public int GetLevel() { return currentLevel; }
     public void SetLevel(int value) { currentLevel = value; }
     public double GetExp() { return exp; }

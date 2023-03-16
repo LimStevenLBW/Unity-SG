@@ -5,14 +5,19 @@ using Assets.Scripts.Models.Unit;
 namespace Assets.Scripts.Interface
 {
     /*
-     * Handles interaction in the overworld
+     * Handles interaction in combat
      */
-    class HexOverworldUI : MonoBehaviour
+    class ManagerCombatUI : MonoBehaviour
     {
         public HexGrid grid;
-        
-        PlayerFormation selectedUnit;
-        HexCell selectedCell;
+        public UnitWindow unitWindow;
+        private UnitController selectedUnit;
+        private HexCell selectedCell;
+
+        [SerializeField] private AudioSource AudioPlayer;
+        [SerializeField] private AudioClip AudioHover;
+        [SerializeField] private AudioClip AudioClickOpen;
+        [SerializeField] private AudioClip AudioClickClose;
 
         void Update()
         {
@@ -23,17 +28,20 @@ namespace Assets.Scripts.Interface
                 {
                     DoSelection();
                 }
+                /*
                 else if (selectedUnit)
                 {
                     if (Input.GetMouseButtonDown(1))
                     {
                         DoMove();
+
                     }
                     else
                     {
                         DoPathfinding();
                     }
                 }
+                */
             }
         }
 
@@ -49,17 +57,23 @@ namespace Assets.Scripts.Interface
          */
         void DoSelection()
         {
-            grid.ClearPath(); //Clear any current paths
 
             DisableHighlight(selectedUnit);
+            DisableUnitWindow(selectedUnit);
 
             UpdateSelection();
 
+
             if (selectedCell)
             {
-                Debug.Log("Re-Enable");
-                //selectedUnit = selectedCell.Unit;
+                selectedUnit = selectedCell.unitController;
+                
+            }
+            //Note that a cell may not necessarily have a unit
+            if (selectedUnit)
+            {
                 EnableHighlight(selectedUnit);
+                EnableUnitWindow(selectedUnit);
             }
 
         }
@@ -69,22 +83,22 @@ namespace Assets.Scripts.Interface
          */
         bool UpdateSelection()
         {
+            //grid.ClearPath(); //Clear any current paths
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            //Most people will try to select the unit, not the cell.
-            PlayerFormation unit = grid.GetFormation(ray);
             HexCell cell;
 
-            //If we get the unit, we can get the cell easily
+            //Check if a unit/cell was clicked. Most people will try to select the unit, not the cell.
+            //If we have the unit, we can get the cell easily
+            UnitController unit = grid.GetUnit(ray);
+
             if (unit)
             {
                 cell = unit.Location;
-
-               // selectedUnit = unit;
             }
             else
             {
-                //Or just get the grid cell at mouse position
+                //Or alternatively, just get the grid cell at mouse position
                 cell = grid.GetCell(ray);
             }
 
@@ -124,15 +138,31 @@ namespace Assets.Scripts.Interface
             }
         }
 
-        void EnableHighlight(PlayerFormation unit)
+        void EnableHighlight(UnitController unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = true;
         }
 
-        void DisableHighlight(PlayerFormation unit)
+        void DisableHighlight(UnitController unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = false;
         }
 
+        void EnableUnitWindow(UnitController unit)
+        {
+            unitWindow.gameObject.SetActive(true);
+            if(unit) unitWindow.SetValues(unit);
+            PlayAudioClip(AudioClickOpen);
+        }
+        void DisableUnitWindow(UnitController unit)
+        {
+            PlayAudioClip(AudioClickClose);
+            unitWindow.gameObject.SetActive(false);
+        }
+        public virtual void PlayAudioClip(AudioClip clip)
+        {
+            AudioPlayer.clip = clip;
+            AudioPlayer.Play();
+        }
     }
 }

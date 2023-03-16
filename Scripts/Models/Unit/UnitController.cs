@@ -16,14 +16,15 @@ public class UnitController : MonoBehaviour
     private Animator animator;
     private State state;
 
+
     private HexCell location, currentTravelLocation;
     private float orientation;
     const float travelSpeed = 4f;
     const float rotationSpeed = 180f;
     List<HexCell> pathToTravel;
 
-    //COPIED FROM HEX FORMATION
     public HexGrid Grid { get; set; }
+
     public float Orientation
     {
         get
@@ -221,5 +222,10 @@ public class UnitController : MonoBehaviour
         }
 
         return moveCost;
+    }
+
+    public Unit GetUnit()
+    {
+        return unit;
     }
 }
