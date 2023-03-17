@@ -33,8 +33,6 @@ public class PortraitCamera : MonoBehaviour
             int speed = 5;
             // Look
 
-            Debug.Log("target " + target.position);
-            Debug.Log("Transform "+ transform.position);
             var newRotation = Quaternion.LookRotation(target.transform.position + new Vector3(0, 17, 0) - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, speed * Time.deltaTime);
 

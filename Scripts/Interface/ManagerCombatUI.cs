@@ -11,6 +11,7 @@ namespace Assets.Scripts.Interface
     {
         public HexGrid grid;
         public UnitWindow unitWindow;
+        public CameraControl mainCamera;
         private UnitController selectedUnit;
         private HexCell selectedCell;
 
@@ -22,8 +23,8 @@ namespace Assets.Scripts.Interface
         void Update()
         {
             //As long as the pointer is not above a UI element from the event system, then..
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
+            //if (!EventSystem.current.IsPointerOverGameObject())
+           // {
                 if (Input.GetMouseButtonDown(0)) //LEFT CLICK
                 {
                     DoSelection();
@@ -42,7 +43,7 @@ namespace Assets.Scripts.Interface
                     }
                 }
                 */
-            }
+           // }
         }
 
         public void ToggleEditMode()
@@ -59,10 +60,9 @@ namespace Assets.Scripts.Interface
         {
 
             DisableHighlight(selectedUnit);
-            DisableUnitWindow(selectedUnit);
+            DisableUnitWindow();
 
             UpdateSelection();
-
 
             if (selectedCell)
             {
@@ -151,11 +151,17 @@ namespace Assets.Scripts.Interface
         void EnableUnitWindow(UnitController unit)
         {
             unitWindow.gameObject.SetActive(true);
-            if(unit) unitWindow.SetValues(unit);
+
+            if (unit) {
+                unitWindow.SetValues(unit);
+                //unitWindow.SetPosition(unit);
+                mainCamera.Focus(unit.transform, 50, 50);
+            }
             PlayAudioClip(AudioClickOpen);
         }
-        void DisableUnitWindow(UnitController unit)
+        void DisableUnitWindow()
         {
+            mainCamera.UnFocus();
             PlayAudioClip(AudioClickClose);
             unitWindow.gameObject.SetActive(false);
         }

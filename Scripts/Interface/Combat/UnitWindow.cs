@@ -36,16 +36,10 @@ public class UnitWindow : MonoBehaviour
         if (unit)
         {
 
-            /* portraitCamera.transform.position = unitController.transform.position + new Vector3(0, 16, -35);
-
-             Vector3 eulerRotation = new Vector3(portraitCamera.transform.eulerAngles.x, unitController.transform.eulerAngles.y, transform.eulerAngles.z);
-
-             portraitCamera.transform.rotation = Quaternion.Euler(eulerRotation);
-             */
             portraitCamera.SetTargetObject(unitController);
 
             nameText.SetText("" + unit.GetName());
-            rankText.SetText("" + unit.GetRank());
+            rankText.SetText("" + unit.GetRank() + " Rank Squad Leader");
             troopsText.SetText(unit.GetCurrentTroopCount() + " / " + unit.GetMaxTroopCount());
             staminaText.SetText(unit.GetCurrentStamina() + " / " + unit.GetMaxStamina());
             powerText.SetText("" + unit.GetCurrentPower());
@@ -53,7 +47,13 @@ public class UnitWindow : MonoBehaviour
             speedText.SetText("" + unit.GetCurrentSpeed());
             critText.SetText("" + unit.GetCurrentCrit() + "%");
             
-        }
-        
+        }   
+    }
+    public void SetPosition(UnitController unitController)
+    {
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(unitController.transform.position);
+        screenPos.z = 0;
+
+        transform.position = screenPos;
     }
 }

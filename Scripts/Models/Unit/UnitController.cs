@@ -16,7 +16,6 @@ public class UnitController : MonoBehaviour
     private Animator animator;
     private State state;
 
-
     private HexCell location, currentTravelLocation;
     private float orientation;
     const float travelSpeed = 4f;

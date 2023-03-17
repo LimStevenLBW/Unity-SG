@@ -32,11 +32,12 @@ public class Sector : MonoBehaviour
         }
         
         Debug.Log("Mouse clicked");
-        StartCoroutine(ClickEvent());
+       // StartCoroutine(ClickEvent());
         SectorAudio.clip = SectorClip;
         SectorAudio.Play();
     }
 
+    /*
     private IEnumerator ClickEvent()
     {
         //pause a frame so you don't pick up the same mouse down event.
@@ -48,11 +49,12 @@ public class Sector : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 Vector3 pos = transform.position;
-                cameraScript.StartCoroutine(cameraScript.CameraJump(pos));
+                //cameraScript.StartCoroutine(cameraScript.CameraJump(pos, 50 , -50));
                 yield break;
             }
             count += Time.deltaTime;// increment counter by change in time between frames
             yield return null; // wait for the next frame
         }
     }
+    */
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
+    private Vector3 originPosition;
+    private Quaternion originRotation;
     public bool isControlEnabled;
     
     public float panSpeed = 100.0f;
@@ -43,8 +45,9 @@ public class CameraControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        originPosition = transform.position;
+        originRotation = transform.rotation;
         cameraZoomPosition = transform.position.y;
-        isControlEnabled = true;
     }
 
     // Update is called once per frame
@@ -139,6 +142,7 @@ public class CameraControl : MonoBehaviour
         transform.position = pos; // Submit Result
     }
 
+
     private void HandleScrolling()
     {
         //Check which direction the user is scrolling and store it
@@ -168,13 +172,40 @@ public class CameraControl : MonoBehaviour
         }
 
     }
+
+    public void Focus(Transform target, int offsetY, int offsetZ)
+    {
+        Vector3 targetRotation = transform.rotation.eulerAngles; //Get Vector 3 representation  
+        targetRotation = new Vector3(targetRotation.x-15, targetRotation.y, targetRotation.z); //Adjust angle
+        Quaternion targetRotationQ = Quaternion.Euler(targetRotation); //Convert back
+
+       // IEnumerator coroutineRotate = RotateLerp(transform, targetRotationQ);
+        IEnumerator coroutine = CameraJump(target.position, targetRotationQ, offsetY, offsetZ);
+
+       // StopAllCoroutines();
+        StartCoroutine(coroutine);
+        //StartCoroutine(coroutineRotate);
+
+    }
+    public void UnFocus()
+    {
+       // IEnumerator coroutineRotate = RotateLerp(transform, originRotation);
+        IEnumerator coroutine = CameraJump(originPosition, originRotation, 0, 0);
+        StopAllCoroutines();
+        StartCoroutine(coroutine);
+        //StartCoroutine(coroutineRotate);
+    }
+
+
     /* Quickly pans the camera in the direction of the given vector and sets it behind the target object
      * Disables user camera control while in effect
      */
-    public IEnumerator CameraJump(Vector3 targetPosition)
+
+    public IEnumerator CameraJump(Vector3 targetPosition, Quaternion targetRotationQ, int offsetY, int offsetZ)
     {
-        targetPosition.y += 50;
-        targetPosition.z -= 50;
+        targetPosition.y += offsetY;
+        targetPosition.z -= offsetZ;
+        bool shouldReEnable = isControlEnabled;
         isControlEnabled = false;
         float smoothTime = 0.3F;
         Vector3 velocity = Vector3.zero;
@@ -187,9 +218,11 @@ public class CameraControl : MonoBehaviour
         //While close enough, continue to move the camera
         while (Vector3.Distance(transform.position, targetPosition) > 3f)
         {
+
             //Debug.Log((Vector3.SqrMagnitude(targetPosition - transform.position)));
             //Debug.Log(Vector3.Distance(transform.position, targetPosition));
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationQ, Time.deltaTime * 3f);
             //transform.position = Vector3.MoveTowards(transform.position, targetPosition, jumpSpeed * Time.deltaTime);
             //  transform.Translate(Space.World);
             //Wait a frame and repeat
@@ -198,8 +231,21 @@ public class CameraControl : MonoBehaviour
 
         //Reset camera target position to prevent auto scrolling after the jump
         cameraZoomPosition = transform.position.y;
-        isControlEnabled = true;
+        if(shouldReEnable) isControlEnabled = true;
     }
+
+    /*
+    IEnumerator RotateLerp(Transform target, Quaternion endRot)
+    {
+        float duration = 0.75f;
+        var startRot = target.rotation; // current rotation
+        for (float timer = 0; timer < duration; timer += Time.deltaTime)
+        {
+            target.rotation = Quaternion.Slerp(startRot, endRot, timer / duration);
+            yield return 0;
+        }
+    }
+    */
 
     public void UpdateClampPositions(int cellCountX, int cellCountZ)
     {
