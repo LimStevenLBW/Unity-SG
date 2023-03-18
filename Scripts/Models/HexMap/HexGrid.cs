@@ -652,12 +652,12 @@ public class HexGrid : MonoBehaviour
             {
                 int turn = (current.Distance - 1) / speed;
                 current.SetLabel(turn.ToString());
-                current.EnableHighlight(Color.white);
+                current.EnableHighlight(Color.white, true);
                 current = current.PathFrom;
             }
         }
-        currentPathFrom.EnableHighlight(Color.blue);
-        currentPathTo.EnableHighlight(Color.red);
+        currentPathFrom.EnableHighlight(Color.blue, true);
+        currentPathTo.EnableHighlight(Color.red, true);
     }
 
     public void ClearPath()
@@ -668,16 +668,16 @@ public class HexGrid : MonoBehaviour
             while (current != currentPathFrom)
             {
                 current.SetLabel(null);
-                current.DisableHighlight();
+                current.DisableHighlight(true);
                 current = current.PathFrom;
             }
-            current.DisableHighlight();
+            current.DisableHighlight(true);
             currentPathExists = false;
         }
         else if (currentPathFrom)
         {
-            currentPathFrom.DisableHighlight();
-            currentPathTo.DisableHighlight();
+            currentPathFrom.DisableHighlight(true);
+            currentPathTo.DisableHighlight(true);
         }
         currentPathFrom = currentPathTo = null;
     }

@@ -1,4 +1,4 @@
-Shader "Custom/Highlight" {
+Shader "Custom/Cell_Highlight_Normal" {
 	Properties {
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
@@ -11,7 +11,7 @@ Shader "Custom/Highlight" {
 
 	SubShader {
 		Tags { 
-			"Queue"="Transparent+10"
+			"Queue"="Transparent"
 			"IgnoreProjector"="True"
 			"RenderType"="Transparent"
 			"PreviewType"="Plane"
@@ -19,7 +19,6 @@ Shader "Custom/Highlight" {
 		}
 
 		Cull Off
-		ZTest Always
 		Blend One OneMinusSrcAlpha
 
 		Pass {

@@ -65,6 +65,17 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    public void EnableHighlight()
+    {
+        GetComponent<Outline>().enabled = true;
+        location.EnableHighlight(Color.white, false);
+    }
+    public void DisableHighlight()
+    {
+        GetComponent<Outline>().enabled = false;
+        location.DisableHighlight(false);
+    }
+
     public void ValidateLocation()
     {
         transform.localPosition = location.Position;

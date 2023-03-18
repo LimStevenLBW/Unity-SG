@@ -5,7 +5,7 @@ using Assets.Scripts.Models.Unit;
 namespace Assets.Scripts.Interface
 {
     /*
-     * Handles interaction in combat
+     * Handles user interaction in combat scene
      */
     class ManagerCombatUI : MonoBehaviour
     {
@@ -25,10 +25,14 @@ namespace Assets.Scripts.Interface
             //As long as the pointer is not above a UI element from the event system, then..
             //if (!EventSystem.current.IsPointerOverGameObject())
            // {
-                if (Input.GetMouseButtonDown(0)) //LEFT CLICK
-                {
-                    DoSelection();
-                }
+            if (Input.GetMouseButtonDown(0)) //LEFT CLICK
+            {
+                DoSelection();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                ClearSelection();
+            }
                 /*
                 else if (selectedUnit)
                 {
@@ -59,8 +63,7 @@ namespace Assets.Scripts.Interface
         void DoSelection()
         {
 
-            DisableHighlight(selectedUnit);
-            DisableUnitWindow();
+            ClearSelection();
 
             UpdateSelection();
 
@@ -112,6 +115,12 @@ namespace Assets.Scripts.Interface
             return false; //No need to update it if the same thing was selected
         }
 
+        void ClearSelection()
+        {
+            DisableHighlight(selectedUnit);
+            DisableUnitWindow();
+        }
+
         void DoPathfinding()
         {
             //If a new cell has been selected
@@ -140,12 +149,13 @@ namespace Assets.Scripts.Interface
 
         void EnableHighlight(UnitController unit)
         {
-            if (unit) unit.GetComponent<Outline>().enabled = true;
+            if (unit) unit.EnableHighlight();
+
         }
 
         void DisableHighlight(UnitController unit)
         {
-            if (unit) unit.GetComponent<Outline>().enabled = false;
+            if (unit) unit.DisableHighlight();
         }
 
         void EnableUnitWindow(UnitController unit)

@@ -695,15 +695,26 @@ public class HexCell : MonoBehaviour
         label.text = text;
     }
 
-    public void DisableHighlight()
+    public void DisableHighlight(bool shaderAlwaysOnTop)
     {
-        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        int pickShader = 0; //DefaultAlways on Top
+        if (!shaderAlwaysOnTop)
+        {
+            pickShader = 1;
+        }
+
+        Image highlight = uiRect.GetChild(pickShader).GetComponent<Image>();
         highlight.enabled = false;
     }
 
-    public void EnableHighlight(Color color)
+    public void EnableHighlight(Color color, bool shaderAlwaysOnTop)
     {
-        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        int pickShader = 0; //DefaultAlways on Top
+        if (!shaderAlwaysOnTop)
+        {
+            pickShader = 1;
+        }
+        Image highlight = uiRect.GetChild(pickShader).GetComponent<Image>();
         highlight.color = color;
         highlight.enabled = true;
     }
