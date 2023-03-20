@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Uses unit data to interact with the combat scene. 
+ * Defines the AI for units
+ */
 public class UnitController : MonoBehaviour
 {
     enum State
@@ -22,7 +26,82 @@ public class UnitController : MonoBehaviour
     const float rotationSpeed = 180f;
     List<HexCell> pathToTravel;
 
+    bool ACTIVE = false;
+
     public HexGrid Grid { get; set; }
+
+    //Initialize is only called the first time a unit is obtained
+
+    void Initialize()
+    {
+
+    }
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        unit.InitUnit(); //Initialize combat values
+        state = State.IDLE;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ACTIVE = true;
+            unit.StartListening();
+        }
+
+        if (ACTIVE)
+        {
+
+            if (state == State.IDLE)
+            {
+                CalculateNextAction();
+            }
+        }
+
+        
+        /*
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            animator.SetBool("isWalking", false);
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            animator.SetBool("isWalking", true);
+        }
+        */
+
+    }
+   
+
+    void CalculateNextAction()
+    {
+        if (unit.skill1 && unit.skill1.IsAvailable())
+        {
+            unit.skill1.DoSkill();
+        }
+        else if (unit.skill2 && unit.skill1.IsAvailable())
+        {
+
+        }
+        else if (unit.skill3 && unit.skill1.IsAvailable())
+        {
+
+        }
+        else if (unit.skill4 && unit.skill1.IsAvailable())
+        {
+
+        }
+    }
 
     public float Orientation
     {
@@ -108,35 +187,6 @@ public class UnitController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    //Initialize is only called the first time a unit is obtained
-    void Initialize()
-    {
-        
-    }
-
-    void Awake()
-    {
-        animator = GetComponent<Animator>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        state = State.IDLE;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            animator.SetBool("isWalking", false);
-        }
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
-            animator.SetBool("isWalking", true);
-        }
-    }
 
     IEnumerator TravelPath()
     {

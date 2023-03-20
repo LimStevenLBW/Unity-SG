@@ -18,6 +18,8 @@ public class Unit : ScriptableObject
         D
     }
 
+    public string faction { get; set; }
+
     //Identity
     public string unitName = "test";
     public string bio;
@@ -107,6 +109,11 @@ public class Unit : ScriptableObject
         CritBoost = baseCritBoost;
         TroopCount = baseTroopCount;
         Stamina = baseStamina;
+        skill1.InitBaseFields();
+        skill2.InitBaseFields();
+        skill3.InitBaseFields();
+        skill4.InitBaseFields();
+      
 
         //Initialize Combat Stats
         currentTroopCount = TroopCount;
@@ -118,6 +125,21 @@ public class Unit : ScriptableObject
         currentSpeed = Speed;
         currentSpeed = Crit;
         currentCritBoost = CritBoost;
+
+        if (skill1) skill1.Reset();
+        if (skill2) skill2.Reset();
+
+        if (skill3) skill3.Reset();
+        if (skill4) skill4.Reset();
+    }
+
+    public void StartListening()
+    {
+        if (skill1) skill1.StartListening();
+        if (skill2) skill2.StartListening();
+
+        if (skill3) skill3.StartListening();
+        if (skill4) skill4.StartListening();
     }
 
     public string GetRank()
@@ -180,6 +202,4 @@ public class Unit : ScriptableObject
     public void SetTroopCount(int value) { TroopCount = value; }
 
     public List<StatusEffect> GetStatusEffects() { return statusEffects;  }
-
-
 } 

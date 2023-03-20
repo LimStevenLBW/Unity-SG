@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Works with Hexgrid to handle instantiating units
+ */
 public class UnitManager : MonoBehaviour
 {
     //Temporary for creating Units
@@ -23,8 +26,7 @@ public class UnitManager : MonoBehaviour
 
     void Awake()
     {
-        testUnit1.unit.InitUnit();
-        testUnit2.unit.InitUnit();
+
     }
     void OnEnable()
     {
