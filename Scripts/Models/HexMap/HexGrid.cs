@@ -348,9 +348,12 @@ public class HexGrid : MonoBehaviour
         cellShaderData.isImmediateCellReveal = originalImmediateCellReveal;
     }
 
+    /*
+     * Only for overworld, works under the assumption that there is only one path
+     */
     public void FindPath(HexCell fromCell, HexCell toCell, PlayerFormation unit)
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         //StartCoroutine(Search(fromCell, toCell, speed));
         ClearPath();
         currentPathFrom = fromCell;
@@ -358,13 +361,19 @@ public class HexGrid : MonoBehaviour
         currentPathExists = Search(fromCell, toCell, unit);
         ShowPath(unit.Speed);
     }
+
+
+    /*
+     * When a path is found, we have to remember it. 
+     * That way, we can clean it up next time. So keep track of the end points and whether a path exists between them.
+     */
     public void FindPath(HexCell fromCell, HexCell toCell, UnitController unit)
     {
-        StopAllCoroutines();
-        //StartCoroutine(Search(fromCell, toCell, speed));
         ClearPath();
-        currentPathFrom = fromCell;
-        currentPathTo = toCell;
+       // currentPathFrom = fromCell;
+        //currentPathTo = toCell;
+
+        //Returns true if there is an available path
         currentPathExists = Search(fromCell, toCell, unit);
         ShowPath(unit.Speed);
     }
@@ -478,6 +487,7 @@ public class HexGrid : MonoBehaviour
         }
         return false;
     }
+
     bool Search(HexCell fromCell, HexCell toCell, UnitController unit)
     {
         int speed = unit.Speed;
@@ -490,16 +500,6 @@ public class HexGrid : MonoBehaviour
         {
             searchFrontier.Clear();
         }
-
-        /*
-        for (int i = 0; i < cells.Length; i++)
-        {
-           // cells[i].Distance = int.MaxValue; //if distance at max value, hexcell will determine that it should not display coordinates
-            cells[i].SetLabel(null); //Hide labels
-            cells[i].DisableHighlight();
-        }
-        fromCell.EnableHighlight(Color.green);
-        */
 
         //WaitForSeconds delay = new WaitForSeconds(1 / 60f);
         fromCell.SearchPhase = searchFrontierPhase;
@@ -515,17 +515,6 @@ public class HexGrid : MonoBehaviour
             if (current == toCell)
             {
                 return true;
-                /*
-                while (current != fromCell)
-                {
-                    int turn = current.Distance / speed;
-                    current.SetLabel(turn.ToString());
-                    current.EnableHighlight(Color.blue);
-                    current = current.PathFrom;
-                }
-                toCell.EnableHighlight(Color.red);
-                break; //We can stop once we find destination cell
-                */
             }
 
             int currentTurn = (current.Distance - 1) / speed;
@@ -584,6 +573,7 @@ public class HexGrid : MonoBehaviour
         }
         return false;
     }
+
     List<HexCell> GetVisibleCells(HexCell fromCell, int range)
     {
         List<HexCell> visibleCells = ListPool<HexCell>.Get();

@@ -19,11 +19,14 @@ public class UnitController : MonoBehaviour
 
     private Animator animator;
     private State state;
+    private UnitManager manager;
 
     private HexCell location, currentTravelLocation;
     private float orientation;
+
     const float travelSpeed = 4f;
     const float rotationSpeed = 180f;
+
     List<HexCell> pathToTravel;
 
     bool ACTIVE = false;
@@ -32,9 +35,13 @@ public class UnitController : MonoBehaviour
 
     //Initialize is only called the first time a unit is obtained
 
-    void Initialize()
+    public void Initialize(UnitManager manager)
     {
+        this.manager = manager;
 
+        unit.Initialize(this, manager); //Initialize combat values, pass itself down
+
+        state = State.IDLE;
     }
 
     void Awake()
@@ -45,8 +52,7 @@ public class UnitController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        unit.InitUnit(); //Initialize combat values
-        state = State.IDLE;
+       
     }
 
     // Update is called once per frame
@@ -89,17 +95,17 @@ public class UnitController : MonoBehaviour
         {
             unit.skill1.DoSkill();
         }
-        else if (unit.skill2 && unit.skill1.IsAvailable())
+        else if (unit.skill2 && unit.skill2.IsAvailable())
         {
-
+            unit.skill2.DoSkill();
         }
-        else if (unit.skill3 && unit.skill1.IsAvailable())
+        else if (unit.skill3 && unit.skill3.IsAvailable())
         {
-
+            unit.skill3.DoSkill();
         }
-        else if (unit.skill4 && unit.skill1.IsAvailable())
+        else if (unit.skill4 && unit.skill4.IsAvailable())
         {
-
+            unit.skill4.DoSkill();
         }
     }
 
@@ -160,9 +166,12 @@ public class UnitController : MonoBehaviour
         transform.localPosition = location.Position;
     }
 
+    /*
+     * Return true if the cell is a valid location for this unit to travel to
+     */
     public bool IsValidDestination(HexCell cell)
     {
-        return cell.IsExplored && !cell.IsUnderwater && !cell.formationController;
+        return !cell.unitController;
     }
 
     public void Travel(List<HexCell> path)
@@ -283,4 +292,5 @@ public class UnitController : MonoBehaviour
 
         return moveCost;
     }
+
 }

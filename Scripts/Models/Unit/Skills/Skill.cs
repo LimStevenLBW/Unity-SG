@@ -15,7 +15,13 @@ public abstract class Skill: ScriptableObject
     internal double currentCooldown;
     internal int currentActionCost;
 
-    public abstract void InitBaseFields();
+    
+    internal UnitManager manager;
+    internal UnitController controller;
+    internal Unit unit;
+
+    //Initialize cooldown and action costs
+    public abstract void Initialize(Unit unit, UnitController controller, UnitManager manager);
     public abstract void StartListening();
     public abstract void SecondPassed();
     public abstract void DoSkill();
@@ -30,4 +36,8 @@ public abstract class Skill: ScriptableObject
     public abstract string GetSkillName();
 
     public abstract string GetDescription();
+
+    public abstract void GetController(UnitController controller);
+
+    public abstract void GetUnit(Unit unit);
 }

@@ -121,32 +121,6 @@ namespace Assets.Scripts.Interface
             DisableUnitWindow();
         }
 
-        void DoPathfinding()
-        {
-            //If a new cell has been selected
-            if (UpdateSelection())
-            {
-                if (selectedCell && selectedUnit.IsValidDestination(selectedCell))
-                {
-                    grid.FindPath(selectedUnit.Location, selectedCell, selectedUnit);
-                }
-                else
-                {
-                    grid.ClearPath();
-                }
-            }
-        }
-
-        void DoMove()
-        {
-            if (grid.HasPath)
-            {
-                //selectedUnit.Location = selectedCell;
-                selectedUnit.Travel(grid.GetPath());
-                grid.ClearPath();
-            }
-        }
-
         void EnableHighlight(UnitController unit)
         {
             if (unit) unit.EnableHighlight();

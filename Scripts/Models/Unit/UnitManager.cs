@@ -50,7 +50,7 @@ public class UnitManager : MonoBehaviour
             }
             else
             {
-                CreateTestUnit(testUnit1);
+                CreateCombatUnit(testUnit1);
             }
             return;
         }
@@ -58,11 +58,11 @@ public class UnitManager : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                // DestroyTestUnit();
+                // DestroyCombatUnit();
             }
             else
             {
-                CreateTestUnit(testUnit2);
+                CreateCombatUnit(testUnit2);
             }
             return;
         }
@@ -147,23 +147,69 @@ public class UnitManager : MonoBehaviour
         }
     }
     ///------------------------------------------
-    //TEMPORARY FUNCTIONS FOR TESTING COMBAT
-    void CreateTestUnit(UnitController unit)
+    void CreateCombatUnit(UnitController unitController)
     {
         HexCell cell = GetCellUnderCursor();
-        if (cell && !cell.unitController)
+        if (cell && !cell.unitController) //If the cell is valid and doesn't already have a controller
         {
-            AddTestUnit(
-                Instantiate(unit.prefab), cell, Random.Range(0f, 360f)
+            AddUnit(
+                Instantiate(unitController.prefab), cell, Random.Range(0f, 360f)
             );
-        }
+
+            
+            unitController.Initialize(this); //Pass itself down, likewise, make sure the unit knows about the manager
+         }
     }
-    public void AddTestUnit(UnitController unit, HexCell location, float orientation)
+    public void AddUnit(UnitController controller, HexCell location, float orientation)
     {
-        TestUnits.Add(unit);
-        unit.Grid = grid;
-        unit.transform.SetParent(transform, false);
-        unit.Location = location;
-        unit.Orientation = orientation;
+        TestUnits.Add(controller); //Make sure UnitManager knows about the controller, for testing purposes
+
+        controller.Grid = grid;
+        controller.transform.SetParent(transform, false);
+        controller.Location = location;
+        controller.Orientation = orientation;
+    }
+
+    /*
+     * Locate the nearest enemy that can be pathed to
+     */
+    public void FindNearestEnemy(UnitController controller)
+    {
+        Debug.Log("Reached");
+        /*
+        //Let's go through our list of controllers
+        for(int i=0; i<TestUnits.Count; i++)
+        {
+            //Find the route to that selected controller
+            grid.FindPath(controller.Location, TestUnits[i].Location, TestUnits[i]);
+
+            //Store the shortest route
+        }
+        */
+
+        //Have that controller do path finding?
+    }
+
+    void DoPathfinding(UnitController controller, HexCell targetCell)
+    {
+        if (targetCell && controller.IsValidDestination(targetCell))
+        {
+            grid.FindPath(controller.Location, targetCell, controller);
+        }
+        else
+        {
+            grid.ClearPath();
+        }
+        
+    }
+
+    void DoMove(UnitController controller)
+    {
+        if (grid.HasPath)
+        {
+            //controller.Location = selectedCell;
+            controller.Travel(grid.GetPath());
+            grid.ClearPath();
+        }
     }
 }

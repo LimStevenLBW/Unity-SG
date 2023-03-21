@@ -92,16 +92,22 @@ public class Unit : ScriptableObject
     public Skill skill3;
     public Skill skill4;
 
-    //Status Effects
+    //Status Effects and Skills list
     private List<StatusEffect> statusEffects = new List<StatusEffect>();
+    private List<Skill> skills = new List<Skill>();
 
+    private UnitManager manager;
+    private UnitController controller;
 
-    public void InitUnit()
+    //Should only be called when we first get the unit
+    public void Initialize(UnitController controller, UnitManager manager)
     {
+        this.manager = manager;
+        this.controller = controller;
+
         maxTroopCount = baseTroopCount;
         maxStamina = baseStamina;
 
-        //Should only be called when we first get the unit, move later
         Power = basePower;
         Armor = baseArmor;
         Speed = baseSpeed;
@@ -109,12 +115,27 @@ public class Unit : ScriptableObject
         CritBoost = baseCritBoost;
         TroopCount = baseTroopCount;
         Stamina = baseStamina;
-        skill1.InitBaseFields();
-        skill2.InitBaseFields();
-        skill3.InitBaseFields();
-        skill4.InitBaseFields();
-      
 
+        skills.Add(skill1);
+        skills.Add(skill2);
+        skills.Add(skill3);
+        skills.Add(skill4);
+        
+
+        for (int i=0; i < skills.Count; i++)
+        {
+            if (skills[i])
+            {
+                skills[i].Initialize(this, controller, manager); //Pass itself down
+            }
+        }
+
+        InitForCombat();
+       
+    }
+
+    public void InitForCombat()
+    {
         //Initialize Combat Stats
         currentTroopCount = TroopCount;
         maxTroopCount = TroopCount;
@@ -126,20 +147,24 @@ public class Unit : ScriptableObject
         currentSpeed = Crit;
         currentCritBoost = CritBoost;
 
-        if (skill1) skill1.Reset();
-        if (skill2) skill2.Reset();
-
-        if (skill3) skill3.Reset();
-        if (skill4) skill4.Reset();
+        for (int i = 0; i < skills.Count; i++)
+        {
+            if (skills[i])
+            {
+                skills[i].Reset();
+            }
+        }
     }
 
     public void StartListening()
     {
-        if (skill1) skill1.StartListening();
-        if (skill2) skill2.StartListening();
-
-        if (skill3) skill3.StartListening();
-        if (skill4) skill4.StartListening();
+        for (int i = 0; i < skills.Count; i++)
+        {
+            if (skills[i])
+            {
+                skills[i].StartListening();
+            }
+        }
     }
 
     public string GetRank()
@@ -152,8 +177,8 @@ public class Unit : ScriptableObject
         if (rank == Rank.D) return "D";
 
         return "?";
-
     }
+
     public string GetName() { return unitName; }
    
     public int GetLevel() { return Level; }
@@ -202,4 +227,5 @@ public class Unit : ScriptableObject
     public void SetTroopCount(int value) { TroopCount = value; }
 
     public List<StatusEffect> GetStatusEffects() { return statusEffects;  }
+    public List<Skill> GetSkills() { return skills; }
 } 

@@ -8,10 +8,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "March", menuName = "Character/Skill/MarchSkill")]
 public class MarchSkill : Skill
 {
-    public override void InitBaseFields()
+    public override void Initialize(Unit unit, UnitController controller, UnitManager manager)
     {
+        this.unit = unit;
+        this.controller = controller;
+        this.manager = manager;
+
         cooldown = baseCooldown;
         actionCost = baseActionCost;
+        
     }
 
     public override void StartListening()
@@ -21,10 +26,14 @@ public class MarchSkill : Skill
 
     public override void SecondPassed()
     {
-        currentCooldown -= 1;
+        currentCooldown -= 3;
         if(currentCooldown == 0)
         {
             Debug.Log(skillName + " is Available");
+        }
+        else
+        {
+            Debug.Log(currentCooldown);
         }
     }
 
@@ -37,8 +46,13 @@ public class MarchSkill : Skill
 
     public override void DoSkill()
     {
+        //First, find the nearest enemy
+        manager.FindNearestEnemy(controller);
+        //Spend an action point
+        //Move one space towards the enemy
+        //play the animation until that walk is done
+
         ResetCD();
-        Debug.Log("MOVING");
     }
 
     public override void Reset()
@@ -67,7 +81,13 @@ public class MarchSkill : Skill
         return description;
     }
 
+    public override void GetController(UnitController controller)
+    {
+        this.controller = controller;
+    }
 
+    public override void GetUnit(Unit unit)
+    {
+       this.unit = unit;
+    }
 }
-
-
