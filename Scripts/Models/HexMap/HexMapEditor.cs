@@ -311,7 +311,7 @@ public class HexMapEditor : MonoBehaviour
         editMode = !editMode;
         SetFogOfWar();
         //grid.ShowUI(!toggle);
-        hexGrid.ClearPath();
+        hexGrid.ClearAllPaths();
     }
     public void ShowUI(bool visible)
     {

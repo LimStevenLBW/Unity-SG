@@ -8,6 +8,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "March", menuName = "Character/Skill/MarchSkill")]
 public class MarchSkill : Skill
 {
+    double staminaResult;
+
     public override void Initialize(Unit unit, UnitController controller, UnitManager manager)
     {
         this.unit = unit;
@@ -15,7 +17,7 @@ public class MarchSkill : Skill
         this.manager = manager;
 
         cooldown = baseCooldown;
-        actionCost = baseActionCost;
+        staminaCost = baseStaminaCost;
         
     }
 
@@ -26,8 +28,9 @@ public class MarchSkill : Skill
 
     public override void SecondPassed()
     {
-        currentCooldown -= 3;
-        if(currentCooldown == 0)
+        if(currentCooldown > 0) currentCooldown -= 1;
+
+        if (currentCooldown == 0)
         {
             Debug.Log(skillName + " is Available");
         }
@@ -39,26 +42,45 @@ public class MarchSkill : Skill
 
     public override bool IsAvailable()
     {
-        if (currentCooldown <= 0) return true;
+        //If we still have stamina
+        //Calculate how much stamina we would have IF we were to do the move
 
+        staminaResult = unit.GetCurrentStamina() - currentStaminaCost;
+
+        //If off cooldown and stamina is available
+        if (currentCooldown <= 0 && staminaResult >= 0)
+        {
+            return true;
+        }
         return false;
+
     }
 
     public override void DoSkill()
     {
-        //First, find the nearest enemy
-        manager.FindNearestEnemy(controller);
-        //Spend an action point
-        //Move one space towards the enemy
-        //play the animation until that walk is done
+        //First, find the distance of the path to the nearest enemy
+        int distance = controller.path.FindPathToNearestEnemy();
+      
+        //If we need to move
+        if(distance > 0)
+        {
+            //Update the stamina
+            unit.SetCurrentStamina(staminaResult);
 
-        ResetCD();
+            //Have the controller move one cell along that path
+            controller.path.DoMove(controller);
+
+            //Once complete, reset the CDR
+            ResetCD();
+        }
+        
+        //Otherwise do nothing 
     }
 
     public override void Reset()
     {
         currentCooldown = cooldown;
-        currentActionCost = actionCost;
+        currentStaminaCost = staminaCost;
     }
 
     public override void ResetCD()
@@ -68,7 +90,7 @@ public class MarchSkill : Skill
 
     public override void ResetAC()
     {
-        currentActionCost = actionCost;
+        currentStaminaCost = staminaCost;
     }
 
     public override string GetSkillName()

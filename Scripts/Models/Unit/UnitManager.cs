@@ -9,11 +9,11 @@ using UnityEngine;
 public class UnitManager : MonoBehaviour
 {
     //Temporary for creating Units
-    public List<PlayerFormation> units = new List<PlayerFormation>();
-    public PlayerFormation unitPrefab;
+    public List<FormationController> units = new List<FormationController>();
+    public FormationController unitPrefab;
 
     //TEST FUNCTIONS FOR UNIT CONTROLLER
-    public List<UnitController> TestUnits = new List<UnitController>();
+    public List<UnitController> controllers = new List<UnitController>();
     public UnitController testUnit1;
     public UnitController testUnit2;
 
@@ -77,7 +77,7 @@ public class UnitManager : MonoBehaviour
         units.Clear();
     }
 
-    public void AddFormation(PlayerFormation unit, HexCell location, float orientation)
+    public void AddFormation(FormationController unit, HexCell location, float orientation)
     {
         units.Add(unit);
         unit.Grid = grid;
@@ -88,18 +88,18 @@ public class UnitManager : MonoBehaviour
 
     public void RemoveUnit(UnitController unit)
     {
-        TestUnits.Remove(unit);
+        controllers.Remove(unit);
         unit.Die();
     }
 
-    public PlayerFormation GetFormation(Ray ray)
+    public FormationController GetFormation(Ray ray)
     {
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.collider.gameObject.GetComponent<PlayerFormation>() != null)
+            if (hit.collider.gameObject.GetComponent<FormationController>() != null)
             {
-                return hit.collider.gameObject.GetComponent<PlayerFormation>();
+                return hit.collider.gameObject.GetComponent<FormationController>();
             }
         }
         return null;
@@ -134,7 +134,7 @@ public class UnitManager : MonoBehaviour
         if (cell && !cell.unitController)
         {
             AddFormation(
-                Instantiate(PlayerFormation.unitPrefab), cell, Random.Range(0f, 360f)
+                Instantiate(FormationController.unitPrefab), cell, Random.Range(0f, 360f)
             );
         }
     }
@@ -157,59 +157,19 @@ public class UnitManager : MonoBehaviour
             );
 
             
-            unitController.Initialize(this); //Pass itself down, likewise, make sure the unit knows about the manager
+            
          }
     }
     public void AddUnit(UnitController controller, HexCell location, float orientation)
     {
-        TestUnits.Add(controller); //Make sure UnitManager knows about the controller, for testing purposes
-
+        controllers.Add(controller); //Make sure UnitManager knows about the controller, for testing purposes
+        
         controller.Grid = grid;
         controller.transform.SetParent(transform, false);
         controller.Location = location;
         controller.Orientation = orientation;
+        controller.Initialize(this); //Pass itself down, likewise, make sure the unit knows about the manager
     }
 
-    /*
-     * Locate the nearest enemy that can be pathed to
-     */
-    public void FindNearestEnemy(UnitController controller)
-    {
-        Debug.Log("Reached");
-        /*
-        //Let's go through our list of controllers
-        for(int i=0; i<TestUnits.Count; i++)
-        {
-            //Find the route to that selected controller
-            grid.FindPath(controller.Location, TestUnits[i].Location, TestUnits[i]);
-
-            //Store the shortest route
-        }
-        */
-
-        //Have that controller do path finding?
-    }
-
-    void DoPathfinding(UnitController controller, HexCell targetCell)
-    {
-        if (targetCell && controller.IsValidDestination(targetCell))
-        {
-            grid.FindPath(controller.Location, targetCell, controller);
-        }
-        else
-        {
-            grid.ClearPath();
-        }
-        
-    }
-
-    void DoMove(UnitController controller)
-    {
-        if (grid.HasPath)
-        {
-            //controller.Location = selectedCell;
-            controller.Travel(grid.GetPath());
-            grid.ClearPath();
-        }
-    }
+   
 }

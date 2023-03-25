@@ -8,12 +8,13 @@ public abstract class Skill: ScriptableObject
     public string skillName;
     public string description;
     public double baseCooldown;
-    public int baseActionCost;
+    public double baseStaminaCost;
+
     internal double cooldown;
-    internal int actionCost;
+    internal double staminaCost; //persistent amount outside of combat
 
     internal double currentCooldown;
-    internal int currentActionCost;
+    internal double currentStaminaCost; //used during combat
 
     
     internal UnitManager manager;

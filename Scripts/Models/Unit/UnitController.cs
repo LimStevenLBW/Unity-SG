@@ -16,16 +16,20 @@ public class UnitController : MonoBehaviour
 
     public Unit unit;
     public UnitController prefab;
+    public Pathfinder path;
 
+    private UnitManager manager;
     private Animator animator;
     private State state;
-    private UnitManager manager;
+
+    private const int MOVECOST = 1;
+    private const int MOVECOST_ELEVATION = 5;
 
     private HexCell location, currentTravelLocation;
     private float orientation;
 
     const float travelSpeed = 4f;
-    const float rotationSpeed = 180f;
+    const float rotationSpeed = 200f;
 
     List<HexCell> pathToTravel;
 
@@ -33,13 +37,15 @@ public class UnitController : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
-    //Initialize is only called the first time a unit is obtained
 
+    //Initialize is only called the first time a unit is obtained
     public void Initialize(UnitManager manager)
     {
         this.manager = manager;
-
+       
         unit.Initialize(this, manager); //Initialize combat values, pass itself down
+        path = new Pathfinder();
+        path.Initialize(manager.grid, manager, this, null);
 
         state = State.IDLE;
     }
@@ -168,41 +174,38 @@ public class UnitController : MonoBehaviour
 
     /*
      * Return true if the cell is a valid location for this unit to travel to
+     * I can include conditions for why traveling to a certain cell would be invalid here
      */
     public bool IsValidDestination(HexCell cell)
     {
         return !cell.unitController;
     }
 
-    public void Travel(List<HexCell> path)
+    /* Have this unit start traversing along a path of given hexcells */
+    public void Travel(List<HexCell> path, int steps)
     {
-        location.formationController = null;
-        location = path[path.Count - 1];
-        //location.Unit = this;
-        Debug.Log("REENABLE Line 108 PLAYER FORMATION");
+        location.unitController = null; //This unit no longer occupies the current hexcell
+        location = path[path.Count - 1]; //Its new location is set to the ending hexcell
+        location.unitController = this; //The hexcell's unit is set to be this
 
-        pathToTravel = path;
+        
+
+        pathToTravel = path; //Store the path
+
         StopAllCoroutines();
-        StartCoroutine(TravelPath());
-    }
-
-    public void Die()
-    {
-        if (location)
-        {
-           // Grid.DecreaseVisibility(location, VisionRange);
-        }
-        location.unitController = null;
-        Destroy(gameObject);
+        StartCoroutine(TravelPath(steps)); //Start walking, if steps is 0, walk the whole way
     }
 
 
-    IEnumerator TravelPath()
+    /*
+     * Start traversing through the path to the hexcell, clear the path at the end of the walk
+     */
+    IEnumerator TravelPath(int steps)
     {
         Vector3 a, b, c = pathToTravel[0].Position;
-        //transform.localPosition = c;
-        yield return LookAt(pathToTravel[1].Position);
 
+        yield return LookAt(pathToTravel[1].Position);
+        //Grid.DecreaseVisibility(pathToTravel[0], visionRange);
         float t = Time.deltaTime * travelSpeed;
 
         for (int i = 1; i < pathToTravel.Count; i++)
@@ -211,25 +214,31 @@ public class UnitController : MonoBehaviour
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
+            //Grid.IncreaseVisibility(pathToTravel[i], visionRange);
 
             for (; t < 1f; t += Time.deltaTime * travelSpeed)
             {
                 transform.localPosition = Bezier.GetPoint(a, b, c, t);
+                Vector3 d = Bezier.GetDerivative(a, b, c, t);
+                transform.localRotation = Quaternion.LookRotation(d);
                 yield return null;
             }
 
+            //Grid.DecreaseVisibility(pathToTravel[i], visionRange);
             t -= 1f;
         }
         currentTravelLocation = null;
 
         a = c;
-        //b = pathToTravel[pathToTravel.Count - 1].Position;
         b = location.Position;
         c = b;
+        //Grid.IncreaseVisibility(location, visionRange);
 
         for (; t < 1f; t += Time.deltaTime * travelSpeed)
         {
             transform.localPosition = Bezier.GetPoint(a, b, c, t);
+            Vector3 d = Bezier.GetDerivative(a, b, c, t);
+            transform.localRotation = Quaternion.LookRotation(d);
             yield return null;
         }
         transform.localPosition = location.Position;
@@ -239,6 +248,9 @@ public class UnitController : MonoBehaviour
         pathToTravel = null;
     }
 
+    /*
+     * Turn unit to look at a vector point
+     */
     IEnumerator LookAt(Vector3 point)
     {
         point.y = transform.localPosition.y;
@@ -285,12 +297,20 @@ public class UnitController : MonoBehaviour
         }
         else
         {
-            moveCost = edgeType == HexEdgeType.Flat ? 5 : 10; //MOVE COSTS
+            moveCost = edgeType == HexEdgeType.Flat ? MOVECOST : MOVECOST_ELEVATION; //MOVE COSTS
             moveCost +=
                 toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
         }
 
         return moveCost;
     }
-
+    public void Die()
+    {
+        if (location)
+        {
+            // Grid.DecreaseVisibility(location, VisionRange);
+        }
+        location.unitController = null;
+        Destroy(gameObject);
+    }
 }

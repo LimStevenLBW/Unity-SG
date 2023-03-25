@@ -11,7 +11,7 @@ namespace Assets.Scripts.Interface
     {
         public HexGrid grid;
         
-        PlayerFormation selectedUnit;
+        FormationController selectedUnit;
         HexCell selectedCell;
 
         void Update()
@@ -49,7 +49,7 @@ namespace Assets.Scripts.Interface
          */
         void DoSelection()
         {
-            grid.ClearPath(); //Clear any current paths
+            grid.ClearAllPaths(); //Clear any current paths
 
             DisableHighlight(selectedUnit);
 
@@ -72,7 +72,7 @@ namespace Assets.Scripts.Interface
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             //Most people will try to select the unit, not the cell.
-            PlayerFormation unit = grid.GetFormation(ray);
+            FormationController unit = grid.GetFormation(ray);
             HexCell cell;
 
             //If we get the unit, we can get the cell easily
@@ -105,31 +105,31 @@ namespace Assets.Scripts.Interface
             {
                 if (selectedCell && selectedUnit.IsValidDestination(selectedCell))
                 {
-                    grid.FindPath(selectedUnit.Location, selectedCell, selectedUnit);
+                    selectedUnit.path.FindPath(selectedUnit.Location, selectedCell, selectedUnit);
                 }
                 else
                 {
-                    grid.ClearPath();
+                    grid.ClearAllPaths();
                 }
             }
         }
 
         void DoMove()
         {
-            if (grid.HasPath)
+            if (selectedUnit.path.currentPathExists)
             {
                 //selectedUnit.Location = selectedCell;
-                selectedUnit.Travel(grid.GetPath());
-                grid.ClearPath();
+                selectedUnit.Travel(selectedUnit.path.GetPath());
+                selectedUnit.path.ClearPath();
             }
         }
 
-        void EnableHighlight(PlayerFormation unit)
+        void EnableHighlight(FormationController unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = true;
         }
 
-        void DisableHighlight(PlayerFormation unit)
+        void DisableHighlight(FormationController unit)
         {
             if (unit) unit.GetComponent<Outline>().enabled = false;
         }

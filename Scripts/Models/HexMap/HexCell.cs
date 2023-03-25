@@ -22,7 +22,7 @@ public class HexCell : MonoBehaviour
     private int elevation = int.MinValue; //Lowest value an integer can have, just to avoid skipping first computation
     int urbanLevel, farmLevel, plantLevel, waterLevel;
     int specialIndex; // determine the special feature it has, if any.
-    int distance; //From this cell to selected cell
+    int distance; //From this cell to a selected origin cell
 
     //outdated?
     //0 means the cell has not yet been reached, 
@@ -33,11 +33,11 @@ public class HexCell : MonoBehaviour
     public bool Explorable { get; set; }
 
     public int Index { get; set; }
+    public FormationController formationController { get; set; }
+    public UnitController unitController { get; set; }
 
     private int visibility;
 
-    public PlayerFormation formationController { get; set; }
-    public UnitController unitController { get; set; }
     bool explored;
 
     public bool IsExplored
@@ -450,7 +450,7 @@ public class HexCell : MonoBehaviour
     }
 
     //A Hex cell has 6 neighbors
-    [SerializeField] HexCell[] neighbors;
+    [SerializeField] public HexCell[] neighbors;
 
     public HexCell GetNeighbor(HexDirection direction)
     {

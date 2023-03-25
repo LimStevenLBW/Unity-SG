@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Move
   description: 
-  baseCooldown: 10
+  baseCooldown: 5
   baseActionCost: 1

@@ -116,14 +116,15 @@ public class Unit : ScriptableObject
         TroopCount = baseTroopCount;
         Stamina = baseStamina;
 
+        skills.Clear();
         skills.Add(skill1);
         skills.Add(skill2);
         skills.Add(skill3);
         skills.Add(skill4);
-        
 
         for (int i=0; i < skills.Count; i++)
         {
+
             if (skills[i])
             {
                 skills[i].Initialize(this, controller, manager); //Pass itself down

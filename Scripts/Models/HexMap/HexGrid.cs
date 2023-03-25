@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,15 +20,11 @@ public class HexGrid : MonoBehaviour
     public CameraControl cameraControl;
 
     //private Canvas gridCanvas;
-    private HexCell[] cells;
+    public HexCell[] cells;
     //private HexMesh hexMesh;
     private HexGridChunk[] chunks;
 
     public int seed = 1234;
-    HexCellPriorityQueue searchFrontier;
-    int searchFrontierPhase;
-    HexCell currentPathFrom, currentPathTo;
-    bool currentPathExists;
 
     //Unit Manager contains interaction involving units and formations
     public UnitManager unitManager;
@@ -59,7 +54,7 @@ public class HexGrid : MonoBehaviour
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
 
-            ResetVisibility();
+            //ResetVisibility(); Reset visibility for
         }
     }
 
@@ -74,7 +69,7 @@ public class HexGrid : MonoBehaviour
             return false;
         }
 
-        ClearPath();
+        //ClearPath(); clear any overworld paths
         unitManager.ClearUnits();
 
         if (chunks != null)
@@ -278,7 +273,7 @@ public class HexGrid : MonoBehaviour
         return null;
     }
 
-    public PlayerFormation GetFormation(Ray ray)
+    public FormationController GetFormation(Ray ray)
     {
         //return unitManager.GetUnit(ray);
         return null;
@@ -307,7 +302,7 @@ public class HexGrid : MonoBehaviour
 
     public void Load(BinaryReader reader, int header)
     {
-        ClearPath();
+        //ClearPath(); clear any overworld paths
         unitManager.ClearUnits();
         //StopAllCoroutines();
         int x = 20, z = 15;
@@ -341,355 +336,11 @@ public class HexGrid : MonoBehaviour
             int unitCount = reader.ReadInt32();
             for (int i = 0; i < unitCount; i++)
             {
-                PlayerFormation.Load(reader, this);
+                FormationController.Load(reader, this);
             }
         }
 
         cellShaderData.isImmediateCellReveal = originalImmediateCellReveal;
-    }
-
-    /*
-     * Only for overworld, works under the assumption that there is only one path
-     */
-    public void FindPath(HexCell fromCell, HexCell toCell, PlayerFormation unit)
-    {
-        //StopAllCoroutines();
-        //StartCoroutine(Search(fromCell, toCell, speed));
-        ClearPath();
-        currentPathFrom = fromCell;
-        currentPathTo = toCell;
-        currentPathExists = Search(fromCell, toCell, unit);
-        ShowPath(unit.Speed);
-    }
-
-
-    /*
-     * When a path is found, we have to remember it. 
-     * That way, we can clean it up next time. So keep track of the end points and whether a path exists between them.
-     */
-    public void FindPath(HexCell fromCell, HexCell toCell, UnitController unit)
-    {
-        ClearPath();
-       // currentPathFrom = fromCell;
-        //currentPathTo = toCell;
-
-        //Returns true if there is an available path
-        currentPathExists = Search(fromCell, toCell, unit);
-        ShowPath(unit.Speed);
-    }
-
-    /*
-     * Breadth-First Search using the selected cell as the tree root
-     */
-    bool Search(HexCell fromCell, HexCell toCell, PlayerFormation unit)
-    {
-        int speed = unit.Speed;
-        searchFrontierPhase += 2;
-        if (searchFrontier == null)
-        {
-            searchFrontier = new HexCellPriorityQueue();
-        }
-        else
-        {
-            searchFrontier.Clear();
-        }
-
-        /*
-        for (int i = 0; i < cells.Length; i++)
-        {
-           // cells[i].Distance = int.MaxValue; //if distance at max value, hexcell will determine that it should not display coordinates
-            cells[i].SetLabel(null); //Hide labels
-            cells[i].DisableHighlight();
-        }
-        fromCell.EnableHighlight(Color.green);
-        */
-
-        //WaitForSeconds delay = new WaitForSeconds(1 / 60f);
-        fromCell.SearchPhase = searchFrontierPhase;
-        fromCell.Distance = 0;
-        searchFrontier.Enqueue(fromCell);
-
-        while (searchFrontier.Count > 0)
-        {
-            //yield return delay;
-            HexCell current = searchFrontier.Dequeue();
-            current.SearchPhase += 1;
-
-            if (current == toCell)
-            {
-                return true;
-                /*
-                while (current != fromCell)
-                {
-                    int turn = current.Distance / speed;
-                    current.SetLabel(turn.ToString());
-                    current.EnableHighlight(Color.blue);
-                    current = current.PathFrom;
-                }
-                toCell.EnableHighlight(Color.red);
-                break; //We can stop once we find destination cell
-                */
-            }
-
-            int currentTurn = (current.Distance - 1) / speed;
-
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-            {
-                HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
-                {
-                    continue;
-                }
-                if (!unit.IsValidDestination(neighbor))
-                {
-                    continue;
-                }
-                int moveCost = unit.GetMoveCost(current, neighbor, d);
-
-                if (moveCost < 0)
-                {
-                    continue;
-                }
-
-                int distance = current.Distance + moveCost;
-                int turn = (distance - 1) / speed;
-                if (turn > currentTurn)
-                {
-                    distance = turn * speed + moveCost;
-                }
-
-                //add a neighbor to the frontier. When a cell is added, it is not guaranteed to be the shortest distance, we need to check
-                if (neighbor.SearchPhase < searchFrontierPhase)
-                {
-                    neighbor.SearchPhase = searchFrontierPhase;
-                    neighbor.Distance = distance;
-                    //neighbor.SetLabel(turn.ToString());
-                    neighbor.PathFrom = current;
-                    neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates);
-                    searchFrontier.Enqueue(neighbor);
-                }
-                else if (distance < neighbor.Distance)
-                {
-                    int oldPriority = neighbor.SearchPriority;
-                    neighbor.Distance = distance;
-                    //neighbor.SetLabel(turn.ToString());
-                    neighbor.PathFrom = current;
-                    searchFrontier.Change(neighbor, oldPriority);
-                }
-
-                /*
-                frontier.Sort(
-                    (x, y) => x.SearchPriority.CompareTo(y.SearchPriority)
-                );
-                */
-            }
-           
-        }
-        return false;
-    }
-
-    bool Search(HexCell fromCell, HexCell toCell, UnitController unit)
-    {
-        int speed = unit.Speed;
-        searchFrontierPhase += 2;
-        if (searchFrontier == null)
-        {
-            searchFrontier = new HexCellPriorityQueue();
-        }
-        else
-        {
-            searchFrontier.Clear();
-        }
-
-        //WaitForSeconds delay = new WaitForSeconds(1 / 60f);
-        fromCell.SearchPhase = searchFrontierPhase;
-        fromCell.Distance = 0;
-        searchFrontier.Enqueue(fromCell);
-
-        while (searchFrontier.Count > 0)
-        {
-            //yield return delay;
-            HexCell current = searchFrontier.Dequeue();
-            current.SearchPhase += 1;
-
-            if (current == toCell)
-            {
-                return true;
-            }
-
-            int currentTurn = (current.Distance - 1) / speed;
-
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-            {
-                HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
-                {
-                    continue;
-                }
-                if (!unit.IsValidDestination(neighbor))
-                {
-                    continue;
-                }
-                int moveCost = unit.GetMoveCost(current, neighbor, d);
-
-                if (moveCost < 0)
-                {
-                    continue;
-                }
-
-                int distance = current.Distance + moveCost;
-                int turn = (distance - 1) / speed;
-                if (turn > currentTurn)
-                {
-                    distance = turn * speed + moveCost;
-                }
-
-                //add a neighbor to the frontier. When a cell is added, it is not guaranteed to be the shortest distance, we need to check
-                if (neighbor.SearchPhase < searchFrontierPhase)
-                {
-                    neighbor.SearchPhase = searchFrontierPhase;
-                    neighbor.Distance = distance;
-                    //neighbor.SetLabel(turn.ToString());
-                    neighbor.PathFrom = current;
-                    neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates);
-                    searchFrontier.Enqueue(neighbor);
-                }
-                else if (distance < neighbor.Distance)
-                {
-                    int oldPriority = neighbor.SearchPriority;
-                    neighbor.Distance = distance;
-                    //neighbor.SetLabel(turn.ToString());
-                    neighbor.PathFrom = current;
-                    searchFrontier.Change(neighbor, oldPriority);
-                }
-
-                /*
-                frontier.Sort(
-                    (x, y) => x.SearchPriority.CompareTo(y.SearchPriority)
-                );
-                */
-            }
-
-        }
-        return false;
-    }
-
-    List<HexCell> GetVisibleCells(HexCell fromCell, int range)
-    {
-        List<HexCell> visibleCells = ListPool<HexCell>.Get();
-
-        searchFrontierPhase += 2;
-        if (searchFrontier == null)
-        {
-            searchFrontier = new HexCellPriorityQueue();
-        }
-        else
-        {
-            searchFrontier.Clear();
-        }
-
-        range += fromCell.ViewElevation;
-        fromCell.SearchPhase = searchFrontierPhase;
-        fromCell.Distance = 0;
-        searchFrontier.Enqueue(fromCell);
-
-        HexCoordinates fromCoordinates = fromCell.coordinates;
-        while (searchFrontier.Count > 0)
-        {
-            HexCell current = searchFrontier.Dequeue();
-            current.SearchPhase += 1;
-            visibleCells.Add(current);
-
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-            {
-                HexCell neighbor = current.GetNeighbor(d);
-                if ( neighbor == null || neighbor.SearchPhase > searchFrontierPhase || !neighbor.Explorable )
-                {
-                    continue;
-                }
-
-                int distance = current.Distance + 1;
-                if (distance + neighbor.ViewElevation > range || distance > fromCoordinates.DistanceTo(neighbor.coordinates))
-                {
-                    continue;
-                }
-
-                if (neighbor.SearchPhase < searchFrontierPhase)
-                {
-                    neighbor.SearchPhase = searchFrontierPhase;
-                    neighbor.Distance = distance;
-                    neighbor.SearchHeuristic = 0;
-                    searchFrontier.Enqueue(neighbor);
-                }
-                else if (distance < neighbor.Distance)
-                {
-                    int oldPriority = neighbor.SearchPriority;
-                    neighbor.Distance = distance;
-                    searchFrontier.Change(neighbor, oldPriority);
-                }
-            }
-        }
-        return visibleCells;
-    }
-
-
-    void ShowPath(int speed)
-    {
-        if (currentPathExists)
-        {
-            HexCell current = currentPathTo;
-            while (current != currentPathFrom)
-            {
-                int turn = (current.Distance - 1) / speed;
-                current.SetLabel(turn.ToString());
-                current.EnableHighlight(Color.white, true);
-                current = current.PathFrom;
-            }
-        }
-        currentPathFrom.EnableHighlight(Color.blue, true);
-        currentPathTo.EnableHighlight(Color.red, true);
-    }
-
-    public void ClearPath()
-    {
-        if (currentPathExists)
-        {
-            HexCell current = currentPathTo;
-            while (current != currentPathFrom)
-            {
-                current.SetLabel(null);
-                current.DisableHighlight(true);
-                current = current.PathFrom;
-            }
-            current.DisableHighlight(true);
-            currentPathExists = false;
-        }
-        else if (currentPathFrom)
-        {
-            currentPathFrom.DisableHighlight(true);
-            currentPathTo.DisableHighlight(true);
-        }
-        currentPathFrom = currentPathTo = null;
-    }
-
-    public void IncreaseVisibility(HexCell fromCell, int range)
-    {
-        List<HexCell> cells = GetVisibleCells(fromCell, range);
-        for (int i = 0; i < cells.Count; i++)
-        {
-            cells[i].IncreaseVisibility();
-        }
-        ListPool<HexCell>.Add(cells);
-    }
-
-    public void DecreaseVisibility(HexCell fromCell, int range)
-    {
-        List<HexCell> cells = GetVisibleCells(fromCell, range);
-        for (int i = 0; i < cells.Count; i++)
-        {
-            cells[i].DecreaseVisibility();
-        }
-        ListPool<HexCell>.Add(cells);
     }
 
     public void ShowUI(bool visible)
@@ -700,30 +351,9 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public bool HasPath
+    public void ClearAllPaths()
     {
-        get
-        {
-            return currentPathExists;
-        }
-    }
-
-    public List<HexCell> GetPath()
-    {
-        if (!currentPathExists)
-        {
-            return null;
-        }
-
-        List<HexCell> path = ListPool<HexCell>.Get();
-        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
-        {
-            path.Add(c);
-        }
-
-        path.Add(currentPathFrom);
-        path.Reverse();
-        return path;
+        //Request all known units to clear paths
     }
 
     public void ResetVisibility()
@@ -734,8 +364,8 @@ public class HexGrid : MonoBehaviour
         }
         for (int i = 0; i < unitManager.units.Count; i++)
         {
-            PlayerFormation unit = unitManager.units[i];
-            IncreaseVisibility(unit.Location, unit.VisionRange);
+            FormationController unit = unitManager.units[i];
+            unit.path.IncreaseVisibility(unit.Location, unit.VisionRange);
         }
     }
 }
