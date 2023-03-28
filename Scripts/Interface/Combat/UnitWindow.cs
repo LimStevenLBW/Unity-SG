@@ -31,23 +31,20 @@ public class UnitWindow : MonoBehaviour
 
     public void SetValues(UnitController unitController)
     {
-        Unit unit = unitController.unit;
+        UnitDataStore data = unitController.data;
 
-        if (unit)
-        {
+        portraitCamera.SetTargetObject(unitController);
 
-            portraitCamera.SetTargetObject(unitController);
-
-            nameText.SetText("" + unit.GetName());
-            rankText.SetText("" + unit.GetRank() + " Rank Squad Leader");
-            troopsText.SetText(unit.GetCurrentTroopCount() + " / " + unit.GetMaxTroopCount());
-            staminaText.SetText(unit.GetCurrentStamina() + " / " + unit.GetMaxStamina());
-            powerText.SetText("" + unit.GetCurrentPower());
-            armorText.SetText("" + unit.GetCurrentArmor());
-            speedText.SetText("" + unit.GetCurrentSpeed());
-            critText.SetText("" + unit.GetCurrentCrit() + "%");
+        nameText.SetText("" + data.GetName());
+        rankText.SetText("" + data.GetRank() + " Rank Squad Leader");
+        troopsText.SetText(data.GetCurrentTroopCount() + " / " + data.GetMaxTroopCount());
+        staminaText.SetText(data.GetCurrentStamina() + " / " + data.GetMaxStamina());
+        powerText.SetText("" + data.GetCurrentPower());
+        armorText.SetText("" + data.GetCurrentArmor());
+        speedText.SetText("" + data.GetCurrentSpeed());
+        critText.SetText("" + data.GetCurrentCrit() + "%");
             
-        }   
+          
     }
     public void SetPosition(UnitController unitController)
     {

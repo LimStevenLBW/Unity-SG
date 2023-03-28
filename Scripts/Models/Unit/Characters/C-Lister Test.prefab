@@ -3180,7 +3180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a77283d9509cce441af479124e644746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  unitBase: {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
   prefab: {fileID: 3694363504679355959}
 --- !u!114 &1906158506888737120
 MonoBehaviour:

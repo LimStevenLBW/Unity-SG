@@ -7,7 +7,9 @@ public static class HexMetrics
     public const float outerRadius = 10f;
     public const float innerRadius = outerRadius * outerToInner;
 
-    public const float solidFactor = .75f; //Default value .75f, at 1f, there is no space between cells
+    //IMPORTANT
+    //Default value .75f, at 1f, there is no space between cells and it will look less like terrain
+    public const float solidFactor = 1f; 
     public const float blendFactor = 1f - solidFactor;
     public const float elevationStep = 3f;
     public const int chunkSizeX = 5, chunkSizeZ = 4; //cell count = x * z, i.e 25

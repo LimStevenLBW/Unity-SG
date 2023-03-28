@@ -7,7 +7,7 @@ public class Pathfinder
 {
     private HexGrid grid;
     private UnitManager manager;
-    private UnitController unit;
+    private UnitController controller;
     private FormationController formation;
 
     private HexCell currentPathFrom, currentPathTo;
@@ -16,11 +16,11 @@ public class Pathfinder
     private HexCellPriorityQueue searchFrontier;
     private int searchFrontierPhase;
 
-    public void Initialize(HexGrid grid, UnitManager manager, UnitController unit, FormationController formation)
+    public Pathfinder(HexGrid grid, UnitManager manager, UnitController controller, FormationController formation)
     {
         this.grid = grid;
         this.manager = manager;
-        this.unit = unit;
+        this.controller = controller;
         this.formation = formation;
     }
 
@@ -138,8 +138,8 @@ public class Pathfinder
     }
 
     /*
- * Breadth-First Search using the selected cell as the tree root
- */
+     * Breadth-First Search using the selected cell as the tree root
+     */
     bool Search(HexCell fromCell, HexCell toCell, FormationController unit)
     {
         int speed = unit.Speed;
@@ -277,6 +277,10 @@ public class Pathfinder
 
             if (current == toCell)
             {
+                for (int i = 0; i < grid.cells.Length; i++)
+                {
+                    grid.cells[i].ResetSearchPriority();
+                }
                 return true;
             }
 
@@ -307,9 +311,11 @@ public class Pathfinder
                     distance = turn * speed + moveCost;
                 }
 
+                
                 //add a neighbor to the frontier. When a cell is added, it is not guaranteed to be the shortest distance, we need to check
                 if (neighbor.SearchPhase < searchFrontierPhase)
                 {
+                    Debug.Log("search phase < search frontier phase" + controller.data.GetName());
                     neighbor.SearchPhase = searchFrontierPhase;
                     neighbor.Distance = distance;
                     //neighbor.SetLabel(turn.ToString());
@@ -319,6 +325,7 @@ public class Pathfinder
                 }
                 else if (distance < neighbor.Distance)
                 {
+                    Debug.Log("distance < neighbor distance" + controller.data.GetName());
                     int oldPriority = neighbor.SearchPriority;
                     neighbor.Distance = distance;
                     //neighbor.SetLabel(turn.ToString());
@@ -333,6 +340,10 @@ public class Pathfinder
                 */
             }
 
+        }
+        for (int i = 0; i < grid.cells.Length; i++)
+        {
+            grid.cells[i].ResetSearchPriority();
         }
         return false;
     }
@@ -427,7 +438,7 @@ public class Pathfinder
         HexCell targetCell = null;
         List<HexCell> alreadyChecked = new List<HexCell>(); //Cells that were already checked
 
-        Debug.Log("Find Nearest Enemy Reached");
+        Debug.Log("Find Nearest Enemy Reached BY.." + controller.data.GetName());
 
         //Let's go through our list of controllers
         for (int i = 0; i < manager.controllers.Count; i++)
@@ -435,40 +446,69 @@ public class Pathfinder
             //Need to check enemy faction here todo
             UnitController enemy = manager.controllers[i];
 
+            if (controller == enemy) continue;  //If they're the same unit
+            if (controller.data.faction.Equals(enemy.data.faction)) continue; //if they have the same faction
+
             //Go through the hexcell's neighbors
-            for(int j = 0; j < enemy.Location.neighbors.Length; j++)
+            for (int j = 0; j < enemy.Location.neighbors.Length; j++)
             {
                 HexCell enemyCell = enemy.Location.neighbors[j];
-                if (alreadyChecked.Contains(enemyCell)) continue;
-
-                alreadyChecked.Add(enemyCell);
-                //Find this unit's route to that selected enemy controller
-                if (unit != enemy)
+                if (enemyCell)
                 {
-                    FindPath(unit.Location, enemyCell, unit);
-                }
+                    if (enemyCell.unitController) continue;
+                    if (alreadyChecked.Contains(enemyCell)) continue;
 
-                if (currentPathExists && enemyCell.Distance < shortestDistance)
-                {
-                    shortestDistance = enemyCell.Distance;
-                    targetCell = enemyCell;
+                    alreadyChecked.Add(enemyCell);
 
-                    //There is an enemy right next to our unit! We don't have to move
-                    if (shortestDistance <= 0) break;
+                    //Find this unit's route to that selected enemy controller
+                    FindPath(controller.Location, enemyCell, controller);
+
+                    if (currentPathExists && enemyCell.Distance < shortestDistance)
+                    {
+                        shortestDistance = enemyCell.Distance;
+                        targetCell = enemyCell;
+
+                        //There is an enemy right next to our unit! We don't have to move
+                        if (shortestDistance <= 0) break;
+                    }
                 }
+              
             }     
         }
 
         //If we got a valid target
         if (targetCell && shortestDistance > 0)
         {
-            FindPath(unit.Location, targetCell, unit);
+            FindPath(controller.Location, targetCell, controller);
             return shortestDistance;
         }
         else
         {
             return -1;
         }
+    }
+
+    /*
+     * Check if the adjacent squares have an enemy, if so, return true
+     */
+    public bool IsThereAdjacentEnemy()
+    {
+        for (int i=0; i < controller.Location.neighbors.Length; i++){
+            HexCell enemyCell = controller.Location.neighbors[i];
+
+            if (enemyCell && enemyCell.unitController)
+            {
+                UnitController enemyController = enemyCell.unitController;
+                if (!controller.data.faction.Equals(enemyController.data.faction))
+                {
+                    
+                    return true;
+                }
+            }
+            
+        }
+
+        return false;
     }
 
 

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: B-Rank
   m_EditorClassIdentifier: 
+  faction: 2
   unitName: B-Lister Melee
   bio: 
-  rank: 4
+  rank: 3
   baseLevel: 1
   expGrowthRate: 1
   basePower: 6
@@ -34,8 +35,8 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   unitClass: {fileID: 0}
-  uniqueSkill: {fileID: 0}
-  skill1: {fileID: 0}
-  skill2: {fileID: 0}
-  skill3: {fileID: 0}
-  skill4: {fileID: 0}
+  movementSkill_ID: 1
+  skill1_ID: 0
+  skill2_ID: 0
+  skill3_ID: 0
+  skill4_ID: 0

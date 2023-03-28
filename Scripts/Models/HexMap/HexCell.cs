@@ -52,6 +52,10 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    public void ResetSearchPriority()
+    {
+        SearchPhase = 0;
+    }
 
     public HexCellShaderData ShaderData {
         get;
@@ -482,6 +486,10 @@ public class HexCell : MonoBehaviour
         {
             formationController.ValidateLocation();
         }
+        if (unitController)
+        {
+            unitController.ValidateLocation();
+        }
         for (int i = 0; i < neighbors.Length; i++)
         {
             HexCell neighbor = neighbors[i];
@@ -672,7 +680,7 @@ public class HexCell : MonoBehaviour
         Vector3 position = transform.localPosition;
         position.y = elevation * HexMetrics.elevationStep;
         position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
-
+        //position.y -= (HexMetrics.SampleNoise(position).y * 2f - 1f) * 2;
         transform.localPosition = position;
 
         Vector3 uiPosition = uiRect.localPosition;

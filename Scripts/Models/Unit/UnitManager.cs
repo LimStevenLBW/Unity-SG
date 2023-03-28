@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Works with Hexgrid to handle instantiating units
+ * There is only one UnitManager.
+ * The Unit Manager knows the controllers that will go into the combat scene
  */
 public class UnitManager : MonoBehaviour
 {
@@ -16,8 +17,13 @@ public class UnitManager : MonoBehaviour
     public List<UnitController> controllers = new List<UnitController>();
     public UnitController testUnit1;
     public UnitController testUnit2;
-
+    public UnitController testUnit3;
     public HexGrid grid;
+
+    public bool PATHFINDING_IN_USE = false;
+
+    
+   // public Queue<UnitController> pathfindingQueue;
 
     public void InitGrid(HexGrid grid)
     {
@@ -63,6 +69,18 @@ public class UnitManager : MonoBehaviour
             else
             {
                 CreateCombatUnit(testUnit2);
+            }
+            return;
+        }
+        else if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                // DestroyCombatUnit();
+            }
+            else
+            {
+                CreateCombatUnit(testUnit3);
             }
             return;
         }

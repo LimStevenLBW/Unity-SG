@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using UnityEngine;
 public class HexCellPriorityQueue
 {
 
@@ -49,6 +49,8 @@ public class HexCellPriorityQueue
     public void Change(HexCell cell, int oldPriority)
     {
         HexCell current = list[oldPriority];
+       // if(current == null) Debug.Log("current null? " + current);
+       // if (current == null) Debug.Log("next with same priority null? " + current.NextWithSamePriority);
         HexCell next = current.NextWithSamePriority;
 
         if (current == cell)

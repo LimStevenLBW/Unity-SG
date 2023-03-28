@@ -3,25 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Defines the base definition for a unit
+ * Defines the base definitions for a unit
  */
 [CreateAssetMenu(fileName = "New Unit Character", menuName = "Character/Unit")]
 public class Unit : ScriptableObject
 {
-    public enum Rank
-    {
-        X,
-        S,
-        A,
-        B,
-        C,
-        D
-    }
-
-    public string faction { get; set; }
+    public string faction;
 
     //Identity
-    public string unitName = "test";
+    public string unitName = "";
     public string bio;
     public Rank rank = Rank.C;
 
@@ -32,47 +22,26 @@ public class Unit : ScriptableObject
 
     //Level
     public int baseLevel = 1;
-    private int Level;
-    private double exp;
     public double expGrowthRate = 1;
 
     //Combat Stats and Modifiers
     public double basePower = 1;
-    private double currentPower;
-    private double Power; 
     public double powerGrowthRate = 1;
-
     public double baseArmor = 1;
-    private double currentArmor;
-    private double Armor;
     public double armorGrowthRate = 1;
 
     //Stamina is spent to use skills
     public double baseStamina = 1;
-    private double currentStamina;
-    private double maxStamina;  //Only used in combat
-    private double Stamina;  //Persistent Stat outside of combat
     public double staminaGrowthRate = 1;
 
     //Speed affects cooldown reduction of skills
     public double baseSpeed = 1;
-    private double currentSpeed;
-    private double Speed;
     public double speedGrowthRate = 1;
 
     public double baseCrit = 0;
-    private double currentCrit;
-    private double Crit;
-
-    private double baseCritBoost = 2; //IE. Crit damage, but more than just damage can be effected, standard for all characters
-    private double currentCritBoost;
-    private double CritBoost;
 
     //Troops
     public int baseTroopCount = 10;
-    private int currentTroopCount;
-    private int maxTroopCount; //With buffs, we can go past the normal troop count during combat
-    private int TroopCount;
 
     //Leadership Stats, these will be within the range of 1-99. In some cases can even affect combat.
     public int leadership = 1;
@@ -86,11 +55,11 @@ public class Unit : ScriptableObject
     //Skills
     public UnitClass unitClass;
 
-    public Skill uniqueSkill;
-    public Skill skill1;
-    public Skill skill2;
-    public Skill skill3;
-    public Skill skill4;
+    public int movementSkill_ID;
+    public int skill1_ID;
+    public int skill2_ID;
+    public int skill3_ID;
+    public int skill4_ID;
 
     //Status Effects and Skills list
     private List<StatusEffect> statusEffects = new List<StatusEffect>();
@@ -99,134 +68,22 @@ public class Unit : ScriptableObject
     private UnitManager manager;
     private UnitController controller;
 
-    //Should only be called when we first get the unit
-    public void Initialize(UnitController controller, UnitManager manager)
-    {
-        this.manager = manager;
-        this.controller = controller;
-
-        maxTroopCount = baseTroopCount;
-        maxStamina = baseStamina;
-
-        Power = basePower;
-        Armor = baseArmor;
-        Speed = baseSpeed;
-        Crit = baseSpeed;
-        CritBoost = baseCritBoost;
-        TroopCount = baseTroopCount;
-        Stamina = baseStamina;
-
-        skills.Clear();
-        skills.Add(skill1);
-        skills.Add(skill2);
-        skills.Add(skill3);
-        skills.Add(skill4);
-
-        for (int i=0; i < skills.Count; i++)
-        {
-
-            if (skills[i])
-            {
-                skills[i].Initialize(this, controller, manager); //Pass itself down
-            }
-        }
-
-        InitForCombat();
-       
-    }
-
-    public void InitForCombat()
-    {
-        //Initialize Combat Stats
-        currentTroopCount = TroopCount;
-        maxTroopCount = TroopCount;
-        currentStamina = Stamina;
-        maxStamina = Stamina;
-        currentPower = Power;
-        currentArmor = Armor;
-        currentSpeed = Speed;
-        currentSpeed = Crit;
-        currentCritBoost = CritBoost;
-
-        for (int i = 0; i < skills.Count; i++)
-        {
-            if (skills[i])
-            {
-                skills[i].Reset();
-            }
-        }
-    }
-
-    public void StartListening()
-    {
-        for (int i = 0; i < skills.Count; i++)
-        {
-            if (skills[i])
-            {
-                skills[i].StartListening();
-            }
-        }
-    }
-
-    public string GetRank()
-    {
-        if (rank == Rank.X) return "X";
-        if (rank == Rank.S) return "S";
-        if (rank == Rank.A) return "A";
-        if (rank == Rank.B) return "B";
-        if (rank == Rank.C) return "C";
-        if (rank == Rank.D) return "D";
-
-        return "?";
-    }
-
-    public string GetName() { return unitName; }
-   
-    public int GetLevel() { return Level; }
-    public void SetLevel(int value) { Level = value; }
-    public double GetExp() { return exp; }
-    public void SetExp(double value) { exp = value; }
     //----------------------------------------------------------------
-    public double GetCurrentPower() { return currentPower; }
-    public void SetCurrentPower(double value) { currentPower = value; }
-    public double GetPower() { return Power; }
-    public void SetPower(double value) { Power = value; }
-
-    public double GetCurrentArmor() { return currentArmor; }
-    public void SetCurrentArmor(double value) { currentArmor = value; }
-    public double GetArmor() { return Armor; }
-    public void SetArmor(double value) { Armor = value; }
-
-    public double GetCurrentStamina() { return currentStamina; }
-    public void SetCurrentStamina(double value) { currentStamina = value; }
-    public double GetMaxStamina() { return maxStamina; }
-    public void SetMaxStamina(double value) { maxStamina = value; }
-    public double GetStamina() { return Stamina; }
-    public void SetStamina(double value) { Stamina = value; }
-
-    public double GetCurrentSpeed() { return currentSpeed; }
-    public void SetCurrentSpeed(double value) { currentSpeed = value; }
-    public double GetSpeed() { return Speed; }
-    public void SetSpeed(double value) { Speed = value; }
-
-    public double GetCurrentCrit() { return currentCrit; }
-    public void SetCurrentCrit(double value) { currentCrit = value; }
-    public double GetCrit() { return Crit; }
-    public void SetCrit(double value) { Crit = value; }
-
-    private double GetBaseCritboost() { return baseCritBoost;  }
-    public double GetCurrentCritBoost() { return currentCritBoost; }
-    public void SetCurrentCritBoost(double value) { currentCritBoost = value; }
-    public double GetCritBoost() { return CritBoost; }
-    public void SetCritBoost(double value) { CritBoost = value; }
-
-    public int GetCurrentTroopCount() { return currentTroopCount; }
-    public void SetCurrentTroopCount(int value) { currentTroopCount = value; }
-    public int GetMaxTroopCount() { return maxTroopCount; }
-    public void SetMaxTroopCount(int value) { maxTroopCount = value; }
-    public int GetTroopCount() { return TroopCount; }
-    public void SetTroopCount(int value) { TroopCount = value; }
 
     public List<StatusEffect> GetStatusEffects() { return statusEffects;  }
     public List<Skill> GetSkills() { return skills; }
+
+
+    /*
+     * We can determine the IDs for Skills here
+     */
+    public Skill GetSkill(int ID)
+    {
+        switch (ID)
+        {
+            case 0: return new MarchSkill();
+            case 1: return null;
+        }
+        return null;
+    }
 } 

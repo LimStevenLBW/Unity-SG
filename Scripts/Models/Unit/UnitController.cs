@@ -11,10 +11,11 @@ public class UnitController : MonoBehaviour
     enum State
     {
         IDLE,
-
+        ACTING,
     }
 
-    public Unit unit;
+    public Unit unitBase;
+    public UnitDataStore data;
     public UnitController prefab;
     public Pathfinder path;
 
@@ -43,9 +44,9 @@ public class UnitController : MonoBehaviour
     {
         this.manager = manager;
        
-        unit.Initialize(this, manager); //Initialize combat values, pass itself down
-        path = new Pathfinder();
-        path.Initialize(manager.grid, manager, this, null);
+        path = new Pathfinder(manager.grid, manager, this, null);
+        data = new UnitDataStore(this, unitBase);
+        
 
         state = State.IDLE;
     }
@@ -68,7 +69,7 @@ public class UnitController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             ACTIVE = true;
-            unit.StartListening();
+            data.StartListening();
         }
 
         if (ACTIVE)
@@ -97,22 +98,48 @@ public class UnitController : MonoBehaviour
 
     void CalculateNextAction()
     {
-        if (unit.skill1 && unit.skill1.IsAvailable())
+        //MOVEMENT SKILL
+        //To prevent problems, only one unit is allowed to calculate movement at a time
+       
+        if (data.IsMovementAvailable())
         {
-            unit.skill1.DoSkill();
+            Debug.Log(data.GetName() + " movement is available, and thinks Pathfinding is : " + manager.PATHFINDING_IN_USE);
+            if (!manager.PATHFINDING_IN_USE)
+            {
+                manager.PATHFINDING_IN_USE = true;
+                state = State.ACTING;
+
+                Debug.Log(data.GetName() + " is doing its skill");
+
+               data.movementSkill.DoSkill();
+                Debug.Log(data.GetName() + " is finishing its skill");
+
+               manager.PATHFINDING_IN_USE = false;
+
+            }
         }
+        
+
+        /*
         else if (unit.skill2 && unit.skill2.IsAvailable())
         {
+            state = State.ACTING;
             unit.skill2.DoSkill();
         }
         else if (unit.skill3 && unit.skill3.IsAvailable())
         {
+            state = State.ACTING;
             unit.skill3.DoSkill();
         }
         else if (unit.skill4 && unit.skill4.IsAvailable())
         {
+            state = State.ACTING;
             unit.skill4.DoSkill();
         }
+        */
+
+
+
     }
 
     public float Orientation
@@ -187,8 +214,6 @@ public class UnitController : MonoBehaviour
         location.unitController = null; //This unit no longer occupies the current hexcell
         location = path[path.Count - 1]; //Its new location is set to the ending hexcell
         location.unitController = this; //The hexcell's unit is set to be this
-
-        
 
         pathToTravel = path; //Store the path
 
@@ -312,5 +337,13 @@ public class UnitController : MonoBehaviour
         }
         location.unitController = null;
         Destroy(gameObject);
+    }
+
+    public void SetState(string text)
+    {
+        if (text.Equals("IDLE"))
+        {
+            this.state = State.IDLE;
+        }
     }
 }
