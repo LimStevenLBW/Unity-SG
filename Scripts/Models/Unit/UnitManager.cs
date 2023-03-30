@@ -170,12 +170,11 @@ public class UnitManager : MonoBehaviour
         HexCell cell = GetCellUnderCursor();
         if (cell && !cell.unitController) //If the cell is valid and doesn't already have a controller
         {
+
             AddUnit(
                 Instantiate(unitController.prefab), cell, Random.Range(0f, 360f)
             );
-
-            
-            
+  
          }
     }
     public void AddUnit(UnitController controller, HexCell location, float orientation)

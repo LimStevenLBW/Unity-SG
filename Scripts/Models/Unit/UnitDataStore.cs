@@ -88,11 +88,14 @@ public class UnitDataStore
 
 
     /*
-     * Sets up a new instance of a skills
+     * Setup the skill instances
      */
     public void InitSkills() {
         movementSkill = unitBase.GetSkill(unitBase.movementSkill_ID);
         if(movementSkill != null) movementSkill.Init(this, controller);
+
+        skill1 = unitBase.GetSkill(unitBase.skill1_ID);
+        if (skill1 != null) skill1.Init(this, controller);
     }
 
     public string GetName() { return unitName; }
@@ -105,6 +108,7 @@ public class UnitDataStore
     void SecondPassed()
     {
         if (movementSkill != null) movementSkill.SecondPassed();
+        if (skill1 != null) skill1.SecondPassed();
     }
 
     public bool IsMovementAvailable()
@@ -124,7 +128,6 @@ public class UnitDataStore
         return false;
 
     }
-
 
 
     public string GetRank()

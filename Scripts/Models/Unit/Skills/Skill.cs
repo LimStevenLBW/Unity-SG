@@ -21,6 +21,8 @@ public abstract class Skill
     public abstract void SecondPassed();
     public abstract void DoSkill();
 
+    public abstract void HandleAnimExtra();
+    public abstract bool IsAvailable();
     public abstract void Reset();
 
     public abstract void ResetCD();

@@ -33,6 +33,11 @@ public class MarchSkill : Skill
 
     }
 
+    public override bool IsAvailable()
+    {
+        return false; //unused currently
+    }
+
     public override void DoSkill()
     {
 
@@ -70,6 +75,10 @@ public class MarchSkill : Skill
         controller.SetState("IDLE");
     }
 
+    public override void HandleAnimExtra()
+    {
+
+    }
     public override void Reset()
     {
         

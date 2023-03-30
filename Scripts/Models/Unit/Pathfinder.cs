@@ -315,7 +315,6 @@ public class Pathfinder
                 //add a neighbor to the frontier. When a cell is added, it is not guaranteed to be the shortest distance, we need to check
                 if (neighbor.SearchPhase < searchFrontierPhase)
                 {
-                    Debug.Log("search phase < search frontier phase" + controller.data.GetName());
                     neighbor.SearchPhase = searchFrontierPhase;
                     neighbor.Distance = distance;
                     //neighbor.SetLabel(turn.ToString());
@@ -325,7 +324,6 @@ public class Pathfinder
                 }
                 else if (distance < neighbor.Distance)
                 {
-                    Debug.Log("distance < neighbor distance" + controller.data.GetName());
                     int oldPriority = neighbor.SearchPriority;
                     neighbor.Distance = distance;
                     //neighbor.SetLabel(turn.ToString());

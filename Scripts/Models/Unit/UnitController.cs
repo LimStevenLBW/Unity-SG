@@ -18,9 +18,10 @@ public class UnitController : MonoBehaviour
     public UnitDataStore data;
     public UnitController prefab;
     public Pathfinder path;
+    private Animator animator;
 
     private UnitManager manager;
-    private Animator animator;
+    
     private State state;
 
     private const int MOVECOST = 1;
@@ -82,43 +83,28 @@ public class UnitController : MonoBehaviour
         }
 
         
-        /*
+       
         if (Input.GetKeyDown(KeyCode.O))
         {
-            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", false);
         }
         else if (Input.GetKeyDown(KeyCode.P))
         {
-            animator.SetBool("isWalking", true);
+            animator.SetBool("isAttacking", true);
         }
-        */
+      
 
     }
    
 
     void CalculateNextAction()
     {
-        //MOVEMENT SKILL
-        //To prevent problems, only one unit is allowed to calculate movement at a time
-       
-        if (data.IsMovementAvailable())
+
+        if(data.skill1 != null && data.skill1.IsAvailable())
         {
-            Debug.Log(data.GetName() + " movement is available, and thinks Pathfinding is : " + manager.PATHFINDING_IN_USE);
-            if (!manager.PATHFINDING_IN_USE)
-            {
-                manager.PATHFINDING_IN_USE = true;
-                state = State.ACTING;
-
-                Debug.Log(data.GetName() + " is doing its skill");
-
-               data.movementSkill.DoSkill();
-                Debug.Log(data.GetName() + " is finishing its skill");
-
-               manager.PATHFINDING_IN_USE = false;
-
-            }
+            state = State.ACTING;
+            data.skill1.DoSkill();
         }
-        
 
         /*
         else if (unit.skill2 && unit.skill2.IsAvailable())
@@ -139,6 +125,25 @@ public class UnitController : MonoBehaviour
         */
 
 
+        //MOVEMENT SKILL
+        //To prevent problems, only one unit is allowed to calculate movement at a time
+        if (data.IsMovementAvailable())
+        {
+            //Debug.Log(data.GetName() + " movement is available, and thinks Pathfinding is : " + manager.PATHFINDING_IN_USE);
+            if (!manager.PATHFINDING_IN_USE)
+            {
+                manager.PATHFINDING_IN_USE = true;
+                state = State.ACTING;
+
+                // Debug.Log(data.GetName() + " is doing its skill");
+
+                data.movementSkill.DoSkill();
+                //Debug.Log(data.GetName() + " is finishing its skill");
+
+                manager.PATHFINDING_IN_USE = false;
+
+            }
+        }
 
     }
 
@@ -345,5 +350,35 @@ public class UnitController : MonoBehaviour
         {
             this.state = State.IDLE;
         }
+    }
+
+
+    public void PlayAnim(string anim, float timing, Skill skill)
+    {
+        animator.SetBool(anim, true);
+        StartCoroutine(OnCompleteAnimation(anim, timing, skill));
+
+    }
+    public void StopAnim(string anim)
+    {
+        
+    }
+
+    IEnumerator OnCompleteAnimation(string anim, float timing, Skill skill)
+    {
+        //Normalized time updates rather slowly, we check if its above 1f before proceeding because it is currently 
+        //at the old value from the previous animation
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f) yield return null;
+
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < timing) yield return null;
+
+        //Do something in the middle of the animation 
+        skill.HandleAnimExtra();
+
+        //Let it end normally
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f) yield return null;
+        animator.SetBool(anim, false);
+
+
     }
 }
