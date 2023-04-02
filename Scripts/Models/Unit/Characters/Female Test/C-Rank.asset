@@ -20,14 +20,16 @@ MonoBehaviour:
   expGrowthRate: 1
   basePower: 5
   powerGrowthRate: 1
-  baseArmor: 2
-  armorGrowthRate: 1
+  baseDefense: 2
+  defenseGrowthRate: 1
+  baseMagic: 0
+  magicGrowthRate: 0
   baseStamina: 100
   staminaGrowthRate: 1
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 10
+  baseTroopCount: 50
   leadership: 1
   engineering: 1
   magic: 1

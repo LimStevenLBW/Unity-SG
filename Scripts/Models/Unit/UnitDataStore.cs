@@ -9,34 +9,36 @@ using UnityEngine;
 public class UnitDataStore
 {
     public UnitController controller;
+    public bool wasUpdated = false;
+
     private Unit unitBase;
     public string unitName;
     public string faction;
     public Rank rank;
 
     private int Level;
-    private double exp;
+    private float exp;
 
-    private double currentPower;
-    private double Power;
-    private double currentMagic;
-    private double Magic;
-    private double currentDefense;
-    private double Defense;
+    private float currentPower;
+    private float Power;
+    private float currentMagic;
+    private float Magic;
+    private float currentDefense;
+    private float Defense;
 
-    private double currentStamina;
-    private double maxStamina;  //Only used in combat
-    private double Stamina;  //Persistent Stat outside of combat
+    private float currentStamina;
+    private float maxStamina;  //Only used in combat
+    private float Stamina;  //Persistent Stat outside of combat
 
-    private double currentSpeed;
-    private double Speed;
+    private float currentSpeed;
+    private float Speed;
 
-    private double currentCrit;
-    private double Crit;
+    private float currentCrit;
+    private float Crit;
 
-    private double currentCritBoost;
-    private double CritBoost;
-    private double baseCritBoost = 2; //IE. Crit damage, but more than just damage can be effected, standard for all characters
+    private float currentCritBoost;
+    private float CritBoost;
+    private float baseCritBoost = 2; //IE. Crit damage, but more than just damage can be effected, standard for all characters
 
     private int currentTroopCount;
     private int maxTroopCount; //With buffs, we can go past the normal troop count during combat
@@ -49,7 +51,7 @@ public class UnitDataStore
     private int economy;
     private int agriculture;
 
-    private double upkeep;
+    private float upkeep;
 
     //SKILLS
     //We create a new instance of the skill, based on the ID
@@ -123,7 +125,7 @@ public class UnitDataStore
 
        //If we still have stamina
        //Calculate how much stamina we would have IF we were to do the move
-       double staminaResult = currentStamina - movementSkill.currentStaminaCost;
+       float staminaResult = currentStamina - movementSkill.currentStaminaCost;
 
         //If we have enough stamina and if it is off cooldown, then the move is available
         if(staminaResult >= 0 && movementSkill.currentCooldown <= 0)
@@ -149,45 +151,45 @@ public class UnitDataStore
 
     public int GetLevel() { return Level; }
     public void SetLevel(int value) { Level = value; }
-    public double GetExp() { return exp; }
-    public void SetExp(double value) { exp = value; }
+    public float GetExp() { return exp; }
+    public void SetExp(float value) { exp = value; }
 
-    public double GetCurrentPower() { return currentPower; }
-    public void SetCurrentPower(double value) { currentPower = value; }
-    public double GetPower() { return Power; }
-    public void SetPower(double value) { Power = value; }
+    public float GetCurrentPower() { return currentPower; }
+    public void SetCurrentPower(float value) { currentPower = value; }
+    public float GetPower() { return Power; }
+    public void SetPower(float value) { Power = value; }
 
-    public double GetCurrentMagic() { return currentMagic; }
-    public void SetCurrentMagic(double value) { currentMagic = value; }
-    public double GetMagic() { return Magic; }
-    public void SetMagic(double value) { Magic = value; }
+    public float GetCurrentMagic() { return currentMagic; }
+    public void SetCurrentMagic(float value) { currentMagic = value; }
+    public float GetMagic() { return Magic; }
+    public void SetMagic(float value) { Magic = value; }
 
-    public double GetCurrentDefense() { return currentDefense; }
-    public void SetCurrentDefense(double value) { currentDefense = value; }
-    public double GetDefense() { return Defense; }
-    public void SetDefense(double value) { Defense = value; }
+    public float GetCurrentDefense() { return currentDefense; }
+    public void SetCurrentDefense(float value) { currentDefense = value; }
+    public float GetDefense() { return Defense; }
+    public void SetDefense(float value) { Defense = value; }
 
-    public double GetCurrentStamina() { return currentStamina; }
-    public void SetCurrentStamina(double value) { currentStamina = value; }
-    public double GetMaxStamina() { return maxStamina; }
-    public void SetMaxStamina(double value) { maxStamina = value; }
-    public double GetStamina() { return Stamina; }
-    public void SetStamina(double value) { Stamina = value; }
+    public float GetCurrentStamina() { return currentStamina; }
+    public void SetCurrentStamina(float value) { currentStamina = value; }
+    public float GetMaxStamina() { return maxStamina; }
+    public void SetMaxStamina(float value) { maxStamina = value; }
+    public float GetStamina() { return Stamina; }
+    public void SetStamina(float value) { Stamina = value; }
 
-    public double GetCurrentSpeed() { return currentSpeed; }
-    public void SetCurrentSpeed(double value) { currentSpeed = value; }
-    public double GetSpeed() { return Speed; }
-    public void SetSpeed(double value) { Speed = value; }
+    public float GetCurrentSpeed() { return currentSpeed; }
+    public void SetCurrentSpeed(float value) { currentSpeed = value; }
+    public float GetSpeed() { return Speed; }
+    public void SetSpeed(float value) { Speed = value; }
 
-    public double GetCurrentCrit() { return currentCrit; }
-    public void SetCurrentCrit(double value) { currentCrit = value; }
-    public double GetCrit() { return Crit; }
-    public void SetCrit(double value) { Crit = value; }
+    public float GetCurrentCrit() { return currentCrit; }
+    public void SetCurrentCrit(float value) { currentCrit = value; }
+    public float GetCrit() { return Crit; }
+    public void SetCrit(float value) { Crit = value; }
 
-    public double GetCurrentCritBoost() { return currentCritBoost; }
-    public void SetCurrentCritBoost(double value) { currentCritBoost = value; }
-    public double GetCritBoost() { return CritBoost; }
-    public void SetCritBoost(double value) { CritBoost = value; }
+    public float GetCurrentCritBoost() { return currentCritBoost; }
+    public void SetCurrentCritBoost(float value) { currentCritBoost = value; }
+    public float GetCritBoost() { return CritBoost; }
+    public void SetCritBoost(float value) { CritBoost = value; }
 
     public int GetCurrentTroopCount() { return currentTroopCount; }
     public void SetCurrentTroopCount(int value) { currentTroopCount = value; }

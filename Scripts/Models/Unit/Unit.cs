@@ -22,25 +22,25 @@ public class Unit : ScriptableObject
 
     //Level
     public int baseLevel = 1;
-    public double expGrowthRate = 1;
+    public float expGrowthRate = 1;
 
     //Combat Stats and Modifiers
-    public double basePower = 1;
-    public double powerGrowthRate = 1;
-    public double baseDefense = 1;
-    public double defenseGrowthRate = 1;
-    public double baseMagic = 0;
-    public double magicGrowthRate = 0;
+    public float basePower = 1;
+    public float powerGrowthRate = 1;
+    public float baseDefense = 1;
+    public float defenseGrowthRate = 1;
+    public float baseMagic = 0;
+    public float magicGrowthRate = 0;
 
     //Stamina is spent to use skills
-    public double baseStamina = 1;
-    public double staminaGrowthRate = 1;
+    public float baseStamina = 1;
+    public float staminaGrowthRate = 1;
 
     //Speed affects cooldown reduction of skills
-    public double baseSpeed = 1;
-    public double speedGrowthRate = 1;
+    public float baseSpeed = 1;
+    public float speedGrowthRate = 1;
 
-    public double baseCrit = 0;
+    public float baseCrit = 0;
 
     //Troops
     public int baseTroopCount = 10;
@@ -52,7 +52,7 @@ public class Unit : ScriptableObject
     public int economy = 1;
     public int agriculture = 1;
 
-    public double upkeep = 0.1;
+    public float upkeep = 0.1f;
 
     //Skills
     public UnitClass unitClass;

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MarchSkill : Skill
 {
-    double staminaResult;
+    float staminaResult;
     
     public MarchSkill()
     {

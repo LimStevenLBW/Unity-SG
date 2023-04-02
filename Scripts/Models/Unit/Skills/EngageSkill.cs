@@ -12,14 +12,14 @@ using UnityEngine;
  */
 public class EngageSkill : Skill
 {
-    double staminaResult;
+    float staminaResult;
     UnitController enemyTarget;
 
     public EngageSkill()
     {
         effect = Resources.Load("Effects/CFXR4 Sword Hit PLAIN (Cross)") as GameObject;
         skillName = "Engage";
-        description = "Fortune favors the bold";
+        description = "A simple infantry attack. Much more effective with number advantage";
 
         baseCooldown = 4;
         currentCooldown = baseCooldown;
@@ -77,19 +77,43 @@ public class EngageSkill : Skill
     //Plays after the animation timing
     public override void HandleAnimExtra()
     {
+        enemyTarget.PlayEffect(effect);
+
+        //Calculate the damage done
+        CalculateDamage(controller.data, enemyTarget.data);
+        //play sound
+    }
+
+    public void CalculateDamage(UnitDataStore ally, UnitDataStore enemy)
+    {
+        Color color = Color.white;
         Vector3 position = enemyTarget.transform.position;
         position.y += 10;
         position.x += (float)0.5;
 
-        double damageData = 500;
 
-        Color color = Color.white;
+        //Base damage 
+        float lowerBound = (ally.GetCurrentTroopCount() / 4);
+        float upperBound = (ally.GetCurrentTroopCount() / 3);
 
+        //Setup power vs defense modifier
+        float powerVsDefenseMult = (ally.GetCurrentPower() - enemy.GetCurrentDefense()) * 3;
+
+        //Setup troop count modifier
+        float tcCompareMult = (ally.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.2f;
+
+        //Apply Modifiers
+        lowerBound = lowerBound + powerVsDefenseMult + tcCompareMult;
+        upperBound = upperBound + powerVsDefenseMult + tcCompareMult;
+
+        int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+
+        if (damageData < 0) damageData = 0; //We don't go below zero
+        enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+        enemy.wasUpdated = true;
+        //Display Data
         DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
-        enemyTarget.PlayEffect(effect);
-        //play sound
     }
- 
 
     public override void Reset()
     {

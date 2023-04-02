@@ -8,10 +8,10 @@ public abstract class Skill
     public string skillName;
     public string description;
 
-    public double baseCooldown;
-    public double currentCooldown;
-    public double baseStaminaCost;
-    public double currentStaminaCost;
+    public float baseCooldown;
+    public float currentCooldown;
+    public float baseStaminaCost;
+    public float currentStaminaCost;
 
     internal GameObject effect;
     internal UnitController controller;

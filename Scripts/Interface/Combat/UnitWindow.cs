@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UnitWindow : MonoBehaviour
 {
+    UnitDataStore data;
     public GameObject troops;
     public GameObject stamina;
     public GameObject power;
@@ -32,20 +33,38 @@ public class UnitWindow : MonoBehaviour
     {
         //Start listening for object changes
 
-        //Initialize HP Bars
-        if (_tcBar != null) _tcBar.Initialize(100);
-        if (_spBar != null) _spBar.Initialize(100);
+       
+        
+    }
+
+    public void LateUpdate()
+    {
+        //commented out, lets just update all the time
+        /*
+        if (data != null && data.wasUpdated)
+        {
+            UpdateTargetValues(data);
+            data.wasUpdated = false;
+        }
+        */
+
+        if(data != null) UpdateTargetValues(data);
     }
 
     public void SetValues(UnitController unitController)
     {
-        UnitDataStore data = unitController.data;
+        data = unitController.data;
+        data.wasUpdated = false;
 
         portraitCamera.SetTargetObject(unitController);
 
         nameText.SetText("" + data.GetName());
         rankText.SetText("" + data.GetRank() + " Rank Squad Leader");
-        
+
+        //Initialize HP Bars
+        if (_tcBar != null) _tcBar.Initialize(data.GetMaxTroopCount());
+        if (_spBar != null) _spBar.Initialize(data.GetMaxStamina());
+
         UpdateTargetValues(data);
     }
 
@@ -58,12 +77,13 @@ public class UnitWindow : MonoBehaviour
         critText.SetText("" + data.GetCurrentCrit() + "%");
 
         if (_tcBar != null) _tcBar.UpdateHealthBar(data.GetCurrentTroopCount());
+        //_tcBar.SetMaxHealth(data.GetMaxTroopCount());
         troopsText.SetText(data.GetCurrentTroopCount() + " / " + data.GetMaxTroopCount());
-        _tcBar.SetMaxHealth(data.GetMaxTroopCount());
 
-        if (_spBar != null) _spBar.UpdateHealthBar((float)data.GetCurrentStamina());
+        if (_spBar != null) _spBar.UpdateHealthBar((float)data.GetCurrentStamina());   
+        //_spBar.SetMaxHealth((float)data.GetMaxStamina());
+
         staminaText.SetText(data.GetCurrentStamina() + " / " + data.GetMaxStamina());
-        _spBar.SetMaxHealth((float)data.GetMaxStamina());
     }
 
     public void SetPosition(UnitController unitController)

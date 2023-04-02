@@ -14,7 +14,7 @@ public class DestroySelf : MonoBehaviour
 
     IEnumerator CheckIfAlive()
     {
-        ParticleSystem ps = this.GetComponent<ParticleSystem>();
+        ParticleSystem ps = GetComponent<ParticleSystem>();
 
         while (true && ps != null)
         {
