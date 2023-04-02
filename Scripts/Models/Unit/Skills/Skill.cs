@@ -13,6 +13,7 @@ public abstract class Skill
     public double baseStaminaCost;
     public double currentStaminaCost;
 
+    internal GameObject effect;
     internal UnitController controller;
     internal UnitDataStore data;
 

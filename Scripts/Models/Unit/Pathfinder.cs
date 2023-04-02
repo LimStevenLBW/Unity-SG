@@ -509,5 +509,26 @@ public class Pathfinder
         return false;
     }
 
+    public UnitController GetAdjacentEnemy()
+    {
+        for (int i = 0; i < controller.Location.neighbors.Length; i++)
+        {
+            HexCell enemyCell = controller.Location.neighbors[i];
+
+            if (enemyCell && enemyCell.unitController)
+            {
+                UnitController enemyController = enemyCell.unitController;
+                if (!controller.data.faction.Equals(enemyController.data.faction))
+                {
+
+                    return enemyController;
+                }
+            }
+
+        }
+
+        return null;
+    }
+
 
 }

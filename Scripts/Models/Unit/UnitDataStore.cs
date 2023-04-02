@@ -19,8 +19,10 @@ public class UnitDataStore
 
     private double currentPower;
     private double Power;
-    private double currentArmor;
-    private double Armor;
+    private double currentMagic;
+    private double Magic;
+    private double currentDefense;
+    private double Defense;
 
     private double currentStamina;
     private double maxStamina;  //Only used in combat
@@ -72,9 +74,15 @@ public class UnitDataStore
         unitName = unitBase.unitName;
         faction = unitBase.faction;
         rank = unitBase.rank;
+
         maxTroopCount = unitBase.baseTroopCount;
+        currentTroopCount = maxTroopCount;
+        maxStamina = unitBase.baseStamina;
+        currentStamina = maxStamina;
+
         currentPower = unitBase.basePower;
-        currentArmor = unitBase.baseArmor;
+        currentMagic = unitBase.baseMagic;
+        currentDefense = unitBase.baseDefense;
         currentSpeed = unitBase.baseSpeed;
         currentCrit = unitBase.baseCrit;
         //CritBoost = baseCritBoost;
@@ -82,8 +90,6 @@ public class UnitDataStore
         InitSkills();
         //movementSkill = unitBase.movementSkill;
         //movementCD = movementSkill.baseCooldown;
-     
-
     }
 
 
@@ -129,7 +135,6 @@ public class UnitDataStore
 
     }
 
-
     public string GetRank()
     {
         if (rank == Rank.X) return "X";
@@ -152,10 +157,15 @@ public class UnitDataStore
     public double GetPower() { return Power; }
     public void SetPower(double value) { Power = value; }
 
-    public double GetCurrentArmor() { return currentArmor; }
-    public void SetCurrentArmor(double value) { currentArmor = value; }
-    public double GetArmor() { return Armor; }
-    public void SetArmor(double value) { Armor = value; }
+    public double GetCurrentMagic() { return currentMagic; }
+    public void SetCurrentMagic(double value) { currentMagic = value; }
+    public double GetMagic() { return Magic; }
+    public void SetMagic(double value) { Magic = value; }
+
+    public double GetCurrentDefense() { return currentDefense; }
+    public void SetCurrentDefense(double value) { currentDefense = value; }
+    public double GetDefense() { return Defense; }
+    public void SetDefense(double value) { Defense = value; }
 
     public double GetCurrentStamina() { return currentStamina; }
     public void SetCurrentStamina(double value) { currentStamina = value; }

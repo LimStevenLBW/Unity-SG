@@ -356,7 +356,15 @@ public class UnitController : MonoBehaviour
     public void PlayAnim(string anim, float timing, Skill skill)
     {
         animator.SetBool(anim, true);
-        StartCoroutine(OnCompleteAnimation(anim, timing, skill));
+        StartCoroutine(OnPerformAnimation(anim, timing, skill, null));
+
+    }
+
+    //With direction
+    public void PlayAnim(string anim, float timing, Skill skill, HexCell cell)
+    {
+        animator.SetBool(anim, true);
+        StartCoroutine(OnPerformAnimation(anim, timing, skill, cell));
 
     }
     public void StopAnim(string anim)
@@ -364,21 +372,35 @@ public class UnitController : MonoBehaviour
         
     }
 
-    IEnumerator OnCompleteAnimation(string anim, float timing, Skill skill)
+    //Works in tandem with Talent/Skill
+    IEnumerator OnPerformAnimation(string anim, float timing, Skill skill, HexCell cell)
     {
+        //Turn to look at cell, if need be
+        if (cell)
+        {
+            yield return LookAt(cell.Position);
+        }
+
         //Normalized time updates rather slowly, we check if its above 1f before proceeding because it is currently 
         //at the old value from the previous animation
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f) yield return null;
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < timing) yield return null;
 
-        //Do something in the middle of the animation 
+        //Do something in the middle of the animation, based on the skill 
         skill.HandleAnimExtra();
 
         //Let it end normally
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f) yield return null;
         animator.SetBool(anim, false);
 
+    }
 
+    public void PlayEffect(GameObject effect)
+    {
+        Vector3 pos = transform.position;
+        pos.y += 8;
+        Instantiate(effect, pos, transform.rotation);
+        //effect.AddComponent<DestroySelf>();
     }
 }

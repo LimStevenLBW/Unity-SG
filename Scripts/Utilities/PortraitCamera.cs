@@ -30,7 +30,7 @@ public class PortraitCamera : MonoBehaviour
         if (target)
         {
       
-            int speed = 5;
+            int speed = 8;
             // Look
 
             var newRotation = Quaternion.LookRotation(target.transform.position + new Vector3(0, 17, 0) - transform.position);

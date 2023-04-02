@@ -13,9 +13,11 @@ using UnityEngine;
 public class EngageSkill : Skill
 {
     double staminaResult;
+    UnitController enemyTarget;
 
     public EngageSkill()
     {
+        effect = Resources.Load("Effects/CFXR4 Sword Hit PLAIN (Cross)") as GameObject;
         skillName = "Engage";
         description = "Fortune favors the bold";
 
@@ -38,17 +40,18 @@ public class EngageSkill : Skill
 
     }
 
+    //This is an attacking skill, we need a single valid target
     public override bool IsAvailable()
     {
         //If we still have stamina
         //Calculate how much stamina we would have IF we were to do the move
         double staminaResult = data.GetCurrentStamina() - currentStaminaCost;
 
-        //If we have enough stamina and if it is off cooldown, then the move is available
+        //If we have enough stamina and if it is off cooldown, check for a target
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
-            bool nearbyEnemy = controller.path.IsThereAdjacentEnemy(); //We also need a target
-            if (nearbyEnemy) return true;
+            enemyTarget  = controller.path.GetAdjacentEnemy(); //set the target, mark the move as available
+            if (enemyTarget) return true;
         }
         return false;
 
@@ -62,8 +65,8 @@ public class EngageSkill : Skill
         data.SetCurrentStamina(staminaResult);
       
         //Have the unitcontroller play the attack animation
-        controller.PlayAnim("isAttacking", .45f, this);
-       
+        controller.PlayAnim("isAttacking", .45f, this, enemyTarget.Location);
+
         //Once complete, reset the CDR
         ResetCD();
     
@@ -74,12 +77,16 @@ public class EngageSkill : Skill
     //Plays after the animation timing
     public override void HandleAnimExtra()
     {
-        Vector3 position = controller.transform.position;
-        position.y += 5;
+        Vector3 position = enemyTarget.transform.position;
+        position.y += 10;
         position.x += (float)0.5;
+
         double damageData = 500;
-        Color color = Color.green;
+
+        Color color = Color.white;
+
         DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+        enemyTarget.PlayEffect(effect);
         //play sound
     }
  

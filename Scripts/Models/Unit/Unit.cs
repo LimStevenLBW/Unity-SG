@@ -27,8 +27,10 @@ public class Unit : ScriptableObject
     //Combat Stats and Modifiers
     public double basePower = 1;
     public double powerGrowthRate = 1;
-    public double baseArmor = 1;
-    public double armorGrowthRate = 1;
+    public double baseDefense = 1;
+    public double defenseGrowthRate = 1;
+    public double baseMagic = 0;
+    public double magicGrowthRate = 0;
 
     //Stamina is spent to use skills
     public double baseStamina = 1;

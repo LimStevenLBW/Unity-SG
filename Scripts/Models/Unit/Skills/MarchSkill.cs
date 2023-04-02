@@ -8,7 +8,7 @@ using UnityEngine;
 public class MarchSkill : Skill
 {
     double staminaResult;
-
+    
     public MarchSkill()
     {
         skillName = "March";
