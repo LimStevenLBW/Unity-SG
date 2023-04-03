@@ -9,7 +9,7 @@ using UnityEngine;
 public class UnitDataStore
 {
     public UnitController controller;
-    public bool wasUpdated = false;
+    public bool barWasUpdated = false;
 
     private Unit unitBase;
     public string unitName;
@@ -170,11 +170,11 @@ public class UnitDataStore
     public void SetDefense(float value) { Defense = value; }
 
     public float GetCurrentStamina() { return currentStamina; }
-    public void SetCurrentStamina(float value) { currentStamina = value; }
+    public void SetCurrentStamina(float value) { currentStamina = value; barWasUpdated = true; }
     public float GetMaxStamina() { return maxStamina; }
-    public void SetMaxStamina(float value) { maxStamina = value; }
+    public void SetMaxStamina(float value) { maxStamina = value; barWasUpdated = true; }
     public float GetStamina() { return Stamina; }
-    public void SetStamina(float value) { Stamina = value; }
+    public void SetStamina(float value) { Stamina = value; barWasUpdated = true; }
 
     public float GetCurrentSpeed() { return currentSpeed; }
     public void SetCurrentSpeed(float value) { currentSpeed = value; }
@@ -192,9 +192,13 @@ public class UnitDataStore
     public void SetCritBoost(float value) { CritBoost = value; }
 
     public int GetCurrentTroopCount() { return currentTroopCount; }
-    public void SetCurrentTroopCount(int value) { currentTroopCount = value; }
+    public void SetCurrentTroopCount(int value) {
+        currentTroopCount = value;
+        barWasUpdated = true;
+        if (value <= 0) controller.SetState("DEAD");
+    }
     public int GetMaxTroopCount() { return maxTroopCount; }
-    public void SetMaxTroopCount(int value) { maxTroopCount = value; }
+    public void SetMaxTroopCount(int value) { maxTroopCount = value; barWasUpdated = true; }
     public int GetTroopCount() { return TroopCount; }
-    public void SetTroopCount(int value) { TroopCount = value; }
+    public void SetTroopCount(int value) { TroopCount = value; barWasUpdated = true; }
 }

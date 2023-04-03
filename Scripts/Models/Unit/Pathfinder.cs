@@ -436,8 +436,6 @@ public class Pathfinder
         HexCell targetCell = null;
         List<HexCell> alreadyChecked = new List<HexCell>(); //Cells that were already checked
 
-        Debug.Log("Find Nearest Enemy Reached BY.." + controller.data.GetName());
-
         //Let's go through our list of controllers
         for (int i = 0; i < manager.controllers.Count; i++)
         {
@@ -446,6 +444,7 @@ public class Pathfinder
 
             if (controller == enemy) continue;  //If they're the same unit
             if (controller.data.faction.Equals(enemy.data.faction)) continue; //if they have the same faction
+            if (enemy.GetState() == "DEAD") continue; //if they are dead, skip them
 
             //Go through the hexcell's neighbors
             for (int j = 0; j < enemy.Location.neighbors.Length; j++)
@@ -497,6 +496,7 @@ public class Pathfinder
             if (enemyCell && enemyCell.unitController)
             {
                 UnitController enemyController = enemyCell.unitController;
+                if (enemyController.GetState() == "DEAD") continue;
                 if (!controller.data.faction.Equals(enemyController.data.faction))
                 {
                     
@@ -518,6 +518,7 @@ public class Pathfinder
             if (enemyCell && enemyCell.unitController)
             {
                 UnitController enemyController = enemyCell.unitController;
+                if (enemyController.GetState() == "DEAD") continue;
                 if (!controller.data.faction.Equals(enemyController.data.faction))
                 {
 

@@ -12,6 +12,7 @@ public class UnitController : MonoBehaviour
     {
         IDLE,
         ACTING,
+        DEAD
     }
 
     public Unit unitBase;
@@ -54,6 +55,7 @@ public class UnitController : MonoBehaviour
 
     void Awake()
     {
+        state = State.DEAD; //Start off as a ghost
         animator = GetComponent<Animator>();
     }
 
@@ -75,6 +77,16 @@ public class UnitController : MonoBehaviour
 
         if (ACTIVE)
         {
+            if (state == State.DEAD)
+            {
+                StopAllCoroutines();
+                animator.SetTrigger("die");
+
+                //Remove itself as a unit
+                Location.unitController = null;
+
+            }
+
 
             if (state == State.IDLE)
             {
@@ -104,6 +116,8 @@ public class UnitController : MonoBehaviour
         {
             state = State.ACTING;
             data.skill1.DoSkill();
+            
+            return;
         }
 
         /*
@@ -346,16 +360,36 @@ public class UnitController : MonoBehaviour
 
     public void SetState(string text)
     {
+        if (text.Equals("DEAD"))
+        {
+            this.state = State.DEAD;
+        }
         if (text.Equals("IDLE"))
         {
             this.state = State.IDLE;
         }
     }
 
+    public string GetState()
+    {
+        if(state == State.DEAD)
+        {
+            return "DEAD";
+        }
+        if(state == State.IDLE)
+        {
+            return "IDLE";
+        }
+        if (state == State.ACTING) return "ACTING";
+
+        return "Unknown State";
+    }
+
 
     public void PlayAnim(string anim, float timing, Skill skill)
     {
         animator.SetBool(anim, true);
+       
         StartCoroutine(OnPerformAnimation(anim, timing, skill, null));
 
     }
@@ -364,7 +398,9 @@ public class UnitController : MonoBehaviour
     public void PlayAnim(string anim, float timing, Skill skill, HexCell cell)
     {
         animator.SetBool(anim, true);
+       
         StartCoroutine(OnPerformAnimation(anim, timing, skill, cell));
+
 
     }
     public void StopAnim(string anim)
@@ -375,6 +411,7 @@ public class UnitController : MonoBehaviour
     //Works in tandem with Talent/Skill
     IEnumerator OnPerformAnimation(string anim, float timing, Skill skill, HexCell cell)
     {
+
         //Turn to look at cell, if need be
         if (cell)
         {
@@ -383,7 +420,10 @@ public class UnitController : MonoBehaviour
 
         //Normalized time updates rather slowly, we check if its above 1f before proceeding because it is currently 
         //at the old value from the previous animation
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f) yield return null;
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        {
+            yield return null;
+        }
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < timing) yield return null;
 
@@ -393,6 +433,10 @@ public class UnitController : MonoBehaviour
         //Let it end normally
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f) yield return null;
         animator.SetBool(anim, false);
+
+        //Reset state after the animation is done
+        SetState("IDLE");
+
 
     }
 

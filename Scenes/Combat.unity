@@ -1105,7 +1105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.94279176, g: 0.8632076, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1804,7 +1804,7 @@ MonoBehaviour:
   _uiPrimaryBar: {fileID: 1096764758}
   _uiGhostBar: {fileID: 313618942}
   _barPrimaryColor: {r: 0.7595412, g: 0.41568628, b: 0.972549, a: 1}
-  _barGhostHurtColor: {r: 1, g: 0, b: 0, a: 1}
+  _barGhostHurtColor: {r: 0.94279176, g: 0.8632076, b: 1, a: 1}
   _barGhostHealColor: {r: 1, g: 1, b: 1, a: 1}
   _barAdaptiveColor: {r: 1, g: 0, b: 0, a: 1}
   _barFlashingColor: {r: 1, g: 0, b: 0, a: 1}
@@ -1817,7 +1817,7 @@ MonoBehaviour:
   _lowHealthThreshold: 25
   _flashToTime: 0.1
   _flashFromTime: 0.3
-  _barFillDuration: 0.5
+  _barFillDuration: 1.02
   _damageFillDelay: 0
   _healFillDelay: 0
   _animationTriggerThreshold: 1
@@ -7025,7 +7025,7 @@ MonoBehaviour:
   _uiGhostBar: {fileID: 374339740002104909}
   _barPrimaryColor: {r: 0, g: 1, b: 0, a: 1}
   _barGhostHurtColor: {r: 1, g: 0, b: 0, a: 1}
-  _barGhostHealColor: {r: 1, g: 1, b: 1, a: 1}
+  _barGhostHealColor: {r: 0.31594875, g: 0.63863474, b: 0.9433962, a: 1}
   _barAdaptiveColor: {r: 1, g: 0, b: 0, a: 1}
   _barFlashingColor: {r: 1, g: 0, b: 0, a: 1}
   _ghostBarAlpha: 1
@@ -7037,18 +7037,18 @@ MonoBehaviour:
   _lowHealthThreshold: 25
   _flashToTime: 0.1
   _flashFromTime: 0.3
-  _barFillDuration: 0.5
+  _barFillDuration: 1
   _damageFillDelay: 0
   _healFillDelay: 0
   _animationTriggerThreshold: 1
   _damageShake: 1
-  _adaptiveDamageShake: 1
+  _adaptiveDamageShake: 0
   _damageShakeAmount: 0.2
   _damageShakeIntensity: 40
   _damageShakeDuration: 0.3
   _adaptiveShakeAmount: {x: 0.5, y: 5}
-  _adaptiveShakeIntensity: {x: 10, y: 75}
-  _adaptiveShakeThreshold: 0.5
+  _adaptiveShakeIntensity: {x: 10, y: 25}
+  _adaptiveShakeThreshold: 0.2
   _healScale: 1
   _adaptiveHealScale: 1
   _healScaleAmount: 1.3

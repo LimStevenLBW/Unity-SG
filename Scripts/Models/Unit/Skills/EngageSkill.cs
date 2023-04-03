@@ -21,9 +21,9 @@ public class EngageSkill : Skill
         skillName = "Engage";
         description = "A simple infantry attack. Much more effective with number advantage";
 
-        baseCooldown = 4;
+        baseCooldown = 2;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 10;
+        baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
     }
 
@@ -63,15 +63,15 @@ public class EngageSkill : Skill
 
         staminaResult = data.GetCurrentStamina() - currentStaminaCost;
         data.SetCurrentStamina(staminaResult);
-      
+
         //Have the unitcontroller play the attack animation
         controller.PlayAnim("isAttacking", .45f, this, enemyTarget.Location);
 
         //Once complete, reset the CDR
         ResetCD();
     
-        //Reset the state
-        controller.SetState("IDLE");
+        //Reset the state, changed, we reset after the animation is done in coroutine instead
+        //controller.SetState("IDLE");
     }
 
     //Plays after the animation timing
@@ -110,7 +110,7 @@ public class EngageSkill : Skill
 
         if (damageData < 0) damageData = 0; //We don't go below zero
         enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
-        enemy.wasUpdated = true;
+
         //Display Data
         DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
     }

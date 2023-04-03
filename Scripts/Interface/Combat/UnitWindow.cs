@@ -30,31 +30,28 @@ public class UnitWindow : MonoBehaviour
 
     // Start is called before the first frame update
     public void Awake()
-    {
-        //Start listening for object changes
-
-       
-        
+    {     
     }
 
     public void LateUpdate()
     {
-        //commented out, lets just update all the time
-        /*
-        if (data != null && data.wasUpdated)
-        {
-            UpdateTargetValues(data);
-            data.wasUpdated = false;
-        }
-        */
 
+        //Only when bars are changed
+        if (data != null && data.barWasUpdated)
+        {
+            UpdateBarValues(data);
+            data.barWasUpdated = false;
+        }
+        
+
+        //Pretty much always do
         if(data != null) UpdateTargetValues(data);
     }
 
     public void SetValues(UnitController unitController)
     {
         data = unitController.data;
-        data.wasUpdated = false;
+        data.barWasUpdated = false;
 
         portraitCamera.SetTargetObject(unitController);
 
@@ -66,6 +63,7 @@ public class UnitWindow : MonoBehaviour
         if (_spBar != null) _spBar.Initialize(data.GetMaxStamina());
 
         UpdateTargetValues(data);
+        UpdateBarValues(data);
     }
 
     public void UpdateTargetValues(UnitDataStore data)
@@ -75,15 +73,24 @@ public class UnitWindow : MonoBehaviour
         defenseText.SetText("" + data.GetCurrentDefense());
         speedText.SetText("" + data.GetCurrentSpeed());
         critText.SetText("" + data.GetCurrentCrit() + "%");
+    }
 
-        if (_tcBar != null) _tcBar.UpdateHealthBar(data.GetCurrentTroopCount());
-        //_tcBar.SetMaxHealth(data.GetMaxTroopCount());
-        troopsText.SetText(data.GetCurrentTroopCount() + " / " + data.GetMaxTroopCount());
+    public void UpdateBarValues(UnitDataStore data)
+    {
+        if (_tcBar != null)
+        {
+            _tcBar.UpdateHealthBar(data.GetCurrentTroopCount());
+            //_tcBar.SetMaxHealth(data.GetMaxTroopCount());
+            troopsText.SetText(data.GetCurrentTroopCount() + " / " + data.GetMaxTroopCount());
+        }
 
-        if (_spBar != null) _spBar.UpdateHealthBar((float)data.GetCurrentStamina());   
-        //_spBar.SetMaxHealth((float)data.GetMaxStamina());
+        if (_spBar != null)
+        {
+            _spBar.UpdateHealthBar((float)data.GetCurrentStamina());
+           // _spBar.SetMaxHealth((float)data.GetMaxStamina());
 
-        staminaText.SetText(data.GetCurrentStamina() + " / " + data.GetMaxStamina());
+            staminaText.SetText(data.GetCurrentStamina() + " / " + data.GetMaxStamina());
+        }
     }
 
     public void SetPosition(UnitController unitController)

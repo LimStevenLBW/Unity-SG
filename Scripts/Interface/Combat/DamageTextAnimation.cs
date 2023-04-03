@@ -15,8 +15,18 @@ public class DamageTextAnimation : MonoBehaviour
 
     void Awake()
     {
-        tmp = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        //Slightly vary the starting origin
+        float transformXModified = Random.Range(transform.position.x - 5, transform.position.x + 5);
+        float transformYModified = Random.Range(transform.position.y - 5, transform.position.y + 4);
+        transform.position = new Vector3(transformXModified, transformYModified, transform.position.z);
         origin = transform.position;
+        tmp = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+      
+
+        
+       // float originYModifier = Random.Range(origin.y - 1, origin.y + 1);
+
+      // origin.y += originYModifier;
     }
 
     // Update is called once per frame
