@@ -14,7 +14,7 @@ public class MarchSkill : Skill
         skillName = "March";
         description = "Going for a stroll";
 
-        baseCooldown = 4;
+        baseCooldown = 2;
         currentCooldown = baseCooldown;
         baseStaminaCost = 10;
         currentStaminaCost = baseStaminaCost;

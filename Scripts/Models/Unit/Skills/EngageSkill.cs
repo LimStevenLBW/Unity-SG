@@ -17,11 +17,11 @@ public class EngageSkill : Skill
 
     public EngageSkill()
     {
-        effect = Resources.Load("Effects/CFXR4 Sword Hit PLAIN (Cross)") as GameObject;
+        effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
         skillName = "Engage";
         description = "A simple infantry attack. Much more effective with number advantage";
 
-        baseCooldown = 2;
+        baseCooldown = 4;
         currentCooldown = baseCooldown;
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
@@ -77,7 +77,9 @@ public class EngageSkill : Skill
     //Plays after the animation timing
     public override void HandleAnimExtra()
     {
-        enemyTarget.PlayEffect(effect);
+        Vector3 pos = enemyTarget.transform.position;
+        pos.y += 8;
+        enemyTarget.PlayEffect(effect, pos);
 
         //Calculate the damage done
         CalculateDamage(controller.data, enemyTarget.data);

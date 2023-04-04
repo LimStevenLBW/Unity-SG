@@ -7,24 +7,43 @@ using UnityEngine;
  */
 public class DestroySelf : MonoBehaviour
 {
-    void OnEnable()
+    int time;
+    void OnStart()
     {
+       
+    }
+
+    public void SelfDestruct(int time)
+    {
+        this.time = time;
         StartCoroutine("CheckIfAlive");
     }
 
+    //Destroy this object after its animation finishes, or after a certain amount of time
     IEnumerator CheckIfAlive()
     {
         ParticleSystem ps = GetComponent<ParticleSystem>();
 
-        while (true && ps != null)
+        while (ps != null)
         {
-            yield return new WaitForSeconds(0.5f);
-            if (!ps.IsAlive(true))
+            Debug.Log(time);
+            if (time > 0)
             {
-
-                GameObject.Destroy(this.gameObject);
+                yield return new WaitForSeconds(time);
+                Destroy(this.gameObject);
                 break;
             }
+            else
+            {
+                yield return new WaitForSeconds(0.5f);
+                if (!ps.IsAlive(true))
+                {
+
+                   Destroy(this.gameObject);
+                   break;
+                }
+            }
+
         }
     }
 }

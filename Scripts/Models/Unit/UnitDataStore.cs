@@ -99,11 +99,21 @@ public class UnitDataStore
      * Setup the skill instances
      */
     public void InitSkills() {
-        movementSkill = unitBase.GetSkill(unitBase.movementSkill_ID);
-        if(movementSkill != null) movementSkill.Init(this, controller);
-
         skill1 = unitBase.GetSkill(unitBase.skill1_ID);
         if (skill1 != null) skill1.Init(this, controller);
+
+        skill2 = unitBase.GetSkill(unitBase.skill2_ID);
+        if (skill2 != null) skill2.Init(this, controller);
+
+        skill3 = unitBase.GetSkill(unitBase.skill3_ID);
+        if (skill3 != null) skill3.Init(this, controller);
+
+        skill4 = unitBase.GetSkill(unitBase.skill4_ID);
+        if (skill4 != null) skill4.Init(this, controller);
+
+        movementSkill = unitBase.GetSkill(unitBase.movementSkill_ID);
+        if (movementSkill != null) movementSkill.Init(this, controller);
+
     }
 
     public string GetName() { return unitName; }
@@ -115,8 +125,11 @@ public class UnitDataStore
 
     void SecondPassed()
     {
-        if (movementSkill != null) movementSkill.SecondPassed();
         if (skill1 != null) skill1.SecondPassed();
+        if (skill2 != null) skill2.SecondPassed();
+        if (skill3 != null) skill3.SecondPassed();
+        if (skill4 != null) skill4.SecondPassed();
+        if (movementSkill != null) movementSkill.SecondPassed(); 
     }
 
     public bool IsMovementAvailable()
@@ -193,8 +206,18 @@ public class UnitDataStore
 
     public int GetCurrentTroopCount() { return currentTroopCount; }
     public void SetCurrentTroopCount(int value) {
-        currentTroopCount = value;
+        if(value > maxTroopCount)
+        {
+            currentTroopCount = maxTroopCount; // Cannot go past max
+        }
+        else
+        {
+            currentTroopCount = value;
+            
+        }
+
         barWasUpdated = true;
+
         if (value <= 0) controller.SetState("DEAD");
     }
     public int GetMaxTroopCount() { return maxTroopCount; }

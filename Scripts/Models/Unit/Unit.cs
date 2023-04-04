@@ -84,7 +84,8 @@ public class Unit : ScriptableObject
         switch (ID)
         {
             case 0: return new MarchSkill();
-            case 2: return new EngageSkill();
+            case 100: return new EngageSkill();
+            case 200: return new RecoverySkill();
         }
         return null;
     }

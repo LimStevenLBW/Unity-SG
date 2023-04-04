@@ -119,13 +119,13 @@ public class UnitController : MonoBehaviour
             
             return;
         }
-
-        /*
-        else if (unit.skill2 && unit.skill2.IsAvailable())
+        else if (data.skill2 != null && data.skill2.IsAvailable())
         {
             state = State.ACTING;
-            unit.skill2.DoSkill();
+            data.skill2.DoSkill();
+            return;
         }
+        /*
         else if (unit.skill3 && unit.skill3.IsAvailable())
         {
             state = State.ACTING;
@@ -230,11 +230,14 @@ public class UnitController : MonoBehaviour
     /* Have this unit start traversing along a path of given hexcells */
     public void Travel(List<HexCell> path, int steps)
     {
-        location.unitController = null; //This unit no longer occupies the current hexcell
-        location = path[path.Count - 1]; //Its new location is set to the ending hexcell
-        location.unitController = this; //The hexcell's unit is set to be this
+        List<HexCell> trimmedPath = new List<HexCell>();
 
-        pathToTravel = path; //Store the path
+        for (int i=0; i < path.Count; i++){
+            trimmedPath.Add(path[i]);
+            if (trimmedPath.Count > steps) break;
+        }
+
+        pathToTravel = trimmedPath; //Store the path
 
         StopAllCoroutines();
         StartCoroutine(TravelPath(steps)); //Start walking, if steps is 0, walk the whole way
@@ -249,6 +252,7 @@ public class UnitController : MonoBehaviour
         Vector3 a, b, c = pathToTravel[0].Position;
 
         yield return LookAt(pathToTravel[1].Position);
+
         //Grid.DecreaseVisibility(pathToTravel[0], visionRange);
         float t = Time.deltaTime * travelSpeed;
 
@@ -273,6 +277,11 @@ public class UnitController : MonoBehaviour
         }
         currentTravelLocation = null;
 
+        Debug.Log("modified Location");
+        location.unitController = null; //This unit no longer occupies the current hexcell
+        location = pathToTravel[pathToTravel.Count - 1]; //Its new location is set to the ending hexcell
+        location.unitController = this; //The hexcell's unit is set to be this
+
         a = c;
         b = location.Position;
         c = b;
@@ -286,6 +295,8 @@ public class UnitController : MonoBehaviour
             yield return null;
         }
         transform.localPosition = location.Position;
+
+
 
         //Release Cell List
         ListPool<HexCell>.Add(pathToTravel);
@@ -440,11 +451,17 @@ public class UnitController : MonoBehaviour
 
     }
 
-    public void PlayEffect(GameObject effect)
+    public void PlayEffect(GameObject effect, Vector3 pos)
     {
-        Vector3 pos = transform.position;
-        pos.y += 8;
         Instantiate(effect, pos, transform.rotation);
-        //effect.AddComponent<DestroySelf>();
+    }
+
+    //Play effect according to a certain amount of time, needed when you need to control animation time or if animation wont close on its own
+    public void PlayEffect(GameObject effect, Vector3 pos, int ms)
+    {
+        GameObject obj = Instantiate(effect, pos, Quaternion.identity) as GameObject;
+        // effect.GetComponent<DestroySelf>();
+
+        obj.SendMessage("SelfDestruct", ms);
     }
 }
