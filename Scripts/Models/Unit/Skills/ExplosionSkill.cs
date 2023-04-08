@@ -7,24 +7,25 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 /*
- * The most basic attack
+ * Basic Ranged Magic
  * uses the isAttacking bool
  */
-public class EngageSkill : Skill
+public class ExplosionSkill : Skill
 {
     float staminaResult;
     UnitController enemyTarget;
 
-    public EngageSkill()
+    public ExplosionSkill()
     {
-        effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
-        skillName = "Engage";
-        description = "A simple infantry attack. Much more effective with number advantage";
+        effect = Resources.Load("Effects/CFX_Explosion_B_Smoke+Text") as GameObject;
+        skillName = "Explosion";
+        description = "";
 
-        baseCooldown = 4;
+        baseCooldown = 7;
         currentCooldown = baseCooldown;
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
+        isRunning = false;
     }
 
     public override void Init(UnitDataStore data, UnitController controller)
@@ -60,15 +61,13 @@ public class EngageSkill : Skill
 
     public override void DoSkill()
     {
-
+        ResetCD();
+        isRunning = true; // Indicate that the skill is calculating;
         staminaResult = data.GetCurrentStamina() - currentStaminaCost;
         data.SetCurrentStamina(staminaResult);
 
         //Have the unitcontroller play the attack animation
         controller.PlayAnim("isAttacking", .45f, this, enemyTarget.Location);
-
-        //Once complete, reset the CDR
-        ResetCD();
     
         //Reset the state, changed, we reset after the animation is done in coroutine instead
         //controller.SetState("IDLE");
@@ -79,24 +78,45 @@ public class EngageSkill : Skill
     {
         Vector3 pos = enemyTarget.transform.position;
         pos.y += 8;
-        enemyTarget.PlayEffect(effect, pos);
+        enemyTarget.PlayEffect(effect, pos, 4);
 
         //Calculate the damage done
-        CalculateDamage(controller.data, enemyTarget.data);
+        CalculateDamage(controller.data, enemyTarget.data, false);
+
+        //Calculate the damage done to nearby allies of the enemy unit as well
+        List<UnitController> nearbyEnemies = new List<UnitController>(enemyTarget.path.GetAllAdjacent(1, true));
+        foreach (UnitController e in nearbyEnemies)
+        {
+            CalculateDamage(controller.data, e.data, true);
+        }
         //play sound
     }
 
-    public void CalculateDamage(UnitDataStore ally, UnitDataStore enemy)
+    /*
+     * This is an area of effect spell, so it affects surrounding HexCells as well
+     * if it is marked as splash damage, we'll apply the weaker numbers
+     */
+    public void CalculateDamage(UnitDataStore ally, UnitDataStore enemy, bool isSplash)
     {
         Color color = Color.white;
-        Vector3 position = enemyTarget.transform.position;
+        Vector3 position = enemy.controller.transform.position;
         position.y += 10;
         position.x += (float)0.5;
 
-
+        float lowerBound;
+        float upperBound;
         //Base damage 
-        float lowerBound = (ally.GetCurrentTroopCount() / 4);
-        float upperBound = (ally.GetCurrentTroopCount() / 3);
+        if (!isSplash)
+        {
+            lowerBound = (ally.GetCurrentTroopCount() / 3);
+            upperBound = (ally.GetCurrentTroopCount() / 2);
+        }
+        else
+        {
+            lowerBound = (ally.GetCurrentTroopCount() / 5);
+            upperBound = (ally.GetCurrentTroopCount() / 4);
+        }
+        
 
         //Setup power vs defense modifier
         float powerVsDefenseMult = (ally.GetCurrentPower() - enemy.GetCurrentDefense()) * 3;
@@ -111,10 +131,15 @@ public class EngageSkill : Skill
         int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
         if (damageData < 0) damageData = 0; //We don't go below zero
+
+        //Damage to Center
         enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
 
         //Display Data
         DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+        //Terminate
+        isRunning = false;
+
     }
 
     public override void Reset()
@@ -147,4 +172,8 @@ public class EngageSkill : Skill
         this.controller = controller;
     }
 
+    public override bool IsSkillRunning()
+    {
+        return isRunning;
+    }
 }

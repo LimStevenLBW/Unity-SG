@@ -26,7 +26,7 @@ public class DestroySelf : MonoBehaviour
 
         while (ps != null)
         {
-            Debug.Log(time);
+
             if (time > 0)
             {
                 yield return new WaitForSeconds(time);

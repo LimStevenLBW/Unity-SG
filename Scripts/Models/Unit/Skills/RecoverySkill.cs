@@ -19,10 +19,11 @@ public class RecoverySkill : Skill
         skillName = "Recovery";
         description = "Heal your people, so they can get hurt again.";
 
-        baseCooldown = 6;
+        baseCooldown = 10;
         currentCooldown = baseCooldown;
         baseStaminaCost = 15;
         currentStaminaCost = baseStaminaCost;
+        isRunning = false;
     }
 
     public override void Init(UnitDataStore data, UnitController controller)
@@ -48,10 +49,8 @@ public class RecoverySkill : Skill
         //If we have enough stamina and if it is off cooldown
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
-            return true;
-        //Don't bother to heal if our health is full
-
-
+          
+          //Don't bother to heal if our health is full
           if(data.GetCurrentTroopCount() != data.GetMaxTroopCount())
           {
                 return true;
@@ -65,15 +64,13 @@ public class RecoverySkill : Skill
 
     public override void DoSkill()
     {
-
+        ResetCD();
+        isRunning = true; // Indicate that the skill is calculating;
         staminaResult = data.GetCurrentStamina() - currentStaminaCost;
         data.SetCurrentStamina(staminaResult);
 
         //Have the unitcontroller play the attack animation(for now)
         controller.PlayAnim("isAttacking", .45f, this);
-
-        //Once complete, reset the CDR
-        ResetCD();
     
     }
 
@@ -113,6 +110,8 @@ public class RecoverySkill : Skill
 
        //Display Data
        DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+       //Terminate
+       isRunning = false;
     }
 
     public override void Reset()
@@ -145,4 +144,8 @@ public class RecoverySkill : Skill
         this.controller = controller;
     }
 
+    public override bool IsSkillRunning()
+    {
+        return isRunning;
+    }
 }

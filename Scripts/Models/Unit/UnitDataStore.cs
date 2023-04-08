@@ -99,21 +99,38 @@ public class UnitDataStore
      * Setup the skill instances
      */
     public void InitSkills() {
-        skill1 = unitBase.GetSkill(unitBase.skill1_ID);
+        skill1 = FindSkill(unitBase.skill1_ID);
         if (skill1 != null) skill1.Init(this, controller);
 
-        skill2 = unitBase.GetSkill(unitBase.skill2_ID);
+        skill2 = FindSkill(unitBase.skill2_ID);
         if (skill2 != null) skill2.Init(this, controller);
 
-        skill3 = unitBase.GetSkill(unitBase.skill3_ID);
+        skill3 = FindSkill(unitBase.skill3_ID);
         if (skill3 != null) skill3.Init(this, controller);
 
-        skill4 = unitBase.GetSkill(unitBase.skill4_ID);
+        skill4 = FindSkill(unitBase.skill4_ID);
         if (skill4 != null) skill4.Init(this, controller);
 
-        movementSkill = unitBase.GetSkill(unitBase.movementSkill_ID);
+        //The Movement Skill is preset with the unit's class
+        movementSkill = FindSkill(unitBase.GetClass().movementSkill_ID);
         if (movementSkill != null) movementSkill.Init(this, controller);
 
+    }
+
+    /*
+     * We can determine the IDs for Skills here
+     */
+    public Skill FindSkill(int ID)
+    {
+        switch (ID)
+        {
+            case 0: return new ChargeSkill();
+            case 1: return new AdvanceSkill();
+            case 100: return new ClashSkill();
+            case 200: return new RecoverySkill();
+            case 300: return new ExplosionSkill();
+        }
+        return null;
     }
 
     public string GetName() { return unitName; }
@@ -130,24 +147,6 @@ public class UnitDataStore
         if (skill3 != null) skill3.SecondPassed();
         if (skill4 != null) skill4.SecondPassed();
         if (movementSkill != null) movementSkill.SecondPassed(); 
-    }
-
-    public bool IsMovementAvailable()
-    {
-        if (movementSkill == null) return false;
-
-       //If we still have stamina
-       //Calculate how much stamina we would have IF we were to do the move
-       float staminaResult = currentStamina - movementSkill.currentStaminaCost;
-
-        //If we have enough stamina and if it is off cooldown, then the move is available
-        if(staminaResult >= 0 && movementSkill.currentCooldown <= 0)
-        { 
-            return true;
-        }
-
-        return false;
-
     }
 
     public string GetRank()

@@ -128,11 +128,11 @@ public class Pathfinder
 
     }
 
-    public void DoMove(UnitController controller)
+    public void DoMove(UnitController controller, int steps, Skill movementSkill)
     {
         if (currentPathExists)
         {
-            controller.Travel(GetPath(), 1);
+            controller.Travel(GetPath(), steps, movementSkill);
             ClearPath();
         }
     }
@@ -527,9 +527,52 @@ public class Pathfinder
             }
 
         }
-
         return null;
     }
 
+    //Return all adjacent units to this controller
+    //If team is 1, return allies,
+    //If team is 2, return enemies,
+    //For any other value, return all units
+    //If isAlive is true, we only return living units
+    public List<UnitController> GetAllAdjacent(int team, bool FindAlive)
+    {
+        //Clone the list
+        List<HexCell> neighboringCells = new List<HexCell>(controller.Location.neighbors);
+        List<UnitController> workingList = new List<UnitController>();
 
-}
+        for (int i = 0; i < neighboringCells.Count; i++)
+        {
+            HexCell neighborCell = neighboringCells[i];
+
+            //If there is a controller on the cell
+            if (neighborCell && neighborCell.unitController)
+            {
+                UnitController neighborUnit = neighborCell.unitController;
+               
+                if (FindAlive && neighborUnit.GetState() == "DEAD") continue; //We won't add it to the list
+
+                if(team == 1)
+                {
+                    //We only want teammates
+                    if (controller.data.faction.Equals(neighborUnit.data.faction)) workingList.Add(neighborUnit);
+                    continue;
+                }
+                else if (team == 2)
+                { 
+                    // we only want enemies
+                    if (!controller.data.faction.Equals(neighborUnit.data.faction)) workingList.Add(neighborUnit);
+                    continue;
+                }
+                else
+                {
+                    workingList.Add(neighborUnit);
+                }
+            }
+           
+        }
+        return workingList;
+    }
+
+   
+    }

@@ -5,19 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class MarchSkill : Skill
+//CURRENTLY BUGGED WHEN TWO UNITS THAT CAN CHARGE GO AT EACH OTHER
+public class ChargeSkill : Skill
 {
     float staminaResult;
     
-    public MarchSkill()
+    public ChargeSkill()
     {
-        skillName = "March";
-        description = "Going for a stroll";
+        skillName = "Charge!!";
+        description = "I said CHARGE god damn it!";
 
-        baseCooldown = 2;
+        baseCooldown = 1f;
         currentCooldown = baseCooldown;
         baseStaminaCost = 10;
         currentStaminaCost = baseStaminaCost;
+        isRunning = false;
     }
 
     public override void Init(UnitDataStore data, UnitController controller)
@@ -40,7 +42,8 @@ public class MarchSkill : Skill
 
     public override void DoSkill()
     {
-
+        ResetCD();
+        isRunning = true; // Indicate that the skill is calculating;
         bool nearbyEnemy = controller.path.IsThereAdjacentEnemy();
 
         //Debug.Log("Unit: " + data.GetName() + " knows pathfinding is " + manager.PATHFINDING_IN_USE);
@@ -59,10 +62,10 @@ public class MarchSkill : Skill
                 data.SetCurrentStamina(staminaResult);
 
                 //Have the controller move one cell along that path
-                controller.path.DoMove(controller);
+                controller.path.DoMove(controller, 4, this);
 
-                //Once complete, reset the CDR
-                ResetCD();
+                //Terminate
+                isRunning = false;
 
             }
         }
@@ -70,9 +73,6 @@ public class MarchSkill : Skill
         {
             //Do Nothing, don't need to move after all
         }
-
-        //Reset the state
-        controller.SetState("IDLE");
     }
 
     public override void HandleAnimExtra()
@@ -107,6 +107,11 @@ public class MarchSkill : Skill
     public override void GetController(UnitController controller)
     {
         this.controller = controller;
+    }
+
+    public override bool IsSkillRunning()
+    {
+        return isRunning;
     }
 
 }

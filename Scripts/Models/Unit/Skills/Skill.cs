@@ -5,9 +5,10 @@ using UnityEngine;
  */
 public abstract class Skill
 {
+    internal bool isRunning;
     public string skillName;
     public string description;
-
+    
     public float baseCooldown;
     public float currentCooldown;
     public float baseStaminaCost;
@@ -34,4 +35,6 @@ public abstract class Skill
     public abstract string GetDescription();
 
     public abstract void GetController(UnitController controller);
+
+    public abstract bool IsSkillRunning();
 }

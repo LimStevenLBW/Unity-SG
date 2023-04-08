@@ -56,8 +56,7 @@ public class Unit : ScriptableObject
 
     //Skills
     public UnitClass unitClass;
-
-    public int movementSkill_ID;
+ 
     public int skill1_ID;
     public int skill2_ID;
     public int skill3_ID;
@@ -75,18 +74,6 @@ public class Unit : ScriptableObject
     public List<StatusEffect> GetStatusEffects() { return statusEffects;  }
     public List<Skill> GetSkills() { return skills; }
 
+    public UnitClass GetClass() { return unitClass; }
 
-    /*
-     * We can determine the IDs for Skills here
-     */
-    public Skill GetSkill(int ID)
-    {
-        switch (ID)
-        {
-            case 0: return new MarchSkill();
-            case 100: return new EngageSkill();
-            case 200: return new RecoverySkill();
-        }
-        return null;
-    }
 } 

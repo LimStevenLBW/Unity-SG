@@ -12,6 +12,7 @@ public class UnitController : MonoBehaviour
     {
         IDLE,
         ACTING,
+        STUNNED,
         DEAD
     }
 
@@ -19,11 +20,11 @@ public class UnitController : MonoBehaviour
     public UnitDataStore data;
     public UnitController prefab;
     public Pathfinder path;
-    private Animator animator;
 
     private UnitManager manager;
-    
-    private State state;
+    private Animator animator;
+
+    private State state = State.IDLE;
 
     private const int MOVECOST = 1;
     private const int MOVECOST_ELEVATION = 5;
@@ -32,7 +33,7 @@ public class UnitController : MonoBehaviour
     private float orientation;
 
     const float travelSpeed = 4f;
-    const float rotationSpeed = 200f;
+    const float rotationSpeed = 100f;
 
     List<HexCell> pathToTravel;
 
@@ -40,62 +41,25 @@ public class UnitController : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
-
-    //Initialize is only called the first time a unit is obtained
+    // Called when a controller is instantiated by the manager
     public void Initialize(UnitManager manager)
     {
         this.manager = manager;
-       
+
         path = new Pathfinder(manager.grid, manager, this, null);
         data = new UnitDataStore(this, unitBase);
-        
-
-        state = State.IDLE;
-    }
-
-    void Awake()
-    {
-        state = State.DEAD; //Start off as a ghost
         animator = GetComponent<Animator>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-       
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             ACTIVE = true;
             data.StartListening();
         }
 
-        if (ACTIVE)
-        {
-            if (state == State.DEAD)
-            {
-                StopAllCoroutines();
-                animator.SetTrigger("die");
-
-                //Remove itself as a unit
-                Location.unitController = null;
-
-            }
-
-
-            if (state == State.IDLE)
-            {
-                CalculateNextAction();
-            }
-        }
-
-        
-       
         if (Input.GetKeyDown(KeyCode.O))
         {
             animator.SetBool("isAttacking", false);
@@ -104,59 +68,60 @@ public class UnitController : MonoBehaviour
         {
             animator.SetBool("isAttacking", true);
         }
-      
 
     }
-   
+
+    void LateUpdate()
+    {
+        if (ACTIVE)
+        {
+            if (state == State.DEAD)  //Remove itself as a unit
+            {
+                StopAllCoroutines();
+                animator.SetTrigger("die");
+
+                location.unitController = null;
+            }
+            else if (state == State.IDLE)
+            {
+                CalculateNextAction();
+            }
+        }
+    }
 
     void CalculateNextAction()
     {
-
         if(data.skill1 != null && data.skill1.IsAvailable())
         {
             state = State.ACTING;
-            data.skill1.DoSkill();
-            
-            return;
+            data.skill1.DoSkill(); 
         }
         else if (data.skill2 != null && data.skill2.IsAvailable())
         {
             state = State.ACTING;
             data.skill2.DoSkill();
-            return;
         }
-        /*
-        else if (unit.skill3 && unit.skill3.IsAvailable())
+        else if (data.skill3 != null && data.skill3.IsAvailable())
         {
             state = State.ACTING;
-            unit.skill3.DoSkill();
+            data.skill3.DoSkill();
         }
-        else if (unit.skill4 && unit.skill4.IsAvailable())
+        else if (data.skill4 != null && data.skill4.IsAvailable())
         {
             state = State.ACTING;
-            unit.skill4.DoSkill();
+            data.skill4.DoSkill();
         }
-        */
-
-
-        //MOVEMENT SKILL
-        //To prevent problems, only one unit is allowed to calculate movement at a time
-        if (data.IsMovementAvailable())
+        else if (data.movementSkill != null && data.movementSkill.IsAvailable())
         {
-            //Debug.Log(data.GetName() + " movement is available, and thinks Pathfinding is : " + manager.PATHFINDING_IN_USE);
+            //MOVEMENT SKILL
+            //To prevent problems, only one unit is allowed to calculate movement at a time
             if (!manager.PATHFINDING_IN_USE)
             {
                 manager.PATHFINDING_IN_USE = true;
                 state = State.ACTING;
-
-                // Debug.Log(data.GetName() + " is doing its skill");
-
                 data.movementSkill.DoSkill();
-                //Debug.Log(data.GetName() + " is finishing its skill");
-
                 manager.PATHFINDING_IN_USE = false;
-
-            }
+           }
         }
 
     }
@@ -218,120 +183,6 @@ public class UnitController : MonoBehaviour
         transform.localPosition = location.Position;
     }
 
-    /*
-     * Return true if the cell is a valid location for this unit to travel to
-     * I can include conditions for why traveling to a certain cell would be invalid here
-     */
-    public bool IsValidDestination(HexCell cell)
-    {
-        return !cell.unitController;
-    }
-
-    /* Have this unit start traversing along a path of given hexcells */
-    public void Travel(List<HexCell> path, int steps)
-    {
-        List<HexCell> trimmedPath = new List<HexCell>();
-
-        for (int i=0; i < path.Count; i++){
-            trimmedPath.Add(path[i]);
-            if (trimmedPath.Count > steps) break;
-        }
-
-        pathToTravel = trimmedPath; //Store the path
-
-        StopAllCoroutines();
-        StartCoroutine(TravelPath(steps)); //Start walking, if steps is 0, walk the whole way
-    }
-
-
-    /*
-     * Start traversing through the path to the hexcell, clear the path at the end of the walk
-     */
-    IEnumerator TravelPath(int steps)
-    {
-        Vector3 a, b, c = pathToTravel[0].Position;
-
-        yield return LookAt(pathToTravel[1].Position);
-
-        //Grid.DecreaseVisibility(pathToTravel[0], visionRange);
-        float t = Time.deltaTime * travelSpeed;
-
-        for (int i = 1; i < pathToTravel.Count; i++)
-        {
-            currentTravelLocation = pathToTravel[i];
-            a = c;
-            b = pathToTravel[i - 1].Position;
-            c = (b + currentTravelLocation.Position) * 0.5f;
-            //Grid.IncreaseVisibility(pathToTravel[i], visionRange);
-
-            for (; t < 1f; t += Time.deltaTime * travelSpeed)
-            {
-                transform.localPosition = Bezier.GetPoint(a, b, c, t);
-                Vector3 d = Bezier.GetDerivative(a, b, c, t);
-                transform.localRotation = Quaternion.LookRotation(d);
-                yield return null;
-            }
-
-            //Grid.DecreaseVisibility(pathToTravel[i], visionRange);
-            t -= 1f;
-        }
-        currentTravelLocation = null;
-
-        Debug.Log("modified Location");
-        location.unitController = null; //This unit no longer occupies the current hexcell
-        location = pathToTravel[pathToTravel.Count - 1]; //Its new location is set to the ending hexcell
-        location.unitController = this; //The hexcell's unit is set to be this
-
-        a = c;
-        b = location.Position;
-        c = b;
-        //Grid.IncreaseVisibility(location, visionRange);
-
-        for (; t < 1f; t += Time.deltaTime * travelSpeed)
-        {
-            transform.localPosition = Bezier.GetPoint(a, b, c, t);
-            Vector3 d = Bezier.GetDerivative(a, b, c, t);
-            transform.localRotation = Quaternion.LookRotation(d);
-            yield return null;
-        }
-        transform.localPosition = location.Position;
-
-
-
-        //Release Cell List
-        ListPool<HexCell>.Add(pathToTravel);
-        pathToTravel = null;
-    }
-
-    /*
-     * Turn unit to look at a vector point
-     */
-    IEnumerator LookAt(Vector3 point)
-    {
-        point.y = transform.localPosition.y;
-        Quaternion fromRotation = transform.localRotation;
-        Quaternion toRotation =
-            Quaternion.LookRotation(point - transform.localPosition);
-        float angle = Quaternion.Angle(fromRotation, toRotation);
-        if (angle > 0f)
-        {
-            float speed = rotationSpeed / angle;
-
-            for (
-                float t = Time.deltaTime * speed;
-                t < 1f;
-                t += Time.deltaTime * speed
-            )
-            {
-                transform.localRotation =
-                    Quaternion.Slerp(fromRotation, toRotation, t);
-                yield return null;
-            }
-        }
-
-        transform.LookAt(point);
-        orientation = transform.localRotation.eulerAngles.y;
-    }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
     {
@@ -373,11 +224,11 @@ public class UnitController : MonoBehaviour
     {
         if (text.Equals("DEAD"))
         {
-            this.state = State.DEAD;
+            state = State.DEAD;
         }
         if (text.Equals("IDLE"))
         {
-            this.state = State.IDLE;
+            state = State.IDLE;
         }
     }
 
@@ -445,9 +296,10 @@ public class UnitController : MonoBehaviour
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f) yield return null;
         animator.SetBool(anim, false);
 
+        while (skill.IsSkillRunning() == true) yield return null;
+
         //Reset state after the animation is done
         SetState("IDLE");
-
 
     }
 
@@ -457,11 +309,123 @@ public class UnitController : MonoBehaviour
     }
 
     //Play effect according to a certain amount of time, needed when you need to control animation time or if animation wont close on its own
-    public void PlayEffect(GameObject effect, Vector3 pos, int ms)
+    public void PlayEffect(GameObject effect, Vector3 pos, float ms)
     {
         GameObject obj = Instantiate(effect, pos, Quaternion.identity) as GameObject;
         // effect.GetComponent<DestroySelf>();
 
         obj.SendMessage("SelfDestruct", ms);
+    }
+
+    /*
+     * Return true if the cell is a valid location for this unit to travel to
+     * I can include conditions for why traveling to a certain cell would be invalid here
+     */
+    public bool IsValidDestination(HexCell cell)
+    {
+        return !cell.unitController;
+    }
+
+    /* Have this unit start traversing along a path of given hexcells */
+    public void Travel(List<HexCell> path, int steps, Skill movementSkill)
+    {
+        List<HexCell> trimmedPath = new List<HexCell>();
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            trimmedPath.Add(path[i]);
+            if (trimmedPath.Count > steps) break;
+        }
+
+        pathToTravel = trimmedPath; //Store the path
+        location.unitController = null; //This unit no longer occupies the current hexcell
+        location = pathToTravel[pathToTravel.Count - 1]; //Its new location is set to the ending hexcell
+        location.unitController = this; //The hexcell's unit is set to be this
+
+        StopAllCoroutines();
+        StartCoroutine(TravelPath(movementSkill)); //Start walking, if steps is 0, walk the whole way
+    }
+
+
+    /*
+     * Start traversing through the path to the hexcell, clear the path at the end of the walk
+     */
+    IEnumerator TravelPath(Skill movementSkill)
+    {
+        Vector3 a, b, c = pathToTravel[0].Position;
+        transform.localPosition = c;
+        yield return LookAt(pathToTravel[1].Position);
+
+        //Grid.DecreaseVisibility(pathToTravel[0], visionRange);
+        float t = Time.deltaTime * travelSpeed;
+
+        for (int i = 1; i < pathToTravel.Count; i++) {
+            currentTravelLocation = pathToTravel[i];
+            a = c;
+            b = pathToTravel[i - 1].Position;
+            c = (b + currentTravelLocation.Position) * 0.5f;
+            //Grid.IncreaseVisibility(pathToTravel[i], visionRange);
+
+            for (; t < 1f; t += Time.deltaTime * travelSpeed)
+            {
+                transform.localPosition = Bezier.GetPoint(a, b, c, t);
+                Vector3 d = Bezier.GetDerivative(a, b, c, t);
+                transform.localRotation = Quaternion.LookRotation(d);
+                yield return null;
+            }
+            //Grid.DecreaseVisibility(pathToTravel[i], visionRange);
+            t -= 1f;
+        }
+        currentTravelLocation = null;
+
+        a = c;
+        b = location.Position;
+        c = b;
+        //Grid.IncreaseVisibility(location, visionRange);
+
+        for (; t < 1f; t += Time.deltaTime * travelSpeed)
+        {
+            transform.localPosition = Bezier.GetPoint(a, b, c, t);
+            Vector3 d = Bezier.GetDerivative(a, b, c, t);
+            transform.localRotation = Quaternion.LookRotation(d);
+            yield return null;
+        }
+        transform.localPosition = location.Position;
+
+        //Release Cell List
+        ListPool<HexCell>.Add(pathToTravel);
+        pathToTravel = null;
+
+        while (movementSkill.IsSkillRunning() == true) yield return null;
+
+        SetState("IDLE"); //Reset the state
+    }
+
+    /*
+     * Turn unit to look at a vector point
+     */
+    IEnumerator LookAt(Vector3 point)
+    {
+        point.y = transform.localPosition.y;
+        Quaternion fromRotation = transform.localRotation;
+        Quaternion toRotation =
+            Quaternion.LookRotation(point - transform.localPosition);
+        float angle = Quaternion.Angle(fromRotation, toRotation);
+
+        if (angle > 0f)
+        {
+            float speed = rotationSpeed / angle;
+
+            for (float t = Time.deltaTime * speed; t < 1f; t += Time.deltaTime * speed
+            )
+            {
+                transform.localRotation =
+                    Quaternion.Slerp(fromRotation, toRotation, t);
+                yield return null;
+            }
+        }
+
+        transform.LookAt(point);
+        orientation = transform.localRotation.eulerAngles.y;
     }
 }
