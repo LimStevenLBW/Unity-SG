@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class AdvanceSkill : Skill
+public class MovementAdvanceSkill : Skill
 {
     float staminaResult;
     
-    public AdvanceSkill()
+    public MovementAdvanceSkill()
     {
         skillName = "Advance";
         description = "Fire within range";
 
-        baseCooldown = 1.0f;
+        baseCooldown = 0.7f;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 5;
+        baseStaminaCost = 1;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }
@@ -42,8 +42,9 @@ public class AdvanceSkill : Skill
         //If we have enough stamina and if it is off cooldown, then the move is available
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
-            bool nearbyEnemy = controller.path.IsThereAdjacentEnemy(); //if there no nearby enemy, we can do the move
-            if (!nearbyEnemy) return true;
+            bool noNearbyEnemy = !controller.path.IsThereAdjacentEnemy(); //if there no nearby enemy, we should do the move
+            bool notTrapped = !controller.path.IsThisUnitSurrounded(); //If this unit is surrounded by allies for example, it won't be able to move
+            if (noNearbyEnemy && notTrapped) return true;
 
         }
         return false;
@@ -51,18 +52,20 @@ public class AdvanceSkill : Skill
 
     public override void DoSkill()
     {
-        ResetCD();
-        isRunning = true; // Indicate that the skill is calculating;
-
+        
         //First, find the distance of the path to the nearest enemy
         int distance = controller.path.FindPathToNearestEnemy();
 
         //If we need to move
         if (distance > 0)
         {
+            ResetCD();
+
             //Update the stamina
             staminaResult = data.GetCurrentStamina() - currentStaminaCost;
             data.SetCurrentStamina(staminaResult);
+
+            isRunning = true; // Indicate that the skill is calculating;
 
             //Have the controller move one cell along that path
             controller.path.DoMove(controller, 1, this);
@@ -70,6 +73,11 @@ public class AdvanceSkill : Skill
             //Terminate
             isRunning = false;
 
+        }
+        else
+        {
+            //Movement failed, cancel
+            controller.SetState("IDLE");
         }
 
     }

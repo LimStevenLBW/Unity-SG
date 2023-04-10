@@ -12,7 +12,7 @@ namespace Assets.Scripts.Interface
         public HexGrid grid;
         public UnitWindow unitWindow;
         public CameraControl mainCamera;
-        private UnitController selectedUnit;
+        private UnitController selectedController;
         private HexCell selectedCell;
 
         [SerializeField] private AudioSource AudioPlayer;
@@ -34,7 +34,7 @@ namespace Assets.Scripts.Interface
                 ClearSelection();
             }
                 /*
-                else if (selectedUnit)
+                else if (selectedController)
                 {
                     if (Input.GetMouseButtonDown(1))
                     {
@@ -69,14 +69,14 @@ namespace Assets.Scripts.Interface
 
             if (selectedCell)
             {
-                selectedUnit = selectedCell.unitController;
+                selectedController = selectedCell.unitController;
                 
             }
             //Note that a cell may not necessarily have a unit
-            if (selectedUnit)
+            if (selectedController)
             {
-                EnableHighlight(selectedUnit);
-                EnableUnitWindow(selectedUnit);
+                EnableHighlight(selectedController);
+                EnableUnitWindow(selectedController);
             }
 
         }
@@ -117,29 +117,29 @@ namespace Assets.Scripts.Interface
 
         void ClearSelection()
         {
-            DisableHighlight(selectedUnit);
+            DisableHighlight(selectedController);
             DisableUnitWindow();
         }
 
-        void EnableHighlight(UnitController unit)
+        void EnableHighlight(UnitController controller)
         {
-            if (unit) unit.EnableHighlight();
+            if (controller) controller.EnableHighlight();
 
         }
 
-        void DisableHighlight(UnitController unit)
+        void DisableHighlight(UnitController controller)
         {
-            if (unit) unit.DisableHighlight();
+            if (controller) controller.DisableHighlight();
         }
 
-        void EnableUnitWindow(UnitController unit)
+        void EnableUnitWindow(UnitController controller)
         {
             unitWindow.gameObject.SetActive(true);
 
-            if (unit) {
-                unitWindow.SetValues(unit);
+            if (controller) {
+                unitWindow.Initialize(controller);
                 //unitWindow.SetPosition(unit);
-                mainCamera.Focus(unit.transform, 50, 50);
+                mainCamera.Focus(controller.transform, 50, 50);
             }
             PlayAudioClip(AudioClickOpen);
         }

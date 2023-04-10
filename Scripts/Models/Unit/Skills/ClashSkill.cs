@@ -23,7 +23,7 @@ public class ClashSkill : Skill
 
         baseCooldown = 4;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 5;
+        baseStaminaCost = 1;
         currentStaminaCost = baseStaminaCost;
 
         isRunning = false;

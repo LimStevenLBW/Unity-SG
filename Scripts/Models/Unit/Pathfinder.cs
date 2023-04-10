@@ -437,33 +437,32 @@ public class Pathfinder
         List<HexCell> alreadyChecked = new List<HexCell>(); //Cells that were already checked
 
         //Let's go through our list of controllers
-        for (int i = 0; i < manager.controllers.Count; i++)
+        for (int i = 0; i < controller.myEnemies.Count; i++)
         {
-            //Need to check enemy faction here todo
-            UnitController enemy = manager.controllers[i];
+            UnitController possibleEnemy = controller.myEnemies[i];
 
-            if (controller == enemy) continue;  //If they're the same unit
-            if (controller.data.faction.Equals(enemy.data.faction)) continue; //if they have the same faction
-            if (enemy.GetState() == "DEAD") continue; //if they are dead, skip them
+            //if (controller == possibleEnemy) continue;  //If they're the same unit
+            if (controller.teamNum == possibleEnemy.teamNum) continue; //if they have the same team
+            if (possibleEnemy.GetState() == "DEAD") continue; //if they are dead, skip them
 
             //Go through the hexcell's neighbors
-            for (int j = 0; j < enemy.Location.neighbors.Length; j++)
+            for (int j = 0; j < possibleEnemy.Location.neighbors.Length; j++)
             {
-                HexCell enemyCell = enemy.Location.neighbors[j];
-                if (enemyCell)
+                HexCell neighborCellToEnemy = possibleEnemy.Location.neighbors[j];
+                if (neighborCellToEnemy)
                 {
-                    if (enemyCell.unitController) continue;
-                    if (alreadyChecked.Contains(enemyCell)) continue;
+                    if (neighborCellToEnemy.unitController) continue;
+                    if (alreadyChecked.Contains(neighborCellToEnemy)) continue;
 
-                    alreadyChecked.Add(enemyCell);
+                    alreadyChecked.Add(neighborCellToEnemy);
 
                     //Find this unit's route to that selected enemy controller
-                    FindPath(controller.Location, enemyCell, controller);
+                    FindPath(controller.Location, neighborCellToEnemy, controller);
 
-                    if (currentPathExists && enemyCell.Distance < shortestDistance)
+                    if (currentPathExists && neighborCellToEnemy.Distance < shortestDistance)
                     {
-                        shortestDistance = enemyCell.Distance;
-                        targetCell = enemyCell;
+                        shortestDistance = neighborCellToEnemy.Distance;
+                        targetCell = neighborCellToEnemy;
 
                         //There is an enemy right next to our unit! We don't have to move
                         if (shortestDistance <= 0) break;
@@ -497,16 +496,25 @@ public class Pathfinder
             {
                 UnitController enemyController = enemyCell.unitController;
                 if (enemyController.GetState() == "DEAD") continue;
-                if (!controller.data.faction.Equals(enemyController.data.faction))
-                {
-                    
-                    return true;
-                }
+                if (controller.teamNum != enemyController.teamNum) return true;
             }
             
         }
 
         return false;
+    }
+
+
+    public bool IsThisUnitSurrounded()
+    {
+        //Search for a free space to move to
+        for (int i = 0; i < controller.Location.neighbors.Length; i++)
+        {
+            HexCell cell = controller.Location.neighbors[i];
+
+            if (cell && controller.IsValidDestination(cell)) return false; //There is an empty space
+        }
+        return true;
     }
 
     public UnitController GetAdjacentEnemy()
@@ -519,16 +527,14 @@ public class Pathfinder
             {
                 UnitController enemyController = enemyCell.unitController;
                 if (enemyController.GetState() == "DEAD") continue;
-                if (!controller.data.faction.Equals(enemyController.data.faction))
-                {
 
-                    return enemyController;
-                }
+                if (controller.teamNum != enemyController.teamNum) return enemyController;
             }
 
         }
         return null;
     }
+
 
     //Return all adjacent units to this controller
     //If team is 1, return allies,

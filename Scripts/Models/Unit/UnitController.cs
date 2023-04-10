@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /*
@@ -8,10 +9,14 @@ using UnityEngine;
  */
 public class UnitController : MonoBehaviour
 {
+    //Debugging
+    public TextMeshProUGUI statusText;
+    public int teamNum;
     enum State
     {
         IDLE,
         ACTING,
+        MOVING,
         STUNNED,
         DEAD
     }
@@ -20,6 +25,9 @@ public class UnitController : MonoBehaviour
     public UnitDataStore data;
     public UnitController prefab;
     public Pathfinder path;
+
+    public List<UnitController> myAllies;
+    public List<UnitController> myEnemies;
 
     private UnitManager manager;
     private Animator animator;
@@ -48,6 +56,10 @@ public class UnitController : MonoBehaviour
 
         path = new Pathfinder(manager.grid, manager, this, null);
         data = new UnitDataStore(this, unitBase);
+
+        //Copy a reference the controller lists. Remember to only edit this in UnitManager for organization!
+        myAllies = manager.GetControllers(teamNum, true);
+        myEnemies = manager.GetControllers(teamNum, false);
         animator = GetComponent<Animator>();
     }
 
@@ -58,6 +70,15 @@ public class UnitController : MonoBehaviour
         {
             ACTIVE = true;
             data.StartListening();
+        }
+
+        if (state == State.DEAD)
+        {
+            StopAllCoroutines();
+            animator.SetTrigger("die");
+            ACTIVE = false;
+
+            manager.RemoveUnit(this); //problematic at the moment
         }
 
         if (Input.GetKeyDown(KeyCode.O))
@@ -75,18 +96,15 @@ public class UnitController : MonoBehaviour
     {
         if (ACTIVE)
         {
-            if (state == State.DEAD)  //Remove itself as a unit
+            if (myEnemies.Count > 0) //If there are still enemies
             {
-                StopAllCoroutines();
-                animator.SetTrigger("die");
+                if(state == State.IDLE) CalculateNextAction();
+            }
 
-                location.unitController = null;
-            }
-            else if (state == State.IDLE)
-            {
-                CalculateNextAction();
-            }
         }
+
+        //For Debugging
+        statusText.SetText(state.ToString() + "Team: " + teamNum);
     }
 
     void CalculateNextAction()
@@ -118,7 +136,7 @@ public class UnitController : MonoBehaviour
             if (!manager.PATHFINDING_IN_USE)
             {
                 manager.PATHFINDING_IN_USE = true;
-                state = State.ACTING;
+                state = State.MOVING;
                 data.movementSkill.DoSkill();
                 manager.PATHFINDING_IN_USE = false;
            }
@@ -183,7 +201,6 @@ public class UnitController : MonoBehaviour
         transform.localPosition = location.Position;
     }
 
-
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
     {
         HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
@@ -210,6 +227,7 @@ public class UnitController : MonoBehaviour
 
         return moveCost;
     }
+
     public void Die()
     {
         if (location)
@@ -217,8 +235,10 @@ public class UnitController : MonoBehaviour
             // Grid.DecreaseVisibility(location, VisionRange);
         }
         location.unitController = null;
-        Destroy(gameObject);
+
+        Destroy(gameObject, 4f);
     }
+
 
     public void SetState(string text)
     {
@@ -331,11 +351,13 @@ public class UnitController : MonoBehaviour
     {
         List<HexCell> trimmedPath = new List<HexCell>();
 
+        
         for (int i = 0; i < path.Count; i++)
         {
             trimmedPath.Add(path[i]);
             if (trimmedPath.Count > steps) break;
         }
+        if (!IsValidDestination(trimmedPath[1])) { Debug.Log("Invalid?"); };
 
         pathToTravel = trimmedPath; //Store the path
         location.unitController = null; //This unit no longer occupies the current hexcell
@@ -396,7 +418,11 @@ public class UnitController : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
-        while (movementSkill.IsSkillRunning() == true) yield return null;
+        while (movementSkill.IsSkillRunning() == true)
+        {
+            Debug.Log("Stuck");
+            yield return null;
+        }
 
         SetState("IDLE"); //Reset the state
     }

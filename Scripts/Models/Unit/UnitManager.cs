@@ -14,7 +14,10 @@ public class UnitManager : MonoBehaviour
     public FormationController unitPrefab;
 
     //TEST FUNCTIONS FOR UNIT CONTROLLER
-    public List<UnitController> controllers = new List<UnitController>();
+    public List<UnitController> firstTeamControllers = new List<UnitController>();
+    public List<UnitController> secondTeamControllers = new List<UnitController>();
+
+    //Preset Types
     public UnitController testUnit1;
     public UnitController testUnit2;
     public UnitController testUnit3;
@@ -48,42 +51,15 @@ public class UnitManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-               // DestroyTestUnit();
-            }
-            else
-            {
-                CreateCombatUnit(testUnit1);
-            }
-            return;
-        }
-        else if (Input.GetKeyDown(KeyCode.X))
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                // DestroyCombatUnit();
-            }
-            else
-            {
-                CreateCombatUnit(testUnit2);
-            }
-            return;
-        }
-        else if (Input.GetKeyDown(KeyCode.Z))
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                // DestroyCombatUnit();
-            }
-            else
-            {
-                CreateCombatUnit(testUnit3);
-            }
-            return;
-        }
+        if (Input.GetKeyDown(KeyCode.A)) CreateCombatUnit(testUnit1, 1);
+        else if (Input.GetKeyDown(KeyCode.S)) CreateCombatUnit(testUnit2, 1);
+        else if (Input.GetKeyDown(KeyCode.D)) CreateCombatUnit(testUnit3, 1);
+
+        //Enemies are assigned to -1
+        if (Input.GetKeyDown(KeyCode.Z)) CreateCombatUnit(testUnit1, -1);
+        else if (Input.GetKeyDown(KeyCode.X)) CreateCombatUnit(testUnit2, -1);
+        else if (Input.GetKeyDown(KeyCode.C)) CreateCombatUnit(testUnit3, -1);
+
     }
 
     public void ClearUnits()
@@ -104,10 +80,24 @@ public class UnitManager : MonoBehaviour
         unit.Orientation = orientation;
     }
 
-    public void RemoveUnit(UnitController unit)
+    public void RemoveUnit(UnitController controller)
     {
-        controllers.Remove(unit);
-        unit.Die();
+        int teamNum = controller.teamNum;
+
+        if (teamNum == 1)
+        {
+            firstTeamControllers.Remove(controller);
+        }
+        else if (teamNum == -1)
+        {
+            secondTeamControllers.Remove(controller);
+        }
+        else
+        {
+            Debug.Log("Invalid Team Number provided on RemoveUnit");
+        }
+
+        controller.Die();
     }
 
     public FormationController GetFormation(Ray ray)
@@ -165,27 +155,50 @@ public class UnitManager : MonoBehaviour
         }
     }
     ///------------------------------------------
-    void CreateCombatUnit(UnitController unitController)
+    void CreateCombatUnit(UnitController unitController, int teamNum)
     {
         HexCell cell = GetCellUnderCursor();
         if (cell && !cell.unitController) //If the cell is valid and doesn't already have a controller
         {
-
             AddUnit(
-                Instantiate(unitController.prefab), cell, Random.Range(0f, 360f)
+                Instantiate(unitController.prefab), cell, Random.Range(0f, 360f), teamNum
             );
   
          }
     }
-    public void AddUnit(UnitController controller, HexCell location, float orientation)
+
+    /*
+     * does some initialization for the unit controller
+     * todo, merge with Initialize function to keep it all in one place
+     */
+    public void AddUnit(UnitController controller, HexCell location, float orientation, int teamNum)
     {
-        controllers.Add(controller); //Make sure UnitManager knows about the controller, for testing purposes
-        
+        controller.teamNum = teamNum;
+
+        if(teamNum == 1) firstTeamControllers.Add(controller); //Make sure UnitManager knows about the controller
+        else if (teamNum == -1) secondTeamControllers.Add(controller);
+        else
+        {
+            Debug.Log("Addunit, invalid teamnumber was provided");
+        }
+
         controller.Grid = grid;
         controller.transform.SetParent(transform, false);
         controller.Location = location;
         controller.Orientation = orientation;
         controller.Initialize(this); //Pass itself down, likewise, make sure the unit knows about the manager
+    }
+
+    public List<UnitController> GetControllers(int teamNum, bool isSameTeam)
+    {
+        //Reverse the team we're looking for if false
+        teamNum = (isSameTeam ? teamNum : teamNum * -1 );
+
+        if (teamNum == 1) return firstTeamControllers;
+        else if (teamNum == -1) return secondTeamControllers;
+
+        Debug.Log("Invalid teamNum provided on GetControllers");
+        return null;
     }
 
    

@@ -25,6 +25,10 @@ public class UnitWindow : MonoBehaviour
 
     [SerializeField] MicroBar _tcBar;
     [SerializeField] MicroBar _spBar;
+    [SerializeField] UnitSkillDisplay _skill1;
+    [SerializeField] UnitSkillDisplay _skill2;
+    [SerializeField] UnitSkillDisplay _skill3;
+    [SerializeField] UnitSkillDisplay _skill4;
 
     public PortraitCamera portraitCamera;
 
@@ -48,7 +52,7 @@ public class UnitWindow : MonoBehaviour
         if(data != null) UpdateTargetValues(data);
     }
 
-    public void SetValues(UnitController unitController)
+    public void Initialize(UnitController unitController)
     {
         data = unitController.data;
         data.barWasUpdated = false;
@@ -61,6 +65,10 @@ public class UnitWindow : MonoBehaviour
         //Initialize HP Bars
         if (_tcBar != null) _tcBar.Initialize(data.GetMaxTroopCount());
         if (_spBar != null) _spBar.Initialize(data.GetMaxStamina());
+        if (_skill1 != null) _skill1.Initialize(data.skill1);
+        if (_skill2 != null) _skill2.Initialize(data.skill2);
+        if (_skill3 != null) _skill3.Initialize(data.skill3);
+        if (_skill4 != null) _skill4.Initialize(data.skill4);
 
         UpdateTargetValues(data);
         UpdateBarValues(data);
@@ -73,6 +81,9 @@ public class UnitWindow : MonoBehaviour
         defenseText.SetText("" + data.GetCurrentDefense());
         speedText.SetText("" + data.GetCurrentSpeed());
         critText.SetText("" + data.GetCurrentCrit() + "%");
+
+        // Data gets skill information late, so we initialize when it is available.
+        
     }
 
     public void UpdateBarValues(UnitDataStore data)
