@@ -72,11 +72,11 @@ public class UnitController : MonoBehaviour
             data.StartListening();
         }
 
-        if (state == State.DEAD)
+        if (ACTIVE && state == State.DEAD)
         {
             StopAllCoroutines();
             animator.SetTrigger("die");
-            ACTIVE = false;
+            ACTIVE = false; //Prevents consecutive runs of this block
 
             manager.RemoveUnit(this); //problematic at the moment
         }
@@ -234,9 +234,13 @@ public class UnitController : MonoBehaviour
         {
             // Grid.DecreaseVisibility(location, VisionRange);
         }
+
+        //works with unitmanager, removeunit()
         location.unitController = null;
+        manager.PATHFINDING_IN_USE = false;
 
         Destroy(gameObject, 4f);
+        
     }
 
 
@@ -297,7 +301,7 @@ public class UnitController : MonoBehaviour
         //Turn to look at cell, if need be
         if (cell)
         {
-            yield return LookAt(cell.Position);
+            //yield return LookAt(cell.Position);
         }
 
         //Normalized time updates rather slowly, we check if its above 1f before proceeding because it is currently 
@@ -376,7 +380,7 @@ public class UnitController : MonoBehaviour
     {
         Vector3 a, b, c = pathToTravel[0].Position;
         transform.localPosition = c;
-        yield return LookAt(pathToTravel[1].Position);
+        //yield return LookAt(pathToTravel[1].Position);
 
         //Grid.DecreaseVisibility(pathToTravel[0], visionRange);
         float t = Time.deltaTime * travelSpeed;
@@ -418,11 +422,7 @@ public class UnitController : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
-        while (movementSkill.IsSkillRunning() == true)
-        {
-            Debug.Log("Stuck");
-            yield return null;
-        }
+        while (movementSkill.IsSkillRunning() == true) yield return null;
 
         SetState("IDLE"); //Reset the state
     }

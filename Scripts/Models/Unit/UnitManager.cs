@@ -82,7 +82,16 @@ public class UnitManager : MonoBehaviour
 
     public void RemoveUnit(UnitController controller)
     {
+
         int teamNum = controller.teamNum;
+        while (true)
+        {
+            if (PATHFINDING_IN_USE) continue;
+            PATHFINDING_IN_USE = true;
+            break;
+        }
+
+        //We cannot edit anything that affects unit pathfinding without permission first
 
         if (teamNum == 1)
         {
