@@ -13352,8 +13352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b113c1b58712e134e984e007c4410916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  troops: {fileID: 0}
-  stamina: {fileID: 0}
+  troops: {fileID: 374339740358915688}
+  stamina: {fileID: 604851736}
   power: {fileID: 627271355}
   magic: {fileID: 400363546}
   defense: {fileID: 446062988}
@@ -16817,6 +16817,12 @@ PrefabInstance:
       propertyPath: testUnit3
       value: 
       objectReference: {fileID: -3596249270230576976, guid: 90ccaf8753d307843b498576741e1011,
+        type: 3}
+    - target: {fileID: 6802904671492513651, guid: 806dc32233c7ae64c8c3906c4902dcc9,
+        type: 3}
+      propertyPath: microBarsEnemy
+      value: 
+      objectReference: {fileID: 6453233549780967968, guid: 386bd4a97d9c489449b3db73f4630207,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 806dc32233c7ae64c8c3906c4902dcc9, type: 3}

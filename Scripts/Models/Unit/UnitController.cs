@@ -57,6 +57,7 @@ public class UnitController : MonoBehaviour
 
         path = new Pathfinder(manager.grid, manager, this, null);
         data = new UnitDataStore(this, unitBase);
+        this.bars = bars;
         bars.Initialize(this);
 
         //Copy a reference the controller lists. Remember to only edit this in UnitManager for organization!
@@ -243,7 +244,7 @@ public class UnitController : MonoBehaviour
         manager.PATHFINDING_IN_USE = false;
 
         Destroy(gameObject, 4f);
-        
+        Destroy(bars.gameObject, 4f);
     }
 
 

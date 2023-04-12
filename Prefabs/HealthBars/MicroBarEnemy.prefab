@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 6695713232354692899}
   - component: {fileID: 6453233549780967968}
   m_Layer: 0
-  m_Name: MicroBarFollowers
+  m_Name: MicroBarEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -355,7 +355,7 @@ MonoBehaviour:
   _uiBackground: {fileID: 0}
   _uiPrimaryBar: {fileID: 0}
   _uiGhostBar: {fileID: 0}
-  _barPrimaryColor: {r: 0, g: 1, b: 0, a: 1}
+  _barPrimaryColor: {r: 1, g: 0.972549, b: 0.03529412, a: 1}
   _barGhostHurtColor: {r: 1, g: 0, b: 0, a: 1}
   _barGhostHealColor: {r: 1, g: 1, b: 1, a: 1}
   _barAdaptiveColor: {r: 1, g: 0, b: 0, a: 1}
@@ -461,7 +461,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 22d6ab82cb06ba34bb17f5c4b3dd6fe4, type: 3}
-  m_Color: {r: 0, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.9696133, b: 0.033018887, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1

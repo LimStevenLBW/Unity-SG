@@ -22,21 +22,24 @@ public class MicroBarFollow : MonoBehaviour
     }
     public void LateUpdate()
     {
-      
 
+        /*
         //Only when bars are changed
         if (data != null && data.barWasUpdated)
         {
             UpdateBarValues(data);
             data.barWasUpdated = false;
         }
+        */
 
     }
 
     public void Initialize(UnitController unitController)
     {
+
         data = unitController.data;
         this.unitController = unitController;
+
         if (_tcBar != null) _tcBar.Initialize(data.GetMaxTroopCount());
         if (_spBar != null) _spBar.Initialize(data.GetMaxStamina());
         UpdateBarValues(data);
@@ -46,6 +49,8 @@ public class MicroBarFollow : MonoBehaviour
 
         //Place the bar above the unit controller's head
         transform.position = new Vector3(unitController.Location.transform.position.x, boxSizeConverted.y+5, unitController.transform.position.z);
+
+        data.OnBarUpdated += UpdateBarValues;
         
     }
 
@@ -60,10 +65,14 @@ public class MicroBarFollow : MonoBehaviour
 
         if (_spBar != null)
         {
-            _spBar.UpdateHealthBar((float)data.GetCurrentStamina());
+            _spBar.UpdateHealthBar(data.GetCurrentStamina());
             // _spBar.SetMaxHealth((float)data.GetMaxStamina());
 
             //staminaText.SetText(data.GetCurrentStamina() + " / " + data.GetMaxStamina());
         }
+    }
+    void OnDisable()
+    {
+        data.OnBarUpdated -= UpdateBarValues;
     }
 }

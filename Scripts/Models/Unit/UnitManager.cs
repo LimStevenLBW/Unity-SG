@@ -26,7 +26,7 @@ public class UnitManager : MonoBehaviour
     public bool PATHFINDING_IN_USE = false;
 
     public MicroBarFollow microBars;
-
+    public MicroBarFollow microBarsEnemy;
     // public Queue<UnitController> pathfindingQueue;
 
     public void InitGrid(HexGrid grid)
@@ -183,9 +183,18 @@ public class UnitManager : MonoBehaviour
     public void AddUnit(UnitController controller, HexCell location, float orientation, int teamNum)
     {
         controller.teamNum = teamNum;
+        MicroBarFollow bars = null;
 
-        if(teamNum == 1) firstTeamControllers.Add(controller); //Make sure UnitManager knows about the controller
-        else if (teamNum == -1) secondTeamControllers.Add(controller);
+        if (teamNum == 1)
+        {
+            firstTeamControllers.Add(controller); //Make sure UnitManager knows about the controller}
+            bars = Instantiate(microBars.prefab);
+        }
+        else if (teamNum == -1)
+        {
+            secondTeamControllers.Add(controller);
+            bars = Instantiate(microBarsEnemy.prefab);
+        }
         else
         {
             Debug.Log("Addunit, invalid teamnumber was provided");
@@ -197,7 +206,7 @@ public class UnitManager : MonoBehaviour
         controller.Orientation = orientation;
 
         //Setup health and stamina bars
-        MicroBarFollow bars = Instantiate(microBars.prefab);
+        
         controller.Initialize(this, bars); //Pass itself down, likewise, make sure the unit knows about the manager
     }
 

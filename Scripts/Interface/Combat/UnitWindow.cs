@@ -39,7 +39,7 @@ public class UnitWindow : MonoBehaviour
 
     public void LateUpdate()
     {
-
+        /*
         //Only when bars are changed
         if (data != null && data.barWasUpdated)
         {
@@ -47,7 +47,7 @@ public class UnitWindow : MonoBehaviour
             data.barWasUpdated = false;
         }
         
-
+    */
         //Pretty much always do
         if(data != null) UpdateTargetValues(data);
     }
@@ -72,6 +72,7 @@ public class UnitWindow : MonoBehaviour
 
         UpdateTargetValues(data);
         UpdateBarValues(data);
+        if( data!= null) data.OnBarUpdated += UpdateBarValues;
     }
 
     public void UpdateTargetValues(UnitDataStore data)
@@ -97,7 +98,7 @@ public class UnitWindow : MonoBehaviour
 
         if (_spBar != null)
         {
-            _spBar.UpdateHealthBar((float)data.GetCurrentStamina());
+            _spBar.UpdateHealthBar(data.GetCurrentStamina());
            // _spBar.SetMaxHealth((float)data.GetMaxStamina());
 
             staminaText.SetText(data.GetCurrentStamina() + " / " + data.GetMaxStamina());
@@ -110,5 +111,10 @@ public class UnitWindow : MonoBehaviour
         screenPos.z = 0;
 
         transform.position = screenPos;
+    }
+
+    void OnDisable()
+    {
+        if(data != null) data.OnBarUpdated -= UpdateBarValues;
     }
 }

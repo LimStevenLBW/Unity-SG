@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,6 @@ using UnityEngine;
 public class UnitDataStore
 {
     public UnitController controller;
-    public bool barWasUpdated = false;
 
     private Unit unitBase;
     public string unitName;
@@ -60,8 +60,8 @@ public class UnitDataStore
     public Skill skill2;
     public Skill skill3;
     public Skill skill4;
- 
 
+    public Action<UnitDataStore> OnBarUpdated;
     public UnitDataStore(UnitController controller, Unit unitBase)
     {
         this.controller = controller;
@@ -186,13 +186,6 @@ public class UnitDataStore
     public float GetDefense() { return Defense; }
     public void SetDefense(float value) { Defense = value; }
 
-    public float GetCurrentStamina() { return currentStamina; }
-    public void SetCurrentStamina(float value) { currentStamina = value; barWasUpdated = true; }
-    public float GetMaxStamina() { return maxStamina; }
-    public void SetMaxStamina(float value) { maxStamina = value; barWasUpdated = true; }
-    public float GetStamina() { return Stamina; }
-    public void SetStamina(float value) { Stamina = value; barWasUpdated = true; }
-
     public float GetCurrentSpeed() { return currentSpeed; }
     public void SetCurrentSpeed(float value) { currentSpeed = value; }
     public float GetSpeed() { return Speed; }
@@ -208,6 +201,7 @@ public class UnitDataStore
     public float GetCritBoost() { return CritBoost; }
     public void SetCritBoost(float value) { CritBoost = value; }
 
+    //TROOP COUNT
     public int GetCurrentTroopCount() { return currentTroopCount; }
     public void SetCurrentTroopCount(int value) {
         if(value > maxTroopCount)
@@ -220,12 +214,35 @@ public class UnitDataStore
             
         }
 
-        barWasUpdated = true;
+        OnBarUpdated?.Invoke(this);
 
         if (value <= 0) controller.SetState("DEAD");
     }
+
     public int GetMaxTroopCount() { return maxTroopCount; }
-    public void SetMaxTroopCount(int value) { maxTroopCount = value; barWasUpdated = true; }
+    public void SetMaxTroopCount(int value) { maxTroopCount = value; OnBarUpdated?.Invoke(this); }
     public int GetTroopCount() { return TroopCount; }
-    public void SetTroopCount(int value) { TroopCount = value; barWasUpdated = true; }
+    public void SetTroopCount(int value) { TroopCount = value; }
+
+    //STAMINA
+    public float GetCurrentStamina() { return currentStamina; }
+    public void SetCurrentStamina(float value)
+    {
+        if (value > maxTroopCount)
+        {
+            currentStamina = maxStamina; // Cannot go past max
+        }
+        else
+        {
+            currentStamina = value;
+
+        }
+        currentStamina = value;
+        OnBarUpdated?.Invoke(this);
+    }
+    public float GetMaxStamina() { return maxStamina; }
+    public void SetMaxStamina(float value) { maxStamina = value; OnBarUpdated?.Invoke(this); }
+    public float GetStamina() { return Stamina; }
+    public void SetStamina(float value) { Stamina = value; }
+
 }
