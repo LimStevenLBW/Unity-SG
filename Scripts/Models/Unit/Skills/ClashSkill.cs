@@ -17,13 +17,15 @@ public class ClashSkill : Skill
 
     public ClashSkill()
     {
+        maxRange = 1;
+        minRange = 1;
         effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
         skillName = "Clash";
         description = "A simple infantry attack. Much more effective with number advantage";
 
-        baseCooldown = 4;
+        baseCooldown = 2;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 1;
+        baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
 
         isRunning = false;
@@ -70,12 +72,6 @@ public class ClashSkill : Skill
 
         //Have the unitcontroller play the attack animation
         controller.PlayAnim("isAttacking", .45f, this, enemyTarget.Location);
-
-        //Once complete, reset the CDR
-        ResetCD();
-    
-        //Reset the state, changed, we reset after the animation is done in coroutine instead
-        //controller.SetState("IDLE");
     }
 
     //Plays after the animation timing
@@ -98,15 +94,15 @@ public class ClashSkill : Skill
         position.x += (float)0.5;
 
         //Base damage is based on max troop count, should help ensure a stable damage range
-        float lowerBound = (thisGuy.GetMaxTroopCount() / 5);
-        float upperBound = (thisGuy.GetMaxTroopCount() / 4);
+        float lowerBound = (thisGuy.GetMaxTroopCount() / 15);
+        float upperBound = (thisGuy.GetMaxTroopCount() / 10);
 
         //Setup base count modifier, a small debuff or buff based on the current health comparison
         float baseModifier = (thisGuy.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
 
         //Apply Base Modifier
-        lowerBound =  lowerBound + baseModifier;
-        upperBound =  upperBound + baseModifier;
+        lowerBound += baseModifier;
+        upperBound += baseModifier;
 
         //Apply Power vs Defense Modifiers
         float lowerModifier = (thisGuy.GetCurrentPower() - enemy.GetCurrentDefense()) * lowerBound * 0.1f;

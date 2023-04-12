@@ -25,13 +25,14 @@ public class UnitController : MonoBehaviour
     public UnitDataStore data;
     public UnitController prefab;
     public Pathfinder path;
+    public MicroBarFollow bars;
 
     public List<UnitController> myAllies;
     public List<UnitController> myEnemies;
 
     private UnitManager manager;
     private Animator animator;
-
+   
     private State state = State.IDLE;
 
     private const int MOVECOST = 1;
@@ -41,7 +42,7 @@ public class UnitController : MonoBehaviour
     private float orientation;
 
     const float travelSpeed = 4f;
-    const float rotationSpeed = 100f;
+    const float rotationSpeed = 360f;
 
     List<HexCell> pathToTravel;
 
@@ -50,12 +51,13 @@ public class UnitController : MonoBehaviour
     public HexGrid Grid { get; set; }
 
     // Called when a controller is instantiated by the manager
-    public void Initialize(UnitManager manager)
+    public void Initialize(UnitManager manager, MicroBarFollow bars)
     {
         this.manager = manager;
 
         path = new Pathfinder(manager.grid, manager, this, null);
         data = new UnitDataStore(this, unitBase);
+        bars.Initialize(this);
 
         //Copy a reference the controller lists. Remember to only edit this in UnitManager for organization!
         myAllies = manager.GetControllers(teamNum, true);
@@ -78,6 +80,7 @@ public class UnitController : MonoBehaviour
             animator.SetTrigger("die");
             ACTIVE = false; //Prevents consecutive runs of this block
 
+            data.StopListening();
             manager.RemoveUnit(this); //problematic at the moment
         }
 
@@ -104,7 +107,7 @@ public class UnitController : MonoBehaviour
         }
 
         //For Debugging
-        statusText.SetText(state.ToString() + "Team: " + teamNum);
+        //statusText.SetText(state.ToString() + "Team: " + teamNum);
     }
 
     void CalculateNextAction()
@@ -294,17 +297,19 @@ public class UnitController : MonoBehaviour
         
     }
 
-    //Works in tandem with Talent/Skill
+    /*
+     * Works in tandem with Talent/Skill
+     * todo, normalizedtime may be very unreliable depending on the animation, look into animation events
+     */
     IEnumerator OnPerformAnimation(string anim, float timing, Skill skill, HexCell cell)
     {
-
         //Turn to look at cell, if need be
         if (cell)
         {
-            //yield return LookAt(cell.Position);
+            yield return LookAt(cell.Position);
         }
 
-        //Normalized time updates rather slowly, we check if its above 1f before proceeding because it is currently 
+        //Normalized time updates rather slowly, we check if it's above 1f before proceeding because it is currently 
         //at the old value from the previous animation
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
         {
@@ -380,7 +385,7 @@ public class UnitController : MonoBehaviour
     {
         Vector3 a, b, c = pathToTravel[0].Position;
         transform.localPosition = c;
-        //yield return LookAt(pathToTravel[1].Position);
+        yield return LookAt(pathToTravel[1].Position);
 
         //Grid.DecreaseVisibility(pathToTravel[0], visionRange);
         float t = Time.deltaTime * travelSpeed;

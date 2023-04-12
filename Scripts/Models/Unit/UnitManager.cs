@@ -25,8 +25,9 @@ public class UnitManager : MonoBehaviour
 
     public bool PATHFINDING_IN_USE = false;
 
-    
-   // public Queue<UnitController> pathfindingQueue;
+    public MicroBarFollow microBars;
+
+    // public Queue<UnitController> pathfindingQueue;
 
     public void InitGrid(HexGrid grid)
     {
@@ -164,15 +165,14 @@ public class UnitManager : MonoBehaviour
         }
     }
     ///------------------------------------------
-    void CreateCombatUnit(UnitController unitController, int teamNum)
+    void CreateCombatUnit(UnitController template, int teamNum)
     {
         HexCell cell = GetCellUnderCursor();
         if (cell && !cell.unitController) //If the cell is valid and doesn't already have a controller
         {
             AddUnit(
-                Instantiate(unitController.prefab), cell, Random.Range(0f, 360f), teamNum
+                Instantiate(template.prefab), cell, Random.Range(0f, 360f), teamNum
             );
-  
          }
     }
 
@@ -195,7 +195,10 @@ public class UnitManager : MonoBehaviour
         controller.transform.SetParent(transform, false);
         controller.Location = location;
         controller.Orientation = orientation;
-        controller.Initialize(this); //Pass itself down, likewise, make sure the unit knows about the manager
+
+        //Setup health and stamina bars
+        MicroBarFollow bars = Instantiate(microBars.prefab);
+        controller.Initialize(this, bars); //Pass itself down, likewise, make sure the unit knows about the manager
     }
 
     public List<UnitController> GetControllers(int teamNum, bool isSameTeam)
@@ -210,5 +213,4 @@ public class UnitManager : MonoBehaviour
         return null;
     }
 
-   
 }

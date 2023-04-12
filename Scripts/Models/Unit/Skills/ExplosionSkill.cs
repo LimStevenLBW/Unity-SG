@@ -17,6 +17,8 @@ public class ExplosionSkill : Skill
 
     public ExplosionSkill()
     {
+        maxRange = 6;
+        minRange = 3;
         effect = Resources.Load("Effects/CFX_Explosion_B_Smoke+Text") as GameObject;
         skillName = "Explosion";
         description = "";

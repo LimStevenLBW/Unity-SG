@@ -140,6 +140,11 @@ public class UnitDataStore
         Timer.OnSecondPassed += SecondPassed;
     }
 
+    public void StopListening()
+    {
+        Timer.OnSecondPassed -= SecondPassed;
+    }
+
     void SecondPassed()
     {
         if (skill1 != null) skill1.SecondPassed();

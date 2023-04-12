@@ -3182,8 +3182,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusText: {fileID: 3808435530905449488}
+  teamNum: 0
   unitBase: {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
   prefab: {fileID: 3694363504679355959}
+  myAllies: []
+  myEnemies: []
 --- !u!114 &1906158506888737120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6303,7 +6306,7 @@ PrefabInstance:
     - target: {fileID: 3039380865841892203, guid: b086cd57be4baeb48a4a0238dc7834d2,
         type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: Debug Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 3863505770362528329, guid: b086cd57be4baeb48a4a0238dc7834d2,
         type: 3}
@@ -6414,6 +6417,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5705465367089890645, guid: b086cd57be4baeb48a4a0238dc7834d2,
+        type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5705465367089890645, guid: b086cd57be4baeb48a4a0238dc7834d2,
         type: 3}

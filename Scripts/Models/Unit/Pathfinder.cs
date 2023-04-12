@@ -561,13 +561,13 @@ public class Pathfinder
                 if(team == 1)
                 {
                     //We only want teammates
-                    if (controller.data.faction.Equals(neighborUnit.data.faction)) workingList.Add(neighborUnit);
+                    if (controller.teamNum == neighborUnit.teamNum) workingList.Add(neighborUnit);
                     continue;
                 }
                 else if (team == 2)
                 { 
                     // we only want enemies
-                    if (!controller.data.faction.Equals(neighborUnit.data.faction)) workingList.Add(neighborUnit);
+                    if (controller.teamNum != neighborUnit.teamNum) workingList.Add(neighborUnit);
                     continue;
                 }
                 else

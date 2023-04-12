@@ -15,11 +15,13 @@ public class RecoverySkill : Skill
 
     public RecoverySkill()
     {
+        minRange = 0;
+        maxRange = 0;
         effect = Resources.Load("Effects/Healing circle") as GameObject;
         skillName = "Recovery";
         description = "Heal your people, so they can get hurt again.";
 
-        baseCooldown = 10;
+        baseCooldown = 12;
         currentCooldown = baseCooldown;
         baseStaminaCost = 15;
         currentStaminaCost = baseStaminaCost;
@@ -58,7 +60,6 @@ public class RecoverySkill : Skill
 
         }
         return false;
-
        
     }
 
@@ -66,6 +67,7 @@ public class RecoverySkill : Skill
     {
         ResetCD();
         isRunning = true; // Indicate that the skill is calculating;
+
         staminaResult = data.GetCurrentStamina() - currentStaminaCost;
         data.SetCurrentStamina(staminaResult);
 
@@ -94,24 +96,24 @@ public class RecoverySkill : Skill
         position.y += 10;
         position.x += (float)0.5; 
 
-       //Base healing
-       float lowerBound = (thisGuy.GetCurrentTroopCount() / 5);
-       float upperBound = (thisGuy.GetCurrentTroopCount() / 4);
+        //Base healing
+        float lowerBound = (thisGuy.GetCurrentTroopCount() / 5);
+        float upperBound = (thisGuy.GetCurrentTroopCount() / 4);
 
 
-       //Setup magic modifier
-       float magicModifier = (thisGuy.GetCurrentMagic()) + (thisGuy.GetCurrentMagic() * .05f);
-       lowerBound += magicModifier;
-       upperBound += magicModifier;
+        //Setup magic modifier
+        float magicModifier = (thisGuy.GetCurrentMagic()) + (thisGuy.GetCurrentMagic() * .05f);
+        lowerBound += magicModifier;
+        upperBound += magicModifier;
 
-       int result = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+        int result = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
-       data.SetCurrentTroopCount(data.GetCurrentTroopCount() + result);
+        data.SetCurrentTroopCount(data.GetCurrentTroopCount() + result);
 
-       //Display Data
-       DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
-       //Terminate
-       isRunning = false;
+        //Display Data
+        DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+        //Terminate
+        isRunning = false;
     }
 
     public override void Reset()

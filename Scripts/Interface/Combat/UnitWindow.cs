@@ -55,7 +55,7 @@ public class UnitWindow : MonoBehaviour
     public void Initialize(UnitController unitController)
     {
         data = unitController.data;
-        data.barWasUpdated = false;
+        //data.barWasUpdated = false;
 
         portraitCamera.SetTargetObject(unitController);
 

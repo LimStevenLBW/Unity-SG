@@ -6,6 +6,8 @@ using UnityEngine;
 public abstract class Skill
 {
     internal bool isRunning;
+    internal int maxRange;
+    internal int minRange;
     public string skillName;
     public string description;
     

@@ -5140,8 +5140,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusText: {fileID: 1356348042722312072}
+  teamNum: 0
   unitBase: {fileID: 11400000, guid: 841f0e62d6ab0dc47b5c09d3c4904c59, type: 2}
   prefab: {fileID: -5380389747431121435}
+  myAllies: []
+  myEnemies: []
 --- !u!114 &1662760050704469908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6409,6 +6412,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5705465367089890645, guid: b086cd57be4baeb48a4a0238dc7834d2,
+        type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b086cd57be4baeb48a4a0238dc7834d2, type: 3}
