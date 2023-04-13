@@ -42,6 +42,7 @@ public class CameraControl : MonoBehaviour
     private Vector3 lastMouseCoordinate = Vector3.zero;
     public float rotationSpeed = (float)0.85;
 
+
     // Start is called before the first frame update
     void Start()
     {

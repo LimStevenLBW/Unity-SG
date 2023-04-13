@@ -12,6 +12,7 @@ namespace Assets.Scripts.Interface
         public HexGrid grid;
         public UnitWindow unitWindow;
         public CameraControl mainCamera;
+        private UnitController priorController;
         private UnitController selectedController;
         private HexCell selectedCell;
 
@@ -65,6 +66,7 @@ namespace Assets.Scripts.Interface
 
             ClearSelection();
 
+            UnFocus();
             UpdateSelection();
 
             if (selectedCell)
@@ -77,7 +79,11 @@ namespace Assets.Scripts.Interface
             {
                 EnableHighlight(selectedController);
                 EnableUnitWindow(selectedController);
+
+                
             }
+
+            priorController = selectedController;
 
         }
 
@@ -139,15 +145,24 @@ namespace Assets.Scripts.Interface
             if (controller) {
                 unitWindow.Initialize(controller);
                 //unitWindow.SetPosition(unit);
-                mainCamera.Focus(controller.transform, 50, 50);
+                if (priorController != selectedController) Focus(controller.transform);
             }
             PlayAudioClip(AudioClickOpen);
         }
         void DisableUnitWindow()
         {
-            mainCamera.UnFocus();
             PlayAudioClip(AudioClickClose);
             unitWindow.gameObject.SetActive(false);
+        }
+
+        void Focus(Transform transform)
+        {
+            mainCamera.Focus(transform, 50, 50);
+        }
+
+        void UnFocus()
+        {
+            mainCamera.UnFocus();
         }
         public virtual void PlayAudioClip(AudioClip clip)
         {

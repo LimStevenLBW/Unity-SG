@@ -4,24 +4,31 @@ using UnityEngine;
 
 public class PortraitCamera : MonoBehaviour
 {
+    private UnitController unit;
+    private float rotationX; //Higher values turns the camera upwards
     private Transform target;
-
-    Vector3 originalTransform;
     Vector3 offset;
 
     // Start is called before the first frame update
     void Start()
     {
-        //originalTransform = transform.position;
+
     }
 
     void Init()
     {
+        offset = target.transform.position - transform.position; //Higher values lower the camera at the end, but dont bother messing with offset, it doesnt work too well
+        BoxCollider box = target.GetComponent<BoxCollider>();
+        Vector3 boxSizeConverted = target.transform.TransformVector(box.size);
+       // Debug.Log("box" + boxSizeConverted.y);
+       // Debug.Log("offset" + offset.y);
+        //Debug.Log("tranform pos" + target.transform.position);
 
+        float height = boxSizeConverted.y;
 
-        offset = target.transform.position - transform.position;
+      
 
-
+        rotationX = height - 4;
     }
 
     // Update is called once per frame
@@ -33,11 +40,10 @@ public class PortraitCamera : MonoBehaviour
             int speed = 8;
             // Look
 
-            var newRotation = Quaternion.LookRotation(target.transform.position + new Vector3(0, 17, 0) - transform.position);
+            var newRotation = Quaternion.LookRotation(target.transform.position + new Vector3(0, rotationX, 0) - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, speed * Time.deltaTime);
 
-            Vector3 newPosition = target.transform.position + target.forward * 30 - target.transform.up * offset.y;
-
+            Vector3 newPosition = target.transform.position + target.forward * 30 - target.transform.up * (offset.y);
             //Vector3 newPosition = target.transform.position - target.transform.right * offset.x - target.transform.up * offset.y;
             transform.position = Vector3.Slerp(transform.position, newPosition, Time.deltaTime * speed);
         }
