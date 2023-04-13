@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
-  m_Name: C-Rank
+  m_Name: Ghost
   m_EditorClassIdentifier: 
   faction: 1
-  unitName: C-Lister Melee
+  unitName: 'Ghost '
   bio: 
   rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 5
+  basePower: 2
   powerGrowthRate: 1
-  baseDefense: 2
+  baseDefense: 12
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 500
+  baseTroopCount: 100
   leadership: 1
   engineering: 1
   magic: 1

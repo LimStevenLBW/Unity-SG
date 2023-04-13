@@ -10,33 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
-  m_Name: Smorc
+  m_Name: Orc
   m_EditorClassIdentifier: 
-  faction: Goons
-  unitName: Smorc
+  faction: 1
+  unitName: A-Rank Mage
   bio: 
-  rank: 4
+  rank: 2
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 20
+  basePower: 12
   powerGrowthRate: 1
-  baseArmor: 5
-  armorGrowthRate: 1
+  baseDefense: 7
+  defenseGrowthRate: 1
+  baseMagic: 0
+  magicGrowthRate: 0
   baseStamina: 100
   staminaGrowthRate: 1
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 100
+  baseTroopCount: 300
   leadership: 1
   engineering: 1
   magic: 1
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  unitClass: {fileID: 0}
-  movementSkill_ID: 0
-  skill1_ID: 0
-  skill2_ID: 0
+  unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
+  skill1_ID: 300
+  skill2_ID: 100
   skill3_ID: 0
   skill4_ID: 0

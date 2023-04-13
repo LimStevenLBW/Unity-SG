@@ -301,6 +301,7 @@ public class UnitController : MonoBehaviour
     /*
      * Works in tandem with Talent/Skill
      * todo, normalizedtime may be very unreliable depending on the animation, look into animation events
+     * We run into problems with animation timings, for example, some models have faster attack animations than others, this affects the skill usefulness
      */
     IEnumerator OnPerformAnimation(string anim, float timing, Skill skill, HexCell cell)
     {

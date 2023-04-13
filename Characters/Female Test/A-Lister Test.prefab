@@ -3882,8 +3882,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a77283d9509cce441af479124e644746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statusText: {fileID: 0}
+  teamNum: 0
   unitBase: {fileID: 11400000, guid: f07014c3a7529424cb915f73cda96822, type: 2}
   prefab: {fileID: -3596249270230576976}
+  bars: {fileID: 0}
+  myAllies: []
+  myEnemies: []
 --- !u!65 &-4165317304404849403
 BoxCollider:
   m_ObjectHideFlags: 0

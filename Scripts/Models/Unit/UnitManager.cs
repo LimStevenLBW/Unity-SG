@@ -21,6 +21,10 @@ public class UnitManager : MonoBehaviour
     public UnitController testUnit1;
     public UnitController testUnit2;
     public UnitController testUnit3;
+    public UnitController testUnit4;
+    public UnitController testUnit5;
+    public UnitController testUnit6;
+
     public HexGrid grid;
 
     public bool PATHFINDING_IN_USE = false;
@@ -55,12 +59,16 @@ public class UnitManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) CreateCombatUnit(testUnit1, 1);
         else if (Input.GetKeyDown(KeyCode.S)) CreateCombatUnit(testUnit2, 1);
         else if (Input.GetKeyDown(KeyCode.D)) CreateCombatUnit(testUnit3, 1);
-
+        else if (Input.GetKeyDown(KeyCode.F)) CreateCombatUnit(testUnit4, 1);
+        else if (Input.GetKeyDown(KeyCode.G)) CreateCombatUnit(testUnit5, 1);
+        else if (Input.GetKeyDown(KeyCode.H)) CreateCombatUnit(testUnit6, 1);
         //Enemies are assigned to -1
         if (Input.GetKeyDown(KeyCode.Z)) CreateCombatUnit(testUnit1, -1);
         else if (Input.GetKeyDown(KeyCode.X)) CreateCombatUnit(testUnit2, -1);
         else if (Input.GetKeyDown(KeyCode.C)) CreateCombatUnit(testUnit3, -1);
-
+        else if (Input.GetKeyDown(KeyCode.V)) CreateCombatUnit(testUnit4, -1);
+        else if (Input.GetKeyDown(KeyCode.B)) CreateCombatUnit(testUnit5, -1);
+        else if (Input.GetKeyDown(KeyCode.N)) CreateCombatUnit(testUnit6, -1);
     }
 
     public void ClearUnits()
