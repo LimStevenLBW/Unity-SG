@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Infantry
   description: 
-  movementSkill_ID: 0
+  movementSkill_ID: 1

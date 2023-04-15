@@ -11,7 +11,11 @@ namespace Assets.Scripts.Interface
     {
         public HexGrid grid;
         public UnitWindow unitWindow;
+        public PlayerHandPanel playerHandPanel;
+
         public CameraControl mainCamera;
+
+
         private UnitController priorController;
         private UnitController selectedController;
         private HexCell selectedCell;
@@ -23,9 +27,14 @@ namespace Assets.Scripts.Interface
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                playerHandPanel.gameObject.SetActive(true);
+            }
+
             //As long as the pointer is not above a UI element from the event system, then..
             //if (!EventSystem.current.IsPointerOverGameObject())
-           // {
+            // {
             if (Input.GetMouseButtonDown(0)) //LEFT CLICK
             {
                 DoSelection();
@@ -166,8 +175,8 @@ namespace Assets.Scripts.Interface
         }
         public virtual void PlayAudioClip(AudioClip clip)
         {
-            AudioPlayer.clip = clip;
-            AudioPlayer.Play();
+            //AudioPlayer.clip = clip;
+            AudioPlayer.PlayOneShot(clip);
         }
     }
 }
