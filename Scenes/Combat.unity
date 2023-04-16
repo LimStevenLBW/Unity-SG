@@ -407,13 +407,14 @@ GameObject:
   - component: {fileID: 57505100}
   - component: {fileID: 57505099}
   - component: {fileID: 57505101}
+  - component: {fileID: 57505102}
   m_Layer: 5
   m_Name: Card 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &57505098
 RectTransform:
   m_ObjectHideFlags: 0
@@ -493,6 +494,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &57505102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57505097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ebf3a97bbdc3da43b8dda4765a54803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardNum: 5
+  AudioPlayer: {fileID: 1564725148}
+  AudioHover: {fileID: 0}
+  AudioClick: {fileID: 0}
+  AudioAppear: {fileID: 8300000, guid: a6212125b8abdb64e82861eb86cf5b8c, type: 3}
 --- !u!1 &78844602
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,13 +764,14 @@ GameObject:
   - component: {fileID: 143086442}
   - component: {fileID: 143086441}
   - component: {fileID: 143086443}
+  - component: {fileID: 143086444}
   m_Layer: 5
   m_Name: Card 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &143086440
 RectTransform:
   m_ObjectHideFlags: 0
@@ -832,6 +851,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &143086444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143086439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ebf3a97bbdc3da43b8dda4765a54803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardNum: 4
+  AudioPlayer: {fileID: 1564725148}
+  AudioHover: {fileID: 0}
+  AudioClick: {fileID: 0}
+  AudioAppear: {fileID: 8300000, guid: a6212125b8abdb64e82861eb86cf5b8c, type: 3}
 --- !u!1 &163418778
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,13 +880,14 @@ GameObject:
   - component: {fileID: 163418781}
   - component: {fileID: 163418780}
   - component: {fileID: 163418782}
+  - component: {fileID: 163418783}
   m_Layer: 5
   m_Name: Card 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &163418779
 RectTransform:
   m_ObjectHideFlags: 0
@@ -930,6 +967,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &163418783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163418778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ebf3a97bbdc3da43b8dda4765a54803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardNum: 2
+  AudioPlayer: {fileID: 1564725148}
+  AudioHover: {fileID: 0}
+  AudioClick: {fileID: 0}
+  AudioAppear: {fileID: 8300000, guid: a6212125b8abdb64e82861eb86cf5b8c, type: 3}
 --- !u!1001 &175043964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1307,6 +1361,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2cf2943bed262469498781952fe12a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cards:
+  - {fileID: 1628600798}
+  - {fileID: 163418783}
+  - {fileID: 585884807}
+  - {fileID: 143086444}
+  - {fileID: 57505102}
 --- !u!4 &279819127 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2348788778322564582, guid: 4d796aa7ff44b104badd6189dff50e00,
@@ -2224,13 +2284,14 @@ GameObject:
   - component: {fileID: 585884805}
   - component: {fileID: 585884804}
   - component: {fileID: 585884806}
+  - component: {fileID: 585884807}
   m_Layer: 5
   m_Name: Card 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &585884803
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2310,6 +2371,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &585884807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585884802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ebf3a97bbdc3da43b8dda4765a54803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardNum: 3
+  AudioPlayer: {fileID: 1564725148}
+  AudioHover: {fileID: 0}
+  AudioClick: {fileID: 0}
+  AudioAppear: {fileID: 8300000, guid: a6212125b8abdb64e82861eb86cf5b8c, type: 3}
 --- !u!1 &588202047
 GameObject:
   m_ObjectHideFlags: 0
@@ -6172,13 +6250,14 @@ GameObject:
   - component: {fileID: 1628600796}
   - component: {fileID: 1628600795}
   - component: {fileID: 1628600797}
+  - component: {fileID: 1628600798}
   m_Layer: 5
   m_Name: Card 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1628600794
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6188,7 +6267,7 @@ RectTransform:
   m_GameObject: {fileID: 1628600793}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 255883388}
@@ -6258,6 +6337,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1628600798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628600793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ebf3a97bbdc3da43b8dda4765a54803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardNum: 1
+  AudioPlayer: {fileID: 1564725148}
+  AudioHover: {fileID: 0}
+  AudioClick: {fileID: 0}
+  AudioAppear: {fileID: 8300000, guid: a6212125b8abdb64e82861eb86cf5b8c, type: 3}
 --- !u!1 &1682403148
 GameObject:
   m_ObjectHideFlags: 0
@@ -13908,7 +14004,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4910893864008086406
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13918,7 +14014,7 @@ RectTransform:
   m_GameObject: {fileID: 4910893864008086405}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 568233935}
@@ -13931,11 +14027,11 @@ RectTransform:
   m_Father: {fileID: 4910893863349868619}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -60, y: 130}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -60, y: -60}
   m_SizeDelta: {x: 900, y: 300}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 1, y: 1}
 --- !u!114 &4910893864008086407
 MonoBehaviour:
   m_ObjectHideFlags: 0
