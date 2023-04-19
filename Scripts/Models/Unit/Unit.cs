@@ -5,7 +5,7 @@ using UnityEngine;
 /*
  * Defines the base definitions for a unit
  */
-[CreateAssetMenu(fileName = "New Unit Character", menuName = "Character/Unit")]
+[CreateAssetMenu(fileName = "New Unit Character", menuName = "Unit/Unit")]
 public class Unit : ScriptableObject
 {
     public string faction;
