@@ -5,17 +5,31 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Deck", menuName = "Deck")]
 public class Deck : ScriptableObject
 {
-    public List<UnitController> deck;
+    public List<UnitController> deckList;
+    private int troopCount;
 
-    // Start is called before the first frame update
-    void Start()
+
+    public void Init()
     {
+        troopCount = 0;
+        foreach (UnitController unit in deckList)
+        {
+            unit.UpdateFields(); //Setup initial fields for unit
+            troopCount += unit.data.GetBaseTroopCount(); //Currently using base for testing
+            
+        }
 
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    public int GetTroopSize()
     {
-        
+        return troopCount;
+    }
+
+    public int GetCommanderCount()
+    {
+        return deckList.Count;
     }
 }

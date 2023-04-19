@@ -218,7 +218,7 @@ public class UnitDataStore
 
         if (value <= 0) controller.SetState("DEAD");
     }
-
+    public int GetBaseTroopCount() { return unitBase.baseTroopCount; }
     public int GetMaxTroopCount() { return maxTroopCount; }
     public void SetMaxTroopCount(int value) { maxTroopCount = value; OnBarUpdated?.Invoke(this); }
     public int GetTroopCount() { return TroopCount; }

@@ -7,14 +7,13 @@ namespace Assets.Scripts.Interface
     /*
      * Handles user interaction in combat scene
      */
-    class ManagerCombatUI : MonoBehaviour
+    public class ManagerCombatUI : MonoBehaviour
     {
         public HexGrid grid;
         public UnitWindow unitWindow;
         public PlayerHandPanel playerHandPanel;
 
         public CameraControl mainCamera;
-
 
         private UnitController priorController;
         private UnitController selectedController;
@@ -25,12 +24,14 @@ namespace Assets.Scripts.Interface
         [SerializeField] private AudioClip AudioClickOpen;
         [SerializeField] private AudioClip AudioClickClose;
 
+
+        void Start()
+        {
+            
+        }
+
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                playerHandPanel.gameObject.SetActive(true);
-            }
 
             //As long as the pointer is not above a UI element from the event system, then..
             //if (!EventSystem.current.IsPointerOverGameObject())
@@ -58,6 +59,11 @@ namespace Assets.Scripts.Interface
                 }
                 */
            // }
+        }
+
+        public void StartStage(Deck playerDeck, Deck enemyDeck)
+        {
+            playerHandPanel.gameObject.SetActive(true);
         }
 
         public void ToggleEditMode()

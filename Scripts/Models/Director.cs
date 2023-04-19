@@ -1,3 +1,4 @@
+using Assets.Scripts.Interface;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,10 +8,11 @@ public class Director : MonoBehaviour
 {
     public Deck playerDeck;
     private Deck enemyDeck;
-
+    public TextMeshProUGUI playPromptText;
     public RouteMap route;
     public StageIntro stageIntro;
-    public TextMeshProUGUI playPromptText;
+
+    public ManagerCombatUI combatManager;
 
     [SerializeField] private AudioSource AudioPlayer;
     [SerializeField] private AudioClip AudioHover;
@@ -37,10 +39,6 @@ public class Director : MonoBehaviour
         enemyDeck = deck;
     }
 
-    public void StartStage()
-    {
-       
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -69,13 +67,19 @@ public class Director : MonoBehaviour
 
     IEnumerator DisplayIntroduction()
     {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3);
         route.gameObject.SetActive(false);
 
+        playerDeck.Init();
+        enemyDeck.Init();
+
+        stageIntro.InitFields(playerDeck, enemyDeck);
         stageIntro.gameObject.SetActive(true);
         yield return new WaitForSeconds(4);
 
         stageIntro.gameObject.SetActive(false);
 
+        //End intro, start game
+        combatManager.StartStage(playerDeck, enemyDeck);
     }
 }

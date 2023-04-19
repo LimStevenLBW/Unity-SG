@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c84092c7e85ed4ba551363560a36df, type: 3}
   m_Name: Mob Deck 1
   m_EditorClassIdentifier: 
-  deck: []
+  deckList:
+  - {fileID: -4049954193885773322, guid: 56a2a6ea7add7dd4f8363c80b8daf278, type: 3}
+  - {fileID: 4046627599654500939, guid: 391963458359a68499a32dbb9b1b2822, type: 3}
+  - {fileID: -2686645630784839087, guid: 6ecc920b389319a43974a1ca83dadb43, type: 3}
+  - {fileID: 5477987023178181673, guid: ac832cebe73796b41ae38c68867d0ecb, type: 3}
+  - {fileID: 5597690903317559734, guid: c841c17965ef0ab4085fba22a6842772, type: 3}

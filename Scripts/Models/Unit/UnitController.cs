@@ -32,7 +32,7 @@ public class UnitController : MonoBehaviour
 
     private UnitManager manager;
     private Animator animator;
-   
+
     private State state = State.IDLE;
 
     private const int MOVECOST = 1;
@@ -50,13 +50,17 @@ public class UnitController : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
+    public void UpdateFields(){
+        data = new UnitDataStore(this, unitBase);
+    }
+
+
     // Called when a controller is instantiated by the manager
     public void Initialize(UnitManager manager, MicroBarFollow bars)
     {
         this.manager = manager;
-
         path = new Pathfinder(manager.grid, manager, this, null);
-        data = new UnitDataStore(this, unitBase);
+        
         this.bars = bars;
         bars.Initialize(this);
 
