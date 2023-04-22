@@ -9,6 +9,7 @@ public class Stage : ScriptableObject
     public Sprite icon;
 
     public Deck enemyDeck;
+
     // Start is called before the first frame update
     void Start()
     {

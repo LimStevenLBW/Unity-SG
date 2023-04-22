@@ -8,6 +8,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Unit Character", menuName = "Unit/Unit")]
 public class Unit : ScriptableObject
 {
+    public UnitController model;
     public string faction;
 
     //Identity
@@ -54,6 +55,8 @@ public class Unit : ScriptableObject
 
     public float upkeep = 0.1f;
 
+    //41-80 ARE ENEMY SPACES, 80 is reserved for captain
+    public int[] positionSpawnPref = new int[2];
     //Skills
     public UnitClass unitClass;
  

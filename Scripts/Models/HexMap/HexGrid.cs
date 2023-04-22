@@ -31,6 +31,8 @@ public class HexGrid : MonoBehaviour
 
     HexCellShaderData cellShaderData;
 
+    private int cell_ID;
+
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
@@ -138,14 +140,29 @@ public class HexGrid : MonoBehaviour
         //cell.Color = defaultColor;
 
         InitCellConnections(x, z, i, cell);
+
+        //Set the ID
+        cell_ID++;
+        cell.cell_ID = cell_ID;
+
+        //Cell 1 is the player commander cell
+        //Cell 80 is the final cell and is the enemy commander cell
+        //Cells 1-10 comprise player backrow
+        //Cells 31-40 comprise player frontrow
+        //Cells 41-50 comprise enemy frontrow
+        //Cells 71-80 comprise enemy backrow
         CreateLabel(cell, position);
+
         cell.Elevation = 0;
 
         //Fade out the edges of the map
         cell.Explorable =
             x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
 
+
         AddCellToChunk(x, z, cell);
+
+        
     }
 
     /**
@@ -197,6 +214,7 @@ public class HexGrid : MonoBehaviour
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
         //label.text = cell.coordinates.ToStringOnSeparateLines(); //Display Cell Coordinates
+        label.text = cell.cell_ID.ToString();
         cell.uiRect = label.rectTransform;
     }
 

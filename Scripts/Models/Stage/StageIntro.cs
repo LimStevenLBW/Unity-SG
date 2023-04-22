@@ -21,7 +21,7 @@ public class StageIntro : MonoBehaviour
     {
         
     }
-    public void InitFields(Deck playerDeck, Deck enemyDeck)
+    public void Init(DeckDataStore playerDeck, DeckDataStore enemyDeck)
     {
         playerCommanderCount.SetText(playerDeck.GetCommanderCount().ToString() + " Commanders");
         enemyCommanderCount.SetText(enemyDeck.GetCommanderCount().ToString()+ " Commanders");

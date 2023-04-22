@@ -22,7 +22,21 @@ public class Pathfinder
         this.manager = manager;
         this.controller = controller;
         this.formation = formation;
+
+        //If combat scene
+        if (controller)
+        {
+            HexCell cell = controller.Location;
+            int thisCellIndex = cell.cell_ID - 1;
+            int lookCellIndex = 0;
+
+            //Face opponents
+            if (thisCellIndex < 40) lookCellIndex = 65;
+            if (thisCellIndex >= 40) lookCellIndex = 15;
+            controller.transform.LookAt(grid.cells[lookCellIndex].transform);
+        }
     }
+
 
     /*
      * Only for overworld

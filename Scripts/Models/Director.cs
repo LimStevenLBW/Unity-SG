@@ -6,13 +6,19 @@ using UnityEngine;
 
 public class Director : MonoBehaviour
 {
-    public Deck playerDeck;
-    private Deck enemyDeck;
+    private bool gameNotStarted = true;
+    public Deck playerDeckBase;
+    private Deck enemyDeckBase;
+
+    private DeckDataStore playerDeck;
+    private DeckDataStore enemyDeck;
+
     public TextMeshProUGUI playPromptText;
     public RouteMap route;
     public StageIntro stageIntro;
 
     public ManagerCombatUI combatManager;
+    public PlayerHandPanel playerHand;
 
     [SerializeField] private AudioSource AudioPlayer;
     [SerializeField] private AudioClip AudioHover;
@@ -34,9 +40,12 @@ public class Director : MonoBehaviour
         }
     }
 
+    /*
+     * Acquire preset enemy deck and store it
+     */
     public void GetEnemyDeck(Deck deck)
     {
-        enemyDeck = deck;
+        enemyDeckBase = deck;
     }
 
 
@@ -49,17 +58,25 @@ public class Director : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) && gameNotStarted)
         {
+            gameNotStarted = false;
+
             AudioPlayer.PlayOneShot(AudioPlayStart);
             route.Initialize(this);
             
-
             //Turn off the prompt text
             playPromptText.gameObject.SetActive(false);
 
             //Game Start
             route.AdvanceRoute();
+
+            //Deck is available now
+            playerDeck = new DeckDataStore(playerDeckBase); //Preset currently
+            enemyDeck = new DeckDataStore(enemyDeckBase); //Obtained from stage
+
+            stageIntro.Init(playerDeck, enemyDeck);
+            playerHand.Init(playerDeck, enemyDeck);
 
             StartCoroutine(DisplayIntroduction());
         }
@@ -68,18 +85,16 @@ public class Director : MonoBehaviour
     IEnumerator DisplayIntroduction()
     {
         yield return new WaitForSeconds(3);
+
         route.gameObject.SetActive(false);
-
-        playerDeck.Init();
-        enemyDeck.Init();
-
-        stageIntro.InitFields(playerDeck, enemyDeck);
         stageIntro.gameObject.SetActive(true);
+
         yield return new WaitForSeconds(4);
 
         stageIntro.gameObject.SetActive(false);
+        playerHand.gameObject.SetActive(true);
 
         //End intro, start game
-        combatManager.StartStage(playerDeck, enemyDeck);
+       // combatManager.StartStage(playerDeck, enemyDeck);
     }
 }

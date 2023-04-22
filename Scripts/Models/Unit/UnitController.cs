@@ -21,7 +21,6 @@ public class UnitController : MonoBehaviour
         DEAD
     }
 
-    public Unit unitBase;
     public UnitDataStore data;
     public UnitController prefab;
     public Pathfinder path;
@@ -50,10 +49,6 @@ public class UnitController : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
-    public void UpdateFields(){
-        data = new UnitDataStore(this, unitBase);
-    }
-
 
     // Called when a controller is instantiated by the manager
     public void Initialize(UnitManager manager, MicroBarFollow bars)
@@ -70,15 +65,14 @@ public class UnitController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
+    public void Awake()
+    {
+        
+    }
+
+    // Update is called once per frame, nothing runs unless active
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            ACTIVE = true;
-            data.StartListening();
-        }
-
         if (ACTIVE && state == State.DEAD)
         {
             StopAllCoroutines();
@@ -89,6 +83,7 @@ public class UnitController : MonoBehaviour
             manager.RemoveUnit(this); //problematic at the moment
         }
 
+        /*
         if (Input.GetKeyDown(KeyCode.O))
         {
             animator.SetBool("isAttacking", false);
@@ -97,7 +92,7 @@ public class UnitController : MonoBehaviour
         {
             animator.SetBool("isAttacking", true);
         }
-
+        */
     }
 
     void LateUpdate()
@@ -113,6 +108,15 @@ public class UnitController : MonoBehaviour
 
         //For Debugging
         //statusText.SetText(state.ToString() + "Team: " + teamNum);
+    }
+
+    /*
+     * Frees up this unit start fighting
+     */
+    public void SetActive()
+    {
+        ACTIVE = true;
+        data.StartListening();
     }
 
     void CalculateNextAction()

@@ -62,10 +62,11 @@ public class UnitDataStore
     public Skill skill4;
 
     public Action<UnitDataStore> OnBarUpdated;
-    public UnitDataStore(UnitController controller, Unit unitBase)
+    public UnitDataStore(Unit unitBase)
     {
-        this.controller = controller;
         this.unitBase = unitBase;
+        controller = unitBase.model;
+        controller.data = this; //Set controller data reference
 
         //Set the Stamina
         Stamina = unitBase.baseStamina;
@@ -218,7 +219,6 @@ public class UnitDataStore
 
         if (value <= 0) controller.SetState("DEAD");
     }
-    public int GetBaseTroopCount() { return unitBase.baseTroopCount; }
     public int GetMaxTroopCount() { return maxTroopCount; }
     public void SetMaxTroopCount(int value) { maxTroopCount = value; OnBarUpdated?.Invoke(this); }
     public int GetTroopCount() { return TroopCount; }

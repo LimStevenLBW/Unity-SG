@@ -9,11 +9,13 @@ namespace Assets.Scripts.Interface
      */
     public class ManagerCombatUI : MonoBehaviour
     {
+        bool isRoundRunning = false;
         public HexGrid grid;
         public UnitWindow unitWindow;
         public PlayerHandPanel playerHandPanel;
 
         public CameraControl mainCamera;
+        public UnitManager unitManager;
 
         private UnitController priorController;
         private UnitController selectedController;
@@ -63,8 +65,12 @@ namespace Assets.Scripts.Interface
 
         public void StartStage(Deck playerDeck, Deck enemyDeck)
         {
-            playerHandPanel.gameObject.SetActive(true);
+            //If combat stage
+           
+            
         }
+
+     
 
         public void ToggleEditMode()
         {

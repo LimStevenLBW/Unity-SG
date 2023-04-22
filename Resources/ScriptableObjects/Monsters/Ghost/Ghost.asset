@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: Ghost
   m_EditorClassIdentifier: 
+  model: {fileID: -4049954193885773322, guid: 56a2a6ea7add7dd4f8363c80b8daf278, type: 3}
   faction: 1
   unitName: 'Ghost '
   bio: 
@@ -36,6 +37,7 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
+  positionSpawnPref: 330000004f000000
   unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   skill1_ID: 200
   skill2_ID: 100

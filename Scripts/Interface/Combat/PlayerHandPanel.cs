@@ -1,14 +1,26 @@
+using Assets.Scripts.Interface;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHandPanel : MonoBehaviour
 {
+    public ManagerCombatUI managerUI;
+    public UnitManager unitManager;
+
+    public DeckDataStore playerDeck;
+    public DeckDataStore enemyDeck;
     public Card[] cards = new Card[5];
+
     // Start is called before the first frame update
     void Start()
     {
 
+    }
+
+    public void Init(DeckDataStore playerDeck, DeckDataStore enemyDeck)
+    {
+        this.playerDeck = playerDeck;
+        this.enemyDeck = enemyDeck;
     }
 
     void OnEnable()
@@ -31,7 +43,15 @@ public class PlayerHandPanel : MonoBehaviour
             c.gameObject.SetActive(true);
         }
 
+        yield return new WaitForSeconds(.1f);
+        PlaceCaptains();
+
     }
 
+    public void PlaceCaptains()
+    {
+        unitManager.AddCaptain(playerDeck.captain.controller, true);
+        unitManager.AddCaptain(enemyDeck.captain.controller, false);
+    }
 
 }

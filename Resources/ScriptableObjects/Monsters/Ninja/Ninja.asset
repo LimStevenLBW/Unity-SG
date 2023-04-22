@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: Ninja
   m_EditorClassIdentifier: 
+  model: {fileID: 5477987023178181673, guid: ac832cebe73796b41ae38c68867d0ecb, type: 3}
   faction: 
   unitName: Goblin Ninjas
   bio: 

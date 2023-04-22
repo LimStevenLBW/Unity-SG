@@ -6,6 +6,8 @@ using Assets.Scripts.Models.HexMap.HexHelpers;
 
 public class HexCell : MonoBehaviour
 {
+    public int cell_ID;
+
     public HexCoordinates coordinates;
     public RectTransform uiRect; //Track Label Location
     public HexGridChunk chunk;

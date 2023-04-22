@@ -13,7 +13,7 @@ public class UnitManager : MonoBehaviour
     public List<FormationController> units = new List<FormationController>();
     public FormationController unitPrefab;
 
-    //TEST FUNCTIONS FOR UNIT CONTROLLER
+    //Fielded Controllers
     public List<UnitController> firstTeamControllers = new List<UnitController>();
     public List<UnitController> secondTeamControllers = new List<UnitController>();
 
@@ -179,17 +179,27 @@ public class UnitManager : MonoBehaviour
         if (cell && !cell.unitController) //If the cell is valid and doesn't already have a controller
         {
             AddUnit(
-                Instantiate(template.prefab), cell, Random.Range(0f, 360f), teamNum
+                Instantiate(template), cell, Random.Range(0f, 360f), template.data, teamNum
             );
          }
+    }
+
+    /*
+     * Place the captain from a deck
+     */
+    public void AddCaptain(UnitController controller, bool isPlayerCaptain)
+    {
+        if (isPlayerCaptain) AddUnit(Instantiate(controller), grid.cells[0], Random.Range(0f, 360f), controller.data, 1);
+        else { AddUnit(Instantiate(controller), grid.cells[79], Random.Range(0f, 360f), controller.data, -1); }
     }
 
     /*
      * does some initialization for the unit controller
      * todo, merge with Initialize function to keep it all in one place
      */
-    public void AddUnit(UnitController controller, HexCell location, float orientation, int teamNum)
+    public void AddUnit(UnitController controller, HexCell location, float orientation, UnitDataStore data, int teamNum)
     {
+        controller.data = data;
         controller.teamNum = teamNum;
         MicroBarFollow bars = null;
 
