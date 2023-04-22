@@ -1,6 +1,5 @@
 using Assets.Scripts.Interface;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -89,9 +88,9 @@ public class Director : MonoBehaviour
         route.gameObject.SetActive(false);
         stageIntro.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(4);
+        //yield return new WaitForSeconds(4);
 
-        stageIntro.gameObject.SetActive(false);
+        //stageIntro.gameObject.SetActive(false);
         playerHand.gameObject.SetActive(true);
 
         //End intro, start game

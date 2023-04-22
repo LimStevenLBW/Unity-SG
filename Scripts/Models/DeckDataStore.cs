@@ -16,7 +16,6 @@ public class DeckDataStore
         unitList = new List<UnitDataStore>();
         this.deckBase = deckBase;
 
-
         //Cycle through and create our working deck
         foreach(Unit unit in deckBase.unitList)
         {
@@ -27,6 +26,36 @@ public class DeckDataStore
         captain = new UnitDataStore(deckBase.captain);
 
         UpdateTroopCount();
+    }
+
+    public bool IsEmpty()
+    {
+        if (unitList.Count == 0) return true;
+        return false;
+    }
+
+    //Fisher yates shuffle
+    public void Shuffle()
+    {
+        System.Random _random = new System.Random();
+        UnitDataStore temp;
+
+        int n = unitList.Count;
+        for(int i = 0; i < n; i++)
+        {
+            int random = i + (int)(_random.NextDouble() * (n - i));
+            temp = unitList[random];
+            unitList[random] = unitList[i];
+            unitList[i] = temp;
+        }
+    }
+
+    public UnitDataStore DrawCard()
+    {
+        int n = unitList.Count;
+        UnitDataStore unit = unitList[n - 1];
+        unitList.RemoveAt(n - 1);
+        return unit;
     }
 
     void UpdateTroopCount()

@@ -2,6 +2,7 @@ using Assets.Scripts.Interface;
 using System.Collections;
 using UnityEngine;
 
+//Reminder, have this be inactive in the scene, need graphic raycaster and to be screen space overlay
 public class PlayerHandPanel : MonoBehaviour
 {
     public ManagerCombatUI managerUI;
@@ -11,12 +12,6 @@ public class PlayerHandPanel : MonoBehaviour
     public DeckDataStore enemyDeck;
     public Card[] cards = new Card[5];
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     public void Init(DeckDataStore playerDeck, DeckDataStore enemyDeck)
     {
         this.playerDeck = playerDeck;
@@ -25,7 +20,8 @@ public class PlayerHandPanel : MonoBehaviour
 
     void OnEnable()
     {
-        StartCoroutine(Draw());
+        StartCoroutine(DrawFull());
+       
     }
 
     // Update is called once per frame
@@ -34,19 +30,22 @@ public class PlayerHandPanel : MonoBehaviour
         
     }
 
-    IEnumerator Draw()
+    //Draw Cards until hand is full
+    IEnumerator DrawFull()
     {
         //We draw cards from left to right 
         foreach (Card c in cards)
         {
             yield return new WaitForSeconds(.1f);
-            c.gameObject.SetActive(true);
+            c.DrawCard(playerDeck);
         }
 
+
         yield return new WaitForSeconds(.1f);
-        PlaceCaptains();
+        //PlaceCaptains();
 
     }
+
 
     public void PlaceCaptains()
     {

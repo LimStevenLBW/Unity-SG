@@ -26,7 +26,6 @@ namespace Assets.Scripts.Interface
         [SerializeField] private AudioClip AudioClickOpen;
         [SerializeField] private AudioClip AudioClickClose;
 
-
         void Start()
         {
             
@@ -34,18 +33,24 @@ namespace Assets.Scripts.Interface
 
         void Update()
         {
-
-            //As long as the pointer is not above a UI element from the event system, then..
-            //if (!EventSystem.current.IsPointerOverGameObject())
-            // {
-            if (Input.GetMouseButtonDown(0)) //LEFT CLICK
+            //If above UI object
+            if (EventSystem.current.IsPointerOverGameObject())
             {
-                DoSelection();
+                UpdateFooterDetails();
             }
-            else if (Input.GetMouseButtonDown(1))
+            else if (!EventSystem.current.IsPointerOverGameObject())
             {
-                ClearSelection();
+                //As long as the pointer is not above a UI element from the event system, then..
+                if (Input.GetMouseButtonDown(0)) //LEFT CLICK
+                {
+                    DoSelection();
+                }
+                else if (Input.GetMouseButtonDown(1))
+                {
+                    ClearSelection();
+                }
             }
+           
                 /*
                 else if (selectedController)
                 {
@@ -189,6 +194,11 @@ namespace Assets.Scripts.Interface
         {
             //AudioPlayer.clip = clip;
             AudioPlayer.PlayOneShot(clip);
+        }
+
+        void UpdateFooterDetails()
+        {
+            
         }
     }
 }
