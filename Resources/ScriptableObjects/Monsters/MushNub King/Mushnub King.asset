@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: Mushnub King
   m_EditorClassIdentifier: 
+  model: {fileID: -2686645630784839087, guid: 6ecc920b389319a43974a1ca83dadb43, type: 3}
   faction: 1
   unitName: MushNub King
   bio: 
@@ -36,6 +37,7 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
+  positionSpawnPref: 0000000000000000
   unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   skill1_ID: 200
   skill2_ID: 100

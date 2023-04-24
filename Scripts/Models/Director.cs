@@ -83,7 +83,7 @@ public class Director : MonoBehaviour
 
     IEnumerator DisplayIntroduction()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
 
         route.gameObject.SetActive(false);
         stageIntro.gameObject.SetActive(true);

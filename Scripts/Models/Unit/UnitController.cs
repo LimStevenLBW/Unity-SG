@@ -26,8 +26,8 @@ public class UnitController : MonoBehaviour
     public Pathfinder path;
     public MicroBarFollow bars;
 
-    public List<UnitController> myAllies;
-    public List<UnitController> myEnemies;
+    private List<UnitController> myAllies;
+    private List<UnitController> myEnemies;
 
     private UnitManager manager;
     private Animator animator;
@@ -468,5 +468,14 @@ public class UnitController : MonoBehaviour
 
         transform.LookAt(point);
         orientation = transform.localRotation.eulerAngles.y;
+    }
+
+    public List<UnitController> GetAllies() {
+        return myAllies;
+    }
+
+    public List<UnitController> GetEnemies()
+    {
+        return myEnemies;
     }
 }

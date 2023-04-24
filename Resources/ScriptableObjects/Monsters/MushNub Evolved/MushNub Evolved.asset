@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
-  m_Name: Mushnub
+  m_Name: MushNub Evolved
   m_EditorClassIdentifier: 
   model: {fileID: 4046627599654500939, guid: 391963458359a68499a32dbb9b1b2822, type: 3}
   faction: 1
   unitName: Mushnub
   bio: 
-  rank: 5
+  rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 7
+  basePower: 9
   powerGrowthRate: 1
   baseDefense: 3
   defenseGrowthRate: 1

@@ -25,6 +25,7 @@ public class DeckDataStore
 
         captain = new UnitDataStore(deckBase.captain);
 
+        Shuffle();
         UpdateTroopCount();
     }
 

@@ -449,11 +449,12 @@ public class Pathfinder
         int shortestDistance = 99999;
         HexCell targetCell = null;
         List<HexCell> alreadyChecked = new List<HexCell>(); //Cells that were already checked
+        List<UnitController> enemies = controller.GetEnemies();
 
         //Let's go through our list of controllers
-        for (int i = 0; i < controller.myEnemies.Count; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            UnitController possibleEnemy = controller.myEnemies[i];
+            UnitController possibleEnemy = enemies[i];
 
             //if (controller == possibleEnemy) continue;  //If they're the same unit
             if (controller.teamNum == possibleEnemy.teamNum) continue; //if they have the same team
