@@ -494,6 +494,7 @@ GameObject:
   - component: {fileID: 1388368575018041552}
   - component: {fileID: 923658134792168538}
   - component: {fileID: 4221551096046564184}
+  - component: {fileID: 9196302217575789659}
   m_Layer: 0
   m_Name: Fish
   m_TagString: Untagged
@@ -565,6 +566,27 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!95 &9196302217575789659
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507451860929435126}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 92d92b7ed53b241429de3c001542bd52, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2553003151950705509
 GameObject:
   m_ObjectHideFlags: 0

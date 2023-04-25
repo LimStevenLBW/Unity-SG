@@ -7,7 +7,8 @@ public class DetailsFooter : MonoBehaviour
 {
     private UnitDataStore currentDisplay;
 
-    public TextMeshProUGUI name;
+    public new TextMeshProUGUI name;
+    public TextMeshProUGUI rank;
     public TextMeshProUGUI troops;
     public TextMeshProUGUI attack;
     public TextMeshProUGUI defense;
@@ -15,7 +16,7 @@ public class DetailsFooter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ResetText();
     }
 
     // Update is called once per frame
@@ -31,10 +32,20 @@ public class DetailsFooter : MonoBehaviour
         currentDisplay = unit;
 
         name.SetText(unit.GetName());
+        rank.SetText(unit.GetRank() + " RANK");
         troops.SetText(unit.GetMaxTroopCount().ToString() + " TROOPS");
         attack.SetText(unit.GetCurrentPower().ToString() + " POW");
         defense.SetText(unit.GetCurrentDefense().ToString() + " DEF");
 
 
+    }
+
+    public void ResetText()
+    {
+        name.SetText("");
+        rank.SetText("");
+        troops.SetText("");
+        attack.SetText("");
+        defense.SetText("");
     }
 }
