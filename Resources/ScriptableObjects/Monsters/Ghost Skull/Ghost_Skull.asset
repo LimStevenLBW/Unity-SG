@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: Ghost_Skull
   m_EditorClassIdentifier: 
-  model: {fileID: -4049954193885773322, guid: 56a2a6ea7add7dd4f8363c80b8daf278, type: 3}
+  model: {fileID: 188449459254459104, guid: 6d4f7497b065a974e88a13f89dda1e81, type: 3}
   faction: 1
   unitName: Banshee
   bio: 

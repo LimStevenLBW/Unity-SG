@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: MushNub Evolved
   m_EditorClassIdentifier: 
-  model: {fileID: 4046627599654500939, guid: 391963458359a68499a32dbb9b1b2822, type: 3}
+  model: {fileID: 3479041650223357548, guid: 331f7bcdb09540045b4dabbbd9608440, type: 3}
   faction: 1
-  unitName: Mushnub
+  unitName: Mushnub E
   bio: 
   rank: 4
   baseLevel: 1

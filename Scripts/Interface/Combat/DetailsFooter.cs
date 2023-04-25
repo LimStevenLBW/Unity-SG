@@ -31,9 +31,9 @@ public class DetailsFooter : MonoBehaviour
         currentDisplay = unit;
 
         name.SetText(unit.GetName());
-        troops.SetText(unit.GetMaxTroopCount().ToString() + " Troops");
-        attack.SetText(unit.GetPower().ToString() + " POW");
-        attack.SetText(unit.GetDefense().ToString() + " POW");
+        troops.SetText(unit.GetMaxTroopCount().ToString() + " TROOPS");
+        attack.SetText(unit.GetCurrentPower().ToString() + " POW");
+        defense.SetText(unit.GetCurrentDefense().ToString() + " DEF");
 
 
     }
