@@ -1,11 +1,27 @@
 using Assets.Scripts.Interface;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class Director : MonoBehaviour
 {
+    enum Phase
+    {
+        INTRO,
+        CARDSELECT,
+        DEPLOYMENT,
+        COMBAT,
+        END
+    }
+
+    private int selectedCardsCount = 0;
+
+    public Action<int> OnCardDeselected;
+
+    private Phase phase = Phase.INTRO;
     private bool gameNotStarted = true;
+
     public Deck playerDeckBase;
     private Deck enemyDeckBase;
 
@@ -93,7 +109,31 @@ public class Director : MonoBehaviour
         stageIntro.gameObject.SetActive(false);
         playerHand.gameObject.SetActive(true);
 
+        phase = Phase.CARDSELECT;
         //End intro, start game
        // combatManager.StartStage(playerDeck, enemyDeck);
+    }
+
+    public string GetPhase()
+    {
+        if (phase == Phase.INTRO) return "INTRO";
+        if (phase == Phase.CARDSELECT) return "CARDSELECT";
+        if (phase == Phase.DEPLOYMENT) return "DEPLOYMENT";
+        if (phase == Phase.COMBAT) return "COMBAT";
+        if (phase == Phase.END) return "END";
+
+        return "Unknown State";
+    }
+
+    public int GetCardSelectOrder()
+    {
+        selectedCardsCount++;
+        return selectedCardsCount;
+    }
+
+    public void NotifyCardDeselected(int ID)
+    {
+        selectedCardsCount--;
+        OnCardDeselected?.Invoke(ID);
     }
 }

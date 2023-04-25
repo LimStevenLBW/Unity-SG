@@ -425,7 +425,7 @@ public class UnitController : MonoBehaviour
         //Grid.IncreaseVisibility(location, visionRange);
 
         for (; t < 1f; t += Time.deltaTime * travelSpeed)
-        {
+        { 
             transform.localPosition = Bezier.GetPoint(a, b, c, t);
             Vector3 d = Bezier.GetDerivative(a, b, c, t);
             transform.localRotation = Quaternion.LookRotation(d);
