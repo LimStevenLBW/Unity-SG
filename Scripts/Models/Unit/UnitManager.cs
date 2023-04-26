@@ -17,6 +17,9 @@ public class UnitManager : MonoBehaviour
     public List<UnitController> firstTeamControllers = new List<UnitController>();
     public List<UnitController> secondTeamControllers = new List<UnitController>();
 
+    public Queue<UnitDataStore> deployableUnits;
+    private UnitController currentController;
+
     //Preset Types
     public UnitController testUnit1;
     public UnitController testUnit2;
@@ -56,6 +59,31 @@ public class UnitManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
+        //Deploy my units
+        if(Director.Instance.GetPhase() == "DEPLOYMENT")
+        {
+            bool wasDeployed = false;
+            if (currentController == null && deployableUnits.Count > 0)
+            {
+
+                currentController = deployableUnits.Dequeue().controller;
+
+                for (int i = 0; i < 40; i++)
+                {
+                    if (grid.cells[i].unitController == null)
+                    {
+                        AddUnit(Instantiate(currentController), grid.cells[i], Random.Range(0f, 360f), currentController.data, 1);
+                        wasDeployed = true;
+                    }
+
+                    if (wasDeployed) break;
+                }
+                currentController = null;
+            }
+            
+        }
+        /*
         if (Input.GetKeyDown(KeyCode.A)) CreateCombatUnit(testUnit1, 1);
         else if (Input.GetKeyDown(KeyCode.S)) CreateCombatUnit(testUnit2, 1);
         else if (Input.GetKeyDown(KeyCode.D)) CreateCombatUnit(testUnit3, 1);
@@ -69,6 +97,7 @@ public class UnitManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.V)) CreateCombatUnit(testUnit4, -1);
         else if (Input.GetKeyDown(KeyCode.B)) CreateCombatUnit(testUnit5, -1);
         else if (Input.GetKeyDown(KeyCode.N)) CreateCombatUnit(testUnit6, -1);
+        */
     }
 
     public void ClearUnits()

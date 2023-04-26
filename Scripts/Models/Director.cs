@@ -33,7 +33,9 @@ public class Director : MonoBehaviour
     public StageIntro stageIntro;
 
     public ManagerCombatUI combatManager;
+    public UnitManager unitManager;
     public PlayerHandPanel playerHand;
+    public CameraControl playerCamera;
 
     [SerializeField] private AudioSource AudioPlayer;
     [SerializeField] private AudioClip AudioHover;
@@ -108,10 +110,12 @@ public class Director : MonoBehaviour
 
         stageIntro.gameObject.SetActive(false);
         playerHand.gameObject.SetActive(true);
+        playerHand.DrawStartingHand();
 
         phase = Phase.CARDSELECT;
+        playerCamera.UnFocus();
         //End intro, start game
-       // combatManager.StartStage(playerDeck, enemyDeck);
+        // combatManager.StartStage(playerDeck, enemyDeck);
     }
 
     public string GetPhase()
@@ -123,6 +127,23 @@ public class Director : MonoBehaviour
         if (phase == Phase.END) return "END";
 
         return "Unknown State";
+    }
+
+    public void SetPhase(string phase)
+    {
+        if (phase == "INTRO") this.phase = Phase.INTRO;
+        if (phase == "CARDSELECT") this.phase = Phase.CARDSELECT;
+        if (phase == "DEPLOYMENT")
+        {
+            this.phase = Phase.DEPLOYMENT;
+            playerCamera.UnFocus();
+            unitManager.deployableUnits = playerHand.GetDeployableUnits();
+            playerHand.gameObject.SetActive(false);
+            selectedCardsCount = 0; //reset order
+        }
+
+        if (phase == "COMBAT") this.phase = Phase.COMBAT;
+        if (phase == "END") this.phase = Phase.END;
     }
 
     public int GetCardSelectOrder()

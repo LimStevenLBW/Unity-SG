@@ -1,5 +1,6 @@
 using Assets.Scripts.Interface;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 //Reminder, have this be inactive in the scene, need graphic raycaster and to be screen space overlay
@@ -20,7 +21,7 @@ public class PlayerHandPanel : MonoBehaviour
 
     void OnEnable()
     {
-        StartCoroutine(DrawFull());
+       
        
     }
 
@@ -28,6 +29,10 @@ public class PlayerHandPanel : MonoBehaviour
     void Update()
     {
         
+    }
+    public void DrawStartingHand()
+    {
+        StartCoroutine(DrawFull());
     }
 
     //Draw Cards until hand is full
@@ -43,6 +48,29 @@ public class PlayerHandPanel : MonoBehaviour
 
         yield return new WaitForSeconds(.1f);
         //PlaceCaptains();
+
+    }
+
+    /*
+     * Get a list of units to summon based on the selection order
+     */
+    public Queue<UnitDataStore> GetDeployableUnits()
+    {
+        List<Card> temp = new List<Card>();
+        foreach (Card c in cards)
+        {
+            if(c.isSelected) temp.Add(c);
+            c.Deselected();
+        }
+        temp.Sort();
+        Queue<UnitDataStore> unitQueue = new Queue<UnitDataStore>();
+
+        foreach(Card c in temp)
+        {
+            unitQueue.Enqueue(c.unit);
+        }
+
+        return unitQueue;
 
     }
 

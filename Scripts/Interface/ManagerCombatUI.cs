@@ -28,7 +28,8 @@ namespace Assets.Scripts.Interface
 
         void Start()
         {
-            
+            //player hand panel is set false to avoid it working before it has data
+            if (playerHandPanel.gameObject.activeInHierarchy) playerHandPanel.gameObject.SetActive(false);
         }
 
         void Update()

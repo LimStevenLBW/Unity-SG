@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraControl : MonoBehaviour
 {
     private Vector3 originPosition;
+    private Vector3 cardSelectPosition;
     private Quaternion originRotation;
     public bool isControlEnabled;
     
@@ -47,6 +48,7 @@ public class CameraControl : MonoBehaviour
     void Start()
     {
         originPosition = transform.position;
+        cardSelectPosition = new Vector3(originPosition.x, originPosition.y + 10, originPosition.z - 40);
         originRotation = transform.rotation;
         cameraZoomPosition = transform.position.y;
     }
@@ -190,8 +192,10 @@ public class CameraControl : MonoBehaviour
     }
     public void UnFocus()
     {
-       // IEnumerator coroutineRotate = RotateLerp(transform, originRotation);
-        IEnumerator coroutine = CameraJump(originPosition, originRotation, 0, 0);
+        IEnumerator coroutine;
+        // IEnumerator coroutineRotate = RotateLerp(transform, originRotation);
+        if (Director.Instance.GetPhase() == "CARDSELECT") coroutine = CameraJump(cardSelectPosition, originRotation, 0, 0);
+        else { coroutine = CameraJump(originPosition, originRotation, 0, 0); }
         StopAllCoroutines();
         StartCoroutine(coroutine);
         //StartCoroutine(coroutineRotate);

@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
+public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IComparable<Card>
 {
     public int cardNum; //unused, just to identify which card in the hand
 
@@ -46,16 +47,22 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
             else if (isSelected)
             {
                 Director.Instance.NotifyCardDeselected(cardSelectOrder);
-                cardSelectOrder = 0;
-                isSelected = false;
-
-                Vector3 pos = transform.position;
-                transform.position = new Vector3(pos.x, pos.y - 25, pos.z);
-
-                cardSelectOrderDisplay.gameObject.SetActive(false);
-                AudioPlayer.PlayOneShot(AudioDeselect);
+                Deselected();
+               
             }
         }
+    }
+
+    public void Deselected()
+    {
+        cardSelectOrder = 0;
+        isSelected = false;
+
+        Vector3 pos = transform.position;
+        transform.position = new Vector3(pos.x, pos.y - 25, pos.z);
+
+        cardSelectOrderDisplay.gameObject.SetActive(false);
+        AudioPlayer.PlayOneShot(AudioDeselect);
     }
 
     public void DrawCard(DeckDataStore deck)
@@ -105,4 +112,9 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
         }
     }
 
+    public int CompareTo(Card other)
+    {
+        
+        return other.cardSelectOrder.CompareTo(cardSelectOrder);
+    }
 }
