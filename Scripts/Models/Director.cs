@@ -137,9 +137,11 @@ public class Director : MonoBehaviour
         {
             this.phase = Phase.DEPLOYMENT;
             playerCamera.UnFocus();
-            unitManager.deployableUnits = playerHand.GetDeployableUnits();
             playerHand.gameObject.SetActive(false);
             selectedCardsCount = 0; //reset order
+
+            //Start Unit Deployment
+            unitManager.DeployQueuedUnits(playerHand.GetDeployableUnits());
         }
 
         if (phase == "COMBAT") this.phase = Phase.COMBAT;

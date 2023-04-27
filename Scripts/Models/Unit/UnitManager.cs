@@ -9,6 +9,9 @@ using UnityEngine;
  */
 public class UnitManager : MonoBehaviour
 {
+    [SerializeField] internal AudioSource AudioPlayer;
+    [SerializeField] internal AudioClip AudioDeployedUnit;
+    private GameObject effect;
     //Temporary for creating Units
     public List<FormationController> units = new List<FormationController>();
     public FormationController unitPrefab;
@@ -17,7 +20,6 @@ public class UnitManager : MonoBehaviour
     public List<UnitController> firstTeamControllers = new List<UnitController>();
     public List<UnitController> secondTeamControllers = new List<UnitController>();
 
-    public Queue<UnitDataStore> deployableUnits;
     private UnitController currentController;
 
     //Preset Types
@@ -53,27 +55,34 @@ public class UnitManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Spawning effect
+        effect = Resources.Load("Effects/CFX3_Hit_SmokePuff") as GameObject;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DeployQueuedUnits(Queue<UnitDataStore> deployableUnits)
     {
-       
-        //Deploy my units
-        if(Director.Instance.GetPhase() == "DEPLOYMENT")
-        {
-            bool wasDeployed = false;
-            if (currentController == null && deployableUnits.Count > 0)
-            {
+        StartCoroutine(AnimateDeploy(deployableUnits));
+    }
 
+    IEnumerator AnimateDeploy(Queue<UnitDataStore> deployableUnits)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        int i = 0;
+        int size = deployableUnits.Count;
+        bool wasDeployed;
+        //Cycle for the same number of elements as the queue size
+        while(i < size) {
+            wasDeployed = false;
+            if (currentController == null)
+            {
                 currentController = deployableUnits.Dequeue().controller;
 
-                for (int i = 0; i < 40; i++)
+                for (int j = 0; j < 40; j++)
                 {
-                    if (grid.cells[i].unitController == null)
+                    if (grid.cells[j].unitController == null)
                     {
-                        AddUnit(Instantiate(currentController), grid.cells[i], Random.Range(0f, 360f), currentController.data, 1);
+                        AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), currentController.data, 1);
                         wasDeployed = true;
                     }
 
@@ -81,6 +90,20 @@ public class UnitManager : MonoBehaviour
                 }
                 currentController = null;
             }
+
+            i++;
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+       
+        //Unit Manager will deploy all selected units in order
+        if(Director.Instance.GetPhase() == "DEPLOYMENT")
+        {
+       
             
         }
         /*
@@ -255,6 +278,9 @@ public class UnitManager : MonoBehaviour
         //Setup health and stamina bars
         
         controller.Initialize(this, bars); //Pass itself down, likewise, make sure the unit knows about the manager
+       
+        controller.PlayEffect(effect, controller.transform.position, 3);
+        AudioPlayer.PlayOneShot(AudioDeployedUnit);
     }
 
     public List<UnitController> GetControllers(int teamNum, bool isSameTeam)

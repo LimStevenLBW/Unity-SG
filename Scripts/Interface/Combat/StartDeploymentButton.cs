@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 class StartDeploymentButton : Button, IPointerClickHandler
 {
 
-    /**
+    /*
      * Registered IPointerClickHandler callback
      */
     public override void OnPointerClick(PointerEventData e)
