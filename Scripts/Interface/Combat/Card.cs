@@ -6,10 +6,12 @@ using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IComparable<Card>
 {
-    public int cardNum; //unused, just to identify which card in the hand
-
+    public int cardNum; //Identify which card in the hand
+    public bool isComparingByOrder = true; //When set to true, sort methods will compare this object by cardSelectOrder, other it will use cardValue
     public bool isSelected = false;
     public int cardSelectOrder = 0;
+    private int cardValue = 0; //How much this card will be valued by the cpu to play
+
     public DetailsFooter footer;
     public UnitDataStore unit;
     public PortraitRoom portraitRoom;
@@ -22,7 +24,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        footer.UpdateData(unit);
+        //Not allowed to see enemy cards
+        if(Director.Instance.GetPhase() != "ENEMYDEPLOYMENT") footer.UpdateData(unit);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -33,16 +36,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
 
             if (!isSelected)
             {
-                cardSelectOrder = Director.Instance.GetCardSelectOrder();
-                isSelected = true;
-
-                cardSelectOrderDisplay.gameObject.SetActive(true);
-                cardSelectOrderDisplay.UpdateOrder(cardSelectOrder);
-               
-                
-                Vector3 pos = transform.position;
-                transform.position = new Vector3(pos.x, pos.y + 25, pos.z);
-                AudioPlayer.PlayOneShot(AudioSelect);
+                Select();
             }
             else if (isSelected)
             {
@@ -51,6 +45,20 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
                
             }
         }
+    }
+
+    public void Select()
+    {
+        cardSelectOrder = Director.Instance.GetCardSelectOrder();
+        isSelected = true;
+
+        cardSelectOrderDisplay.gameObject.SetActive(true);
+        cardSelectOrderDisplay.UpdateOrder(cardSelectOrder);
+
+
+        Vector3 pos = transform.position;
+        transform.position = new Vector3(pos.x, pos.y + 25, pos.z);
+        AudioPlayer.PlayOneShot(AudioSelect);
     }
 
     public void Deselected()
@@ -76,13 +84,19 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
         if (unit != null) {
             gameObject.SetActive(true);
             UpdatePortrait();
+            UpdateCardValue();
         }
     }
 
     void UpdatePortrait()
     {
         if (portraitRoom == null) Debug.Log("null?");
-        portraitRoom.UpdatePortrait(unit);
+        else { portraitRoom.UpdatePortrait(unit); }
+    }
+
+    void UpdateCardValue()
+    {
+
     }
 
     void OnEnable()
@@ -115,6 +129,13 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
     public int CompareTo(Card other)
     {
         
-        return other.cardSelectOrder.CompareTo(cardSelectOrder);
+        if(isComparingByOrder) return other.cardSelectOrder.CompareTo(cardSelectOrder);
+        else
+        {
+            //Compare by card value
+            //
+            //Currently the cpu won't calculate that
+            return other.cardSelectOrder.CompareTo(cardSelectOrder);
+        }
     }
 }

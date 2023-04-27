@@ -61,10 +61,11 @@ public class UnitManager : MonoBehaviour
 
     public void DeployQueuedUnits(Queue<UnitDataStore> deployableUnits)
     {
-        StartCoroutine(AnimateDeploy(deployableUnits));
+        StartCoroutine(AnimateDeployFriendly(deployableUnits));
     }
 
-    IEnumerator AnimateDeploy(Queue<UnitDataStore> deployableUnits)
+
+    public IEnumerator AnimateDeployFriendly(Queue<UnitDataStore> deployableUnits)
     {
         yield return new WaitForSeconds(0.5f);
 
@@ -94,6 +95,9 @@ public class UnitManager : MonoBehaviour
             i++;
             yield return new WaitForSeconds(0.3f);
         }
+        yield return new WaitForSeconds(0.2f);
+        Director.Instance.SetPhase("ENEMYDEPLOYMENT");
+        //StartCoroutine(AnimateDeployEnemy(deployableUnits));
     }
 
     // Update is called once per frame

@@ -9,14 +9,12 @@ public class PlayerHandPanel : MonoBehaviour
     public ManagerCombatUI managerUI;
     public UnitManager unitManager;
 
-    public DeckDataStore playerDeck;
-    public DeckDataStore enemyDeck;
+    public DeckDataStore myDeck;
     public Card[] cards = new Card[5];
 
-    public void Init(DeckDataStore playerDeck, DeckDataStore enemyDeck)
+    public void Init(DeckDataStore deck)
     {
-        this.playerDeck = playerDeck;
-        this.enemyDeck = enemyDeck;
+        myDeck = deck;
     }
 
     void OnEnable()
@@ -42,7 +40,7 @@ public class PlayerHandPanel : MonoBehaviour
         foreach (Card c in cards)
         {
             yield return new WaitForSeconds(.1f);
-            c.DrawCard(playerDeck);
+            c.DrawCard(myDeck);
         }
 
 
@@ -77,8 +75,40 @@ public class PlayerHandPanel : MonoBehaviour
 
     public void PlaceCaptains()
     {
-        unitManager.AddCaptain(playerDeck.captain.controller, true);
-        unitManager.AddCaptain(enemyDeck.captain.controller, false);
+       // unitManager.AddCaptain(playerDeck.captain.controller, true);
+       // unitManager.AddCaptain(enemyDeck.captain.controller, false);
+    }
+
+    /*
+     * Enemy CPU will determine which cards to play
+     * todo, currently the cpu will just play a random 3 cards
+     */
+    public void CPUSelectCards()
+    {
+        StartCoroutine(RandomSelect());
+      
+
+    }
+    IEnumerator RandomSelect()
+    {
+        yield return new WaitForSeconds(1.1f);
+        int randomChoice;
+        int selectedCount = 0;
+        while (selectedCount < 3)
+        {
+            randomChoice = Random.Range(1, 5);
+            foreach (Card c in cards)
+            {
+                if (c.isSelected) continue; //We skip already selected cards
+                if (randomChoice == c.cardNum)
+                {
+                    c.Select();
+                    selectedCount++;
+                    yield return new WaitForSeconds(0.2f);
+                }
+
+            }
+        }
     }
 
 }

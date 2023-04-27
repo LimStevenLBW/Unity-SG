@@ -11,6 +11,8 @@ public class Director : MonoBehaviour
         INTRO,
         CARDSELECT,
         DEPLOYMENT,
+        ENEMYDEPLOYMENT,
+        REPOSITIONING,
         COMBAT,
         END
     }
@@ -35,6 +37,7 @@ public class Director : MonoBehaviour
     public ManagerCombatUI combatManager;
     public UnitManager unitManager;
     public PlayerHandPanel playerHand;
+    public PlayerHandPanel enemyHand;
     public CameraControl playerCamera;
 
     [SerializeField] private AudioSource AudioPlayer;
@@ -88,12 +91,13 @@ public class Director : MonoBehaviour
             //Game Start
             route.AdvanceRoute();
 
-            //Deck is available now
-            playerDeck = new DeckDataStore(playerDeckBase); //Preset currently
+            //Deck is available now to use by monobehaviours
+            playerDeck = new DeckDataStore(playerDeckBase); //Preset currently in editor
             enemyDeck = new DeckDataStore(enemyDeckBase); //Obtained from stage
 
             stageIntro.Init(playerDeck, enemyDeck);
-            playerHand.Init(playerDeck, enemyDeck);
+            playerHand.Init(playerDeck);
+            enemyHand.Init(enemyDeck);
 
             StartCoroutine(DisplayIntroduction());
         }
@@ -108,11 +112,11 @@ public class Director : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
+        //Player Card Selection phase
+        phase = Phase.CARDSELECT;
         stageIntro.gameObject.SetActive(false);
         playerHand.gameObject.SetActive(true);
         playerHand.DrawStartingHand();
-
-        phase = Phase.CARDSELECT;
         playerCamera.UnFocus();
         //End intro, start game
         // combatManager.StartStage(playerDeck, enemyDeck);
@@ -123,6 +127,8 @@ public class Director : MonoBehaviour
         if (phase == Phase.INTRO) return "INTRO";
         if (phase == Phase.CARDSELECT) return "CARDSELECT";
         if (phase == Phase.DEPLOYMENT) return "DEPLOYMENT";
+        if (phase == Phase.ENEMYDEPLOYMENT) return "ENEMYDEPLOYMENT";
+        if (phase == Phase.REPOSITIONING) return "REPOSITIONING";
         if (phase == Phase.COMBAT) return "COMBAT";
         if (phase == Phase.END) return "END";
 
@@ -143,7 +149,16 @@ public class Director : MonoBehaviour
             //Start Unit Deployment
             unitManager.DeployQueuedUnits(playerHand.GetDeployableUnits());
         }
+        if (phase == "ENEMYDEPLOYMENT")
+        {
+            this.phase = Phase.ENEMYDEPLOYMENT;
+            enemyHand.gameObject.SetActive(true);
+            enemyHand.DrawStartingHand();
+            enemyHand.CPUSelectCards();
+            playerCamera.UnFocus();
+        }
 
+        if (phase == "REPOSITIONING") this.phase = Phase.REPOSITIONING;
         if (phase == "COMBAT") this.phase = Phase.COMBAT;
         if (phase == "END") this.phase = Phase.END;
     }
