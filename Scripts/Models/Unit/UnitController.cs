@@ -55,7 +55,11 @@ public class UnitController : MonoBehaviour
     {
         this.manager = manager;
         path = new Pathfinder(manager.grid, manager, this, null);
-        
+
+        //Might have to update later, but for now, update the data with this instantiated controller.
+        data.controller = this;
+        data.InitSkills(); //Calling InitSkills for a second time technically to update path references
+
         this.bars = bars;
         bars.Initialize(this);
 
@@ -63,9 +67,11 @@ public class UnitController : MonoBehaviour
         myAllies = manager.GetControllers(teamNum, true);
         myEnemies = manager.GetControllers(teamNum, false);
         animator = GetComponent<Animator>();
+
+        Director.Instance.OnCombatStarted += SetActive;
     }
 
-    public void Awake()
+    void Awake()
     {
         
     }

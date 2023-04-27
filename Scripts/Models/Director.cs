@@ -11,6 +11,7 @@ public class Director : MonoBehaviour
         INTRO,
         CARDSELECT,
         DEPLOYMENT,
+        ENEMYCARDSELECT,
         ENEMYDEPLOYMENT,
         REPOSITIONING,
         COMBAT,
@@ -20,6 +21,7 @@ public class Director : MonoBehaviour
     private int selectedCardsCount = 0;
 
     public Action<int> OnCardDeselected;
+    public Action OnCombatStarted;
 
     private Phase phase = Phase.INTRO;
     private bool gameNotStarted = true;
@@ -127,6 +129,7 @@ public class Director : MonoBehaviour
         if (phase == Phase.INTRO) return "INTRO";
         if (phase == Phase.CARDSELECT) return "CARDSELECT";
         if (phase == Phase.DEPLOYMENT) return "DEPLOYMENT";
+        if (phase == Phase.ENEMYCARDSELECT) return "ENEMYCARDSELECT";
         if (phase == Phase.ENEMYDEPLOYMENT) return "ENEMYDEPLOYMENT";
         if (phase == Phase.REPOSITIONING) return "REPOSITIONING";
         if (phase == Phase.COMBAT) return "COMBAT";
@@ -147,19 +150,40 @@ public class Director : MonoBehaviour
             selectedCardsCount = 0; //reset order
 
             //Start Unit Deployment
-            unitManager.DeployQueuedUnits(playerHand.GetDeployableUnits());
+            unitManager.DeployQueuedUnits(playerHand.GetDeployableUnits(), true);
         }
-        if (phase == "ENEMYDEPLOYMENT")
+        if(phase == "ENEMYCARDSELECT")
         {
-            this.phase = Phase.ENEMYDEPLOYMENT;
+            this.phase = Phase.ENEMYCARDSELECT;
             enemyHand.gameObject.SetActive(true);
             enemyHand.DrawStartingHand();
             enemyHand.CPUSelectCards();
             playerCamera.UnFocus();
         }
+        if (phase == "ENEMYDEPLOYMENT")
+        {
+            this.phase = Phase.ENEMYDEPLOYMENT;
+            playerCamera.UnFocus();
+            enemyHand.gameObject.SetActive(false);
+            selectedCardsCount = 0;
 
-        if (phase == "REPOSITIONING") this.phase = Phase.REPOSITIONING;
-        if (phase == "COMBAT") this.phase = Phase.COMBAT;
+            unitManager.DeployQueuedUnits(enemyHand.GetDeployableUnits(), false);
+        }
+
+        if (phase == "REPOSITIONING")
+        {
+            this.phase = Phase.REPOSITIONING;
+            playerCamera.UnFocus();
+            //Skipping repositioning for now
+
+            SetPhase("COMBAT");
+        }
+        if (phase == "COMBAT")
+        {
+            this.phase = Phase.COMBAT;
+            OnCombatStarted?.Invoke();
+
+        }
         if (phase == "END") this.phase = Phase.END;
     }
 

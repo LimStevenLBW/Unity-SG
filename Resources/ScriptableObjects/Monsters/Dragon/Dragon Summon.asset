@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: Dragon Summon
   m_EditorClassIdentifier: 
-  model: {fileID: 5118880570307304320, guid: 22649d12de7ebff4eac744efdd35ab24, type: 3}
+  model: {fileID: 3561716668365625288, guid: d277f93875767594fa482b06a6cb96eb, type: 3}
   faction: 1
   unitName: Dragon Summon
   bio: 

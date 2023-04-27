@@ -25,7 +25,7 @@ public class ClashSkill : Skill
 
         baseCooldown = 2;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 5;
+        baseStaminaCost = 0;
         currentStaminaCost = baseStaminaCost;
 
         isRunning = false;
@@ -111,8 +111,9 @@ public class ClashSkill : Skill
         lowerBound += lowerModifier;
         upperBound += upperModifier;
 
-        int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+        //int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
+        int damageData = 1;
         if (damageData < 0) damageData = 0; //We don't go below zero
         enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
 

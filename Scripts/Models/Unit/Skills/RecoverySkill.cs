@@ -21,9 +21,9 @@ public class RecoverySkill : Skill
         skillName = "Recovery";
         description = "Heal your people, so they can get hurt again.";
 
-        baseCooldown = 12;
+        baseCooldown = 10;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 15;
+        baseStaminaCost = 0;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }

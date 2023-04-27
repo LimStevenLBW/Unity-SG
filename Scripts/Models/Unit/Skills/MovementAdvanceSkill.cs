@@ -14,7 +14,7 @@ public class MovementAdvanceSkill : Skill
         skillName = "Advance";
         description = "Fire within range";
 
-        baseCooldown = 0.7f;
+        baseCooldown = 1;
         currentCooldown = baseCooldown;
         baseStaminaCost = 1;
         currentStaminaCost = baseStaminaCost;
@@ -42,6 +42,8 @@ public class MovementAdvanceSkill : Skill
         //If we have enough stamina and if it is off cooldown, then the move is available
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
+            if (controller == null) Debug.Log("controller null");
+            if (controller.path == null) Debug.Log("path null");
             bool noNearbyEnemy = !controller.path.IsThereAdjacentEnemy(); //if there no nearby enemy, we should do the move
             bool notTrapped = !controller.path.IsThisUnitSurrounded(); //If this unit is surrounded by allies for example, it won't be able to move
             if (noNearbyEnemy && notTrapped) return true;

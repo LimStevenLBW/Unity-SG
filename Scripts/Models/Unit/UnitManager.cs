@@ -59,19 +59,21 @@ public class UnitManager : MonoBehaviour
         effect = Resources.Load("Effects/CFX3_Hit_SmokePuff") as GameObject;
     }
 
-    public void DeployQueuedUnits(Queue<UnitDataStore> deployableUnits)
+    public void DeployQueuedUnits(Queue<UnitDataStore> deployableUnits, bool isFriendly)
     {
-        StartCoroutine(AnimateDeployFriendly(deployableUnits));
+        StartCoroutine(AnimateDeployment(deployableUnits, isFriendly));
     }
 
 
-    public IEnumerator AnimateDeployFriendly(Queue<UnitDataStore> deployableUnits)
+    public IEnumerator AnimateDeployment(Queue<UnitDataStore> deployableUnits, bool isFriendly)
     {
         yield return new WaitForSeconds(0.5f);
 
         int i = 0;
         int size = deployableUnits.Count;
         bool wasDeployed;
+
+
         //Cycle for the same number of elements as the queue size
         while(i < size) {
             wasDeployed = false;
@@ -79,16 +81,33 @@ public class UnitManager : MonoBehaviour
             {
                 currentController = deployableUnits.Dequeue().controller;
 
-                for (int j = 0; j < 40; j++)
+                if (isFriendly)
                 {
-                    if (grid.cells[j].unitController == null)
+                    for (int j = 0; j < 40; j++)
                     {
-                        AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), currentController.data, 1);
-                        wasDeployed = true;
-                    }
+                        if (grid.cells[j].unitController == null)
+                        {
+                            AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), currentController.data, 1);
+                            wasDeployed = true;
+                        }
 
-                    if (wasDeployed) break;
+                        if (wasDeployed) break;
+                    }
                 }
+                else
+                {
+                    for (int j = 79; j >= 40; j--)
+                    {
+                        if (grid.cells[j].unitController == null)
+                        {
+                            AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), currentController.data, -1);
+                            wasDeployed = true;
+                        }
+
+                        if (wasDeployed) break;
+                    }
+                }
+              
                 currentController = null;
             }
 
@@ -96,7 +115,10 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
         yield return new WaitForSeconds(0.2f);
-        Director.Instance.SetPhase("ENEMYDEPLOYMENT");
+
+        //CHANGE PHASE
+        if (isFriendly) Director.Instance.SetPhase("ENEMYCARDSELECT");
+        else { Director.Instance.SetPhase("REPOSITIONING"); }
         //StartCoroutine(AnimateDeployEnemy(deployableUnits));
     }
 

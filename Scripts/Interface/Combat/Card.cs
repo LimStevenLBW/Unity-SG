@@ -25,7 +25,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Not allowed to see enemy cards
-        if(Director.Instance.GetPhase() != "ENEMYDEPLOYMENT") footer.UpdateData(unit);
+        if(Director.Instance.GetPhase() != "ENEMYCARDSELECT") footer.UpdateData(unit);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -42,13 +42,14 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
             {
                 Director.Instance.NotifyCardDeselected(cardSelectOrder);
                 Deselected();
-               
+                AudioPlayer.PlayOneShot(AudioDeselect); //placed here to avoid the sound being used when called outside of pointer event
             }
         }
     }
 
     public void Select()
     {
+        AudioPlayer.PlayOneShot(AudioSelect); //Always play selected sound
         cardSelectOrder = Director.Instance.GetCardSelectOrder();
         isSelected = true;
 
@@ -58,7 +59,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
 
         Vector3 pos = transform.position;
         transform.position = new Vector3(pos.x, pos.y + 25, pos.z);
-        AudioPlayer.PlayOneShot(AudioSelect);
     }
 
     public void Deselected()
@@ -70,7 +70,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
         transform.position = new Vector3(pos.x, pos.y - 25, pos.z);
 
         cardSelectOrderDisplay.gameObject.SetActive(false);
-        AudioPlayer.PlayOneShot(AudioDeselect);
     }
 
     public void DrawCard(DeckDataStore deck)

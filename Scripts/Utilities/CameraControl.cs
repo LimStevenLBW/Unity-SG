@@ -6,6 +6,7 @@ public class CameraControl : MonoBehaviour
 {
     private Vector3 originPosition;
     private Vector3 cardSelectPosition;
+    private Vector3 enemyCardSelectPosition;
     private Vector3 enemyDeployPosition;
     private Quaternion originRotation;
     public bool isControlEnabled;
@@ -51,7 +52,8 @@ public class CameraControl : MonoBehaviour
         //Custom camera positions
         originPosition = transform.position;
         cardSelectPosition = new Vector3(originPosition.x, originPosition.y + 10, originPosition.z - 40);
-        enemyDeployPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z + 30);
+        enemyCardSelectPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z + 40);
+        enemyDeployPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z + 25);
         originRotation = transform.rotation;
         cameraZoomPosition = transform.position.y;
     }
@@ -198,7 +200,8 @@ public class CameraControl : MonoBehaviour
         IEnumerator coroutine;
         // IEnumerator coroutineRotate = RotateLerp(transform, originRotation);
         if (Director.Instance.GetPhase() == "CARDSELECT") coroutine = CameraJump(cardSelectPosition, originRotation, 0, 0);
-        else if(Director.Instance.GetPhase() == "ENEMYDEPLOYMENT") coroutine = CameraJump(enemyDeployPosition, originRotation, 0, 0);
+        else if(Director.Instance.GetPhase() == "ENEMYCARDSELECT") coroutine = CameraJump(enemyCardSelectPosition, originRotation, 0, 0);
+        else if (Director.Instance.GetPhase() == "ENEMYDEPLOYMENT") coroutine = CameraJump(enemyDeployPosition, originRotation, 0, 0);
         else { coroutine = CameraJump(originPosition, originRotation, 0, 0); }
         StopAllCoroutines();
         StartCoroutine(coroutine);

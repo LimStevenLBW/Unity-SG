@@ -125,7 +125,7 @@ public class UnitDataStore
     {
         switch (ID)
         {
-            case 0: return new ChargeSkill();
+            case 10: return new ChargeSkill();
             case 1: return new MovementAdvanceSkill();
             case 100: return new ClashSkill();
             case 200: return new RecoverySkill();

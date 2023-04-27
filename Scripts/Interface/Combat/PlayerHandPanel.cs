@@ -109,6 +109,8 @@ public class PlayerHandPanel : MonoBehaviour
 
             }
         }
+
+        Director.Instance.SetPhase("ENEMYDEPLOYMENT");
     }
 
 }
