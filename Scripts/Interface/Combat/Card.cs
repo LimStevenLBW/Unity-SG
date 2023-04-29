@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IComparable<Card>
+public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IComparable<Card>
 {
     public int cardNum; //Identify which card in the hand
     public bool isComparingByOrder = true; //When set to true, sort methods will compare this object by cardSelectOrder, other it will use cardValue
@@ -27,7 +27,10 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IC
         //Not allowed to see enemy cards
         if(Director.Instance.GetPhase() != "ENEMYCARDSELECT") footer.UpdateData(unit);
     }
-
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        footer.ResetText();
+    }
     public void OnPointerDown(PointerEventData eventData)
     {
 

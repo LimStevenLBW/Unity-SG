@@ -11,10 +11,12 @@ public class PlayerHandPanel : MonoBehaviour
 
     public DeckDataStore myDeck;
     public Card[] cards = new Card[5];
+    public DeckCountDisplay deckCounter;
 
     public void Init(DeckDataStore deck)
     {
         myDeck = deck;
+        deckCounter.UpdateCount(deck.GetDeckCount());
     }
 
     void OnEnable()
@@ -41,6 +43,7 @@ public class PlayerHandPanel : MonoBehaviour
         {
             yield return new WaitForSeconds(.1f);
             c.DrawCard(myDeck);
+            deckCounter.UpdateCount(myDeck.GetDeckCount());
         }
 
 

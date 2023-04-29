@@ -35,7 +35,7 @@ public class HexMapEditor : MonoBehaviour
 
     void Awake()
     {
-        SetFogOfWar();
+        //SetFogOfWar();
     }
 
     // Start is called before the first frame update

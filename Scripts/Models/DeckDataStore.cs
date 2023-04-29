@@ -7,6 +7,7 @@ public class DeckDataStore
     private Deck deckBase;
 
     public List<UnitDataStore> unitList;
+    public List<UnitDataStore> routedList;
     public UnitDataStore captain;
 
     private int troopCount;
@@ -76,6 +77,16 @@ public class DeckDataStore
     public int GetCommanderCount()
     {
         return unitList.Count;
+    }
+
+    public int GetDeckCount()
+    {
+        return unitList.Count;
+    }
+
+    public int GetRoutedCount()
+    {
+        return routedList.Count;
     }
 
 }

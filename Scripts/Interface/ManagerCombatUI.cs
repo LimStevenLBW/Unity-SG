@@ -34,16 +34,83 @@ namespace Assets.Scripts.Interface
 
         void Update()
         {
+            //Check for mouseclick
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    
+                    if (hit.collider.gameObject.GetComponent<UnitController>() != null) //Check if the hit GameObject is controller
+                    {
+                        //print(hit.collider.name);
+
+                        UnitController controller = hit.collider.gameObject.GetComponent<UnitController>();
+                        if (selectedController != controller)
+                        {
+                            ClearSelection();
+                            mainCamera.UnFocus();
+                            selectedController = controller;
+                            
+                            selectedCell = selectedController.Location;
+                        }
+                    }
+                    else
+                    {
+                        //Grid handles cell hits, since raycast is unreliable at hitting them w/o help
+                        HexCell cell = grid.GetCell(ray);
+                        //print(hit.collider.name);
+                    
+                        ClearSelection();
+                        mainCamera.UnFocus();
+ 
+
+                        //If the hexcell is different from what we have currently selected
+                        if (cell) 
+                        {
+                            if(cell != selectedCell)
+                            {
+                                selectedCell = cell;
+                                selectedController = selectedCell.unitController;
+                            }
+                            
+                        }          
+                    }
+                    
+                    //Note that a cell may not necessarily have a unit
+                    if (selectedController)
+                    {
+                        if(priorController != selectedController)
+                        {
+                            EnableHighlight(selectedController);
+                            EnableUnitWindow(selectedController);
+                            priorController = selectedController;
+                        }   
+                    }
+   
+                }
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                ClearSelection();
+            }
+
             //If above UI object
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                UpdateFooterDetails();
+
             }
-            else if (!EventSystem.current.IsPointerOverGameObject())
+
+            /*
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
                 //As long as the pointer is not above a UI element from the event system, then..
                 if (Input.GetMouseButtonDown(0)) //LEFT CLICK
                 {
+                    print("do selection");
                     DoSelection();
                 }
                 else if (Input.GetMouseButtonDown(1))
@@ -51,7 +118,7 @@ namespace Assets.Scripts.Interface
                     ClearSelection();
                 }
             }
-           
+           */
                 /*
                 else if (selectedController)
                 {
@@ -91,9 +158,7 @@ namespace Assets.Scripts.Interface
         void DoSelection()
         {
 
-            ClearSelection();
-
-            UnFocus();
+            
             UpdateSelection();
 
             if (selectedCell)
@@ -104,6 +169,7 @@ namespace Assets.Scripts.Interface
             //Note that a cell may not necessarily have a unit
             if (selectedController)
             {
+                Debug.Log("found a controller?");
                 EnableHighlight(selectedController);
                 EnableUnitWindow(selectedController);
 
@@ -126,17 +192,21 @@ namespace Assets.Scripts.Interface
 
             //Check if a unit/cell was clicked. Most people will try to select the unit, not the cell.
             //If we have the unit, we can get the cell easily
-            UnitController unit = grid.GetUnit(ray);
+            /*
 
-            if (unit)
-            {
-                cell = unit.Location;
-            }
-            else
-            {
-                //Or alternatively, just get the grid cell at mouse position
-                cell = grid.GetCell(ray);
-            }
+         UnitController unit;
+             //= grid.GetUnit(ray);
+
+
+         if (unit)
+         {
+             cell = unit.Location;
+         }
+         else
+         {
+             //Or alternatively, just get the grid cell at mouse position
+             
+         }
 
             if (cell != selectedCell) //We have a new selected cell
             {
@@ -144,7 +214,7 @@ namespace Assets.Scripts.Interface
                 
                 return true;
             }
-
+            */
             return false; //No need to update it if the same thing was selected
         }
 
@@ -152,6 +222,9 @@ namespace Assets.Scripts.Interface
         {
             DisableHighlight(selectedController);
             DisableUnitWindow();
+            selectedController = null;
+            priorController = null;
+            selectedCell = null;    
         }
 
         void EnableHighlight(UnitController controller)
@@ -187,19 +260,11 @@ namespace Assets.Scripts.Interface
             mainCamera.Focus(transform, 50, 50);
         }
 
-        void UnFocus()
-        {
-            mainCamera.UnFocus();
-        }
         public virtual void PlayAudioClip(AudioClip clip)
         {
             //AudioPlayer.clip = clip;
             AudioPlayer.PlayOneShot(clip);
         }
 
-        void UpdateFooterDetails()
-        {
-            
-        }
     }
 }

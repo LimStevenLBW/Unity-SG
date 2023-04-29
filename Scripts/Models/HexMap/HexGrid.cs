@@ -35,6 +35,7 @@ public class HexGrid : MonoBehaviour
 
     void Awake()
     {
+        Shader.EnableKeyword("HEX_MAP_EDIT_MODE"); //Disable Fog of war for now
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
 
@@ -295,11 +296,6 @@ public class HexGrid : MonoBehaviour
     {
         //return unitManager.GetUnit(ray);
         return null;
-    }
-
-    public UnitController GetUnit(Ray ray)
-    {
-        return unitManager.GetUnit(ray);
     }
 
     public void Save(BinaryWriter writer)

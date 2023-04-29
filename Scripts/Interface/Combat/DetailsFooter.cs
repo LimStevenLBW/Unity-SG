@@ -47,5 +47,6 @@ public class DetailsFooter : MonoBehaviour
         troops.SetText("");
         attack.SetText("");
         defense.SetText("");
+        currentDisplay = null;
     }
 }
