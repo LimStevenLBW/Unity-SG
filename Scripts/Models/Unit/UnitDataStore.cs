@@ -9,9 +9,10 @@ using UnityEngine;
  */
 public class UnitDataStore
 {
+    public UnitController prefab;
     public UnitController controller;
 
-    private Unit unitBase;
+    public Unit unitBase;
     public string unitName;
     public string faction;
     public Rank rank;
@@ -65,8 +66,8 @@ public class UnitDataStore
     public UnitDataStore(Unit unitBase)
     {
         this.unitBase = unitBase;
-        controller = unitBase.model;
-        controller.data = this; //Set controller data reference
+        prefab = unitBase.model;
+        //controller.data = this; //Set controller data reference
 
         //Set the Stamina
         Stamina = unitBase.baseStamina;
@@ -80,6 +81,7 @@ public class UnitDataStore
 
         maxTroopCount = unitBase.baseTroopCount;
         currentTroopCount = maxTroopCount;
+
         maxStamina = unitBase.baseStamina;
         currentStamina = maxStamina;
 
@@ -90,9 +92,35 @@ public class UnitDataStore
         currentCrit = unitBase.baseCrit;
         //CritBoost = baseCritBoost;
 
-        InitSkills();
+        //InitSkills();
         //movementSkill = unitBase.movementSkill;
         //movementCD = movementSkill.baseCooldown;
+    }
+
+    //Making a copy
+    public UnitDataStore(UnitDataStore data)
+    {
+        //Set the Stamina
+        Stamina = data.Stamina;
+        maxStamina = Stamina;
+        currentStamina = maxStamina;
+
+        //Stats
+        unitName = data.unitName;
+        faction = data.faction;
+        rank = data.rank;
+
+        maxTroopCount = data.maxTroopCount;
+        currentTroopCount = maxTroopCount;
+
+        maxStamina = data.Stamina;
+        currentStamina = maxStamina;
+
+        currentPower = data.currentPower;
+        currentMagic = data.currentMagic;
+        currentDefense = data.currentDefense;
+        currentSpeed = data.currentSpeed;
+        currentCrit = data.currentCrit;
     }
 
 

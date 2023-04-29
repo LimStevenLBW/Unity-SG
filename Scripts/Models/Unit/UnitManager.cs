@@ -79,7 +79,8 @@ public class UnitManager : MonoBehaviour
             wasDeployed = false;
             if (currentController == null)
             {
-                currentController = deployableUnits.Dequeue().controller;
+                UnitDataStore data = deployableUnits.Dequeue();
+                currentController = data.prefab;
 
                 if (isFriendly)
                 {
@@ -87,7 +88,7 @@ public class UnitManager : MonoBehaviour
                     {
                         if (grid.cells[j].unitController == null)
                         {
-                            AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), currentController.data, 1);
+                            AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), data, 1);
                             wasDeployed = true;
                         }
 
@@ -100,7 +101,7 @@ public class UnitManager : MonoBehaviour
                     {
                         if (grid.cells[j].unitController == null)
                         {
-                            AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), currentController.data, -1);
+                            AddUnit(Instantiate(currentController), grid.cells[j], Random.Range(0f, 360f), data, -1);
                             wasDeployed = true;
                         }
 

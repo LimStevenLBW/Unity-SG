@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class PortraitRoom : MonoBehaviour
 {
-    UnitDataStore unit;
+    UnitDataStore dataStore;
     UnitController model;
-    public void UpdatePortrait(UnitDataStore unit)
+    public void UpdatePortrait(UnitDataStore dataStore)
     {
-        if (this.unit != null) Destroy(model);
-        this.unit = unit;
-        model = Instantiate(unit.controller.prefab, transform);
+        if (this.dataStore != null) Destroy(model.gameObject);
+        this.dataStore = dataStore;
+        model = Instantiate(dataStore.prefab, transform);
         model.transform.SetParent(transform, false);
+    }
+
+    public void ClearRoom()
+    {
+        if (this.dataStore != null) Destroy(model.gameObject);
+        dataStore = null;
     }
     // Start is called before the first frame update
     void Start()
@@ -22,6 +28,9 @@ public class PortraitRoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Director.Instance.GetPhase() == "DEPLOYMENT" || Director.Instance.GetPhase() == "ENEMYDEPLOYMENT")
+        {
+            ClearRoom();
+        }
     }
 }

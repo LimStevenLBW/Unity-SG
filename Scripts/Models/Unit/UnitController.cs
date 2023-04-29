@@ -47,6 +47,7 @@ public class UnitController : MonoBehaviour
 
     bool ACTIVE = false;
 
+    private HexCell highlightedCell;
     public HexGrid Grid { get; set; }
 
 
@@ -87,6 +88,16 @@ public class UnitController : MonoBehaviour
 
             data.StopListening();
             manager.RemoveUnit(this); //problematic at the moment
+        }
+
+        //Check for any previously highlighted cells and disable them
+        if(highlightedCell)
+        {
+            if(highlightedCell != location)
+            {
+                highlightedCell.DisableHighlight(false);
+                highlightedCell = null;
+            }
         }
 
         /*
@@ -205,6 +216,7 @@ public class UnitController : MonoBehaviour
 
     public void EnableHighlight()
     {
+        highlightedCell = location;
         GetComponent<Outline>().enabled = true;
         location.EnableHighlight(Color.white, false);
     }
