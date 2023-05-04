@@ -6,7 +6,7 @@ namespace Buttons
     /**
      *  Generic behavior for clickable buttons
      */
-   internal class Button : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
+   public class Button : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
     {
         [SerializeField] internal AudioSource AudioPlayer;
         [SerializeField] internal AudioClip AudioHover;

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Glub E
   m_EditorClassIdentifier: 
   model: {fileID: 3852961436897666306, guid: f9d02f02bc94f294181df495eb0416fc, type: 3}
-  faction: 1
+  unitClass: {fileID: 11400000, guid: 083d44b7b8b199f43a2085c19f71f474, type: 2}
+  faction: {fileID: 11400000, guid: d69344b60a05286429204a02c7a2e905, type: 2}
+  special: {fileID: 0}
   unitName: Glub Duo
   bio: 
   rank: 3
@@ -38,7 +40,6 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
-  unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   skill1_ID: 200
   skill2_ID: 100
   skill3_ID: 0

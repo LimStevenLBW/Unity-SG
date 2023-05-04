@@ -4,7 +4,7 @@ using UnityEngine;
 using Buttons;
 using UnityEngine.EventSystems;
 
-class StartDeploymentButton : Button, IPointerClickHandler
+public class StartDeploymentButton : Button, IPointerClickHandler
 {
 
     /*
@@ -24,7 +24,7 @@ class StartDeploymentButton : Button, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame

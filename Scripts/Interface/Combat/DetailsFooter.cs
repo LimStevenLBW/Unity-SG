@@ -40,8 +40,10 @@ public class DetailsFooter : MonoBehaviour
 
     }
 
+
     public void ResetText()
     {
+        
         name.SetText("");
         rank.SetText("");
         troops.SetText("");

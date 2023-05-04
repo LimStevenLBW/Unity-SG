@@ -17,6 +17,7 @@ public abstract class Skill
     public float currentStaminaCost;
 
     internal GameObject effect;
+    internal GameObject projectile;
     internal UnitController controller;
     internal UnitDataStore data;
 
@@ -26,6 +27,8 @@ public abstract class Skill
     public abstract void DoSkill();
 
     public abstract void HandleAnimExtra();
+
+    public abstract void Resolve();
     public abstract bool IsAvailable();
     public abstract void Reset();
 

@@ -9,19 +9,19 @@ using UnityEngine;
 /*
  * 
  */
-public class RecoverySkill : Skill
+public class DivineRecoverySkill : Skill
 {
     float staminaResult;
 
-    public RecoverySkill()
+    public DivineRecoverySkill()
     {
         minRange = 0;
         maxRange = 0;
         effect = Resources.Load("Effects/Healing circle") as GameObject;
-        skillName = "Recovery";
-        description = "Heal your people, so they can get hurt again.";
+        skillName = "Wide Recovery";
+        description = "Who needs medicine when you have religion";
 
-        baseCooldown = 10;
+        baseCooldown = 16;
         currentCooldown = baseCooldown;
         baseStaminaCost = 0;
         currentStaminaCost = baseStaminaCost;
@@ -51,12 +51,8 @@ public class RecoverySkill : Skill
         //If we have enough stamina and if it is off cooldown
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
-          
-          //Don't bother to heal if our health is full
-          if(data.GetCurrentTroopCount() != data.GetMaxTroopCount())
-          {
-                return true;
-          }
+
+            return true;
 
         }
         return false;
@@ -79,36 +75,41 @@ public class RecoverySkill : Skill
     //Plays after the animation timing
     public override void HandleAnimExtra()
     {
-        Vector3 pos = controller.transform.position;
-        pos.y = 0;
-        controller.PlayEffect(effect, pos, 2);
+        List<UnitController> allies = controller.GetAllies();
 
-        //Calculate the damage done
-        CalculateHealing(controller.data);
-        //play sound
+        foreach(UnitController ally in allies)
+        {
+            Vector3 pos = ally.transform.position;
+            pos.y = 0;
+            if (ally.GetState() != "DEAD")
+            {
+                ally.PlayEffect(effect, pos, 2);
+                CalculateHealing(ally);
+            }
+        }
+
     }
 
-    public void CalculateHealing(UnitDataStore thisGuy)
+    public void CalculateHealing(UnitController ally)
     {
-       
         Color color = Color.white;
-        Vector3 position = controller.transform.position;
+        Vector3 position = ally.transform.position;
         position.y += 10;
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (thisGuy.GetCurrentTroopCount() / 5);
-        float upperBound = (thisGuy.GetCurrentTroopCount() / 4);
+        float lowerBound = (data.GetCurrentTroopCount() / 3);
+        float upperBound = (data.GetCurrentTroopCount());
 
 
         //Setup magic modifier
-        float magicModifier = (thisGuy.GetCurrentMagic()) + (thisGuy.GetCurrentMagic() * .05f);
+        float magicModifier = (data.GetCurrentMagic()) + (data.GetCurrentMagic() * .15f);
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
         int result = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
-        data.SetCurrentTroopCount(data.GetCurrentTroopCount() + result);
+        ally.data.SetCurrentTroopCount(data.GetCurrentTroopCount() + result);
 
         //Display Data
         DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
@@ -141,7 +142,7 @@ public class RecoverySkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
+    public override void GetController(UnitController ally)
     {
         this.controller = controller;
     }
@@ -149,5 +150,9 @@ public class RecoverySkill : Skill
     public override bool IsSkillRunning()
     {
         return isRunning;
+    }
+    public override void Resolve()
+    {
+
     }
 }

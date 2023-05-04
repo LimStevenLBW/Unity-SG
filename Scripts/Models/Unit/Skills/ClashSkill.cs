@@ -23,7 +23,7 @@ public class ClashSkill : Skill
         skillName = "Clash";
         description = "A simple infantry attack. Much more effective with number advantage";
 
-        baseCooldown = 2;
+        baseCooldown = 3;
         currentCooldown = baseCooldown;
         baseStaminaCost = 0;
         currentStaminaCost = baseStaminaCost;
@@ -111,9 +111,8 @@ public class ClashSkill : Skill
         lowerBound += lowerModifier;
         upperBound += upperModifier;
 
-        //int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+        int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
-        int damageData = 1;
         if (damageData < 0) damageData = 0; //We don't go below zero
         enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
 
@@ -157,5 +156,9 @@ public class ClashSkill : Skill
     public override bool IsSkillRunning()
     {
         return isRunning;
+    }
+    public override void Resolve()
+    {
+
     }
 }

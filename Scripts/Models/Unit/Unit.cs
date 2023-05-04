@@ -9,7 +9,9 @@ using UnityEngine;
 public class Unit : ScriptableObject
 {
     public UnitController model;
-    public string faction;
+    public UnitClass unitClass;
+    public UnitTrait faction;
+    public UnitTrait special;
 
     //Identity
     public string unitName = "";
@@ -58,7 +60,6 @@ public class Unit : ScriptableObject
     //41-80 ARE ENEMY SPACES, 80 is reserved for captain
     public int[] positionSpawnPref = new int[2];
     //Skills
-    public UnitClass unitClass;
  
     public int skill1_ID;
     public int skill2_ID;

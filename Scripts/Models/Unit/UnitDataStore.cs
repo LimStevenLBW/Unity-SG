@@ -14,7 +14,11 @@ public class UnitDataStore
 
     public Unit unitBase;
     public string unitName;
-    public string faction;
+
+    public UnitClass unitClass;
+    public UnitTrait faction;
+    public UnitTrait special;
+
     public Rank rank;
 
     private int Level;
@@ -67,6 +71,10 @@ public class UnitDataStore
     {
         this.unitBase = unitBase;
         prefab = unitBase.model;
+
+        unitClass = unitBase.unitClass;
+        faction = unitBase.faction;
+        special = unitBase.special;
         //controller.data = this; //Set controller data reference
 
         //Set the Stamina
@@ -76,7 +84,6 @@ public class UnitDataStore
 
         //Stats
         unitName = unitBase.unitName;
-        faction = unitBase.faction;
         rank = unitBase.rank;
 
         maxTroopCount = unitBase.baseTroopCount;
@@ -95,6 +102,7 @@ public class UnitDataStore
         //InitSkills();
         //movementSkill = unitBase.movementSkill;
         //movementCD = movementSkill.baseCooldown;
+
     }
 
     //Making a copy
@@ -153,10 +161,16 @@ public class UnitDataStore
     {
         switch (ID)
         {
-            case 10: return new ChargeSkill();
             case 1: return new MovementAdvanceSkill();
+            case 2: return new MovementSlowWalkSkill();
+            case 3: return new MoveIntoRangeSkill();
             case 100: return new ClashSkill();
-            case 200: return new RecoverySkill();
+            case 101: return new FistsOfFurySkill();
+            case 102: return new VolleySkill();
+            case 200: return new SelfRecoverySkill();
+            case 201: return new SingleRecoverySkill();
+            case 202: return new WideRecoverySkill();
+            case 203: return new DivineRecoverySkill();
             case 300: return new ExplosionSkill();
         }
         return null;

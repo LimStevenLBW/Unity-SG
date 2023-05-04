@@ -113,5 +113,8 @@ public class ChargeSkill : Skill
     {
         return isRunning;
     }
+    public override void Resolve()
+    {
 
+    }
 }

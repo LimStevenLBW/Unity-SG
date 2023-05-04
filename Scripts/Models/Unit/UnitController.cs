@@ -49,7 +49,7 @@ public class UnitController : MonoBehaviour
 
     private HexCell highlightedCell;
     public HexGrid Grid { get; set; }
-
+    public int currentRange = 20; //If greater than skill range requirement, cant do the skill yet
 
     // Called when a controller is instantiated by the manager
     public void Initialize(UnitManager manager, MicroBarFollow bars)
@@ -138,15 +138,16 @@ public class UnitController : MonoBehaviour
 
     void CalculateNextAction()
     {
-        if(data.skill1 != null && data.skill1.IsAvailable())
+        if (data.skill1 != null && data.skill1.IsAvailable())
         {
             state = State.ACTING;
-            data.skill1.DoSkill(); 
+            data.skill1.DoSkill();
         }
         else if (data.skill2 != null && data.skill2.IsAvailable())
         {
             state = State.ACTING;
             data.skill2.DoSkill();
+            
         }
         else if (data.skill3 != null && data.skill3.IsAvailable())
         {
@@ -168,7 +169,7 @@ public class UnitController : MonoBehaviour
                 state = State.MOVING;
                 data.movementSkill.DoSkill();
                 manager.PATHFINDING_IN_USE = false;
-           }
+            }
         }
 
     }
@@ -411,6 +412,7 @@ public class UnitController : MonoBehaviour
      */
     IEnumerator TravelPath(Skill movementSkill)
     {
+        animator.SetBool("isWalking", true);
         Vector3 a, b, c = pathToTravel[0].Position;
         transform.localPosition = c;
         yield return LookAt(pathToTravel[1].Position);
@@ -457,6 +459,7 @@ public class UnitController : MonoBehaviour
 
         while (movementSkill.IsSkillRunning() == true) yield return null;
 
+        animator.SetBool("isWalking", false);
         SetState("IDLE"); //Reset the state
     }
 
@@ -495,5 +498,9 @@ public class UnitController : MonoBehaviour
     public List<UnitController> GetEnemies()
     {
         return myEnemies;
+    }
+    public UnitManager GetManager()
+    {
+        return manager;
     }
 }

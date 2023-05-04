@@ -56,14 +56,14 @@ public class Pathfinder
      * When a path is found, we have to remember it. 
      * That way, we can clean it up next time. So keep track of the end points and whether a path exists between them.
      */
-    public void FindPath(HexCell fromCell, HexCell toCell, UnitController unit)
+    public void FindPath(HexCell fromCell, HexCell toCell, UnitController unit, bool skipValidation)
     {
         ClearPath(); //Clear any known paths
         currentPathFrom = fromCell;
         currentPathTo = toCell;
 
         //Returns true if there is an available path
-        currentPathExists = Search(fromCell, toCell, unit);
+        currentPathExists = Search(fromCell, toCell, unit, skipValidation);
     }
 
     public void ClearPath()
@@ -129,11 +129,11 @@ public class Pathfinder
     }
 
 
-    public void DoPathfinding(UnitController controller, HexCell targetCell)
+    public void DoPathfinding(UnitController controller, HexCell targetCell, bool skipValidation)
     {
         if (targetCell && controller.IsValidDestination(targetCell))
         {
-            FindPath(controller.Location, targetCell, controller);
+            FindPath(controller.Location, targetCell, controller, skipValidation);
         }
         else
         {
@@ -265,7 +265,7 @@ public class Pathfinder
      * Searches for the best route to a target cell.
      * Establishes a link between the cells along the route and returns true if the path exists
      */
-    bool Search(HexCell fromCell, HexCell toCell, UnitController unit)
+    bool Search(HexCell fromCell, HexCell toCell, UnitController unit, bool skipValidation)
     {
         int speed = unit.Speed;
         searchFrontierPhase += 2;
@@ -472,7 +472,7 @@ public class Pathfinder
                     alreadyChecked.Add(neighborCellToEnemy);
 
                     //Find this unit's route to that selected enemy controller
-                    FindPath(controller.Location, neighborCellToEnemy, controller);
+                    FindPath(controller.Location, neighborCellToEnemy, controller, false);
 
                     if (currentPathExists && neighborCellToEnemy.Distance < shortestDistance)
                     {
@@ -490,7 +490,7 @@ public class Pathfinder
         //If we got a valid target
         if (targetCell && shortestDistance > 0)
         {
-            FindPath(controller.Location, targetCell, controller);
+            FindPath(controller.Location, targetCell, controller, false);
             return shortestDistance;
         }
         else
@@ -530,6 +530,59 @@ public class Pathfinder
             if (cell && controller.IsValidDestination(cell)) return false; //There is an empty space
         }
         return true;
+    }
+
+    public UnitController GetNearestEnemy()
+    {
+        UnitController adjacentEnemy = GetAdjacentEnemy();
+        if (adjacentEnemy != null) return adjacentEnemy;
+
+        int shortestDistance = 99999;
+        HexCell targetCell = null;
+        List<HexCell> alreadyChecked = new List<HexCell>(); //Cells that were already checked
+        List<UnitController> enemies = controller.GetEnemies();
+
+        //Let's go through our list of controllers
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            UnitController possibleEnemy = enemies[i];
+
+            //if (controller == possibleEnemy) continue;  //If they're the same unit
+            if (controller.teamNum == possibleEnemy.teamNum) continue; //if they have the same team
+            if (possibleEnemy.GetState() == "DEAD") continue; //if they are dead, skip them
+          
+            if (possibleEnemy.Location)
+            {
+                if (alreadyChecked.Contains(possibleEnemy.Location)) continue;
+
+                alreadyChecked.Add(possibleEnemy.Location);
+
+                //Find this unit's route to that selected enemy controller
+                FindPath(controller.Location, possibleEnemy.Location, controller, true);
+
+                if (possibleEnemy.Location.Distance < shortestDistance)
+                {
+                    shortestDistance = possibleEnemy.Location.Distance;
+                    targetCell = possibleEnemy.Location;
+
+                    //There is an enemy right next to our unit! We don't have to move
+                    if (shortestDistance <= 0) break;
+                }
+            }
+
+        }
+
+       // Debug.Log(targetCell);
+      //  Debug.Log(shortestDistance);
+        //If we got a valid target
+        if (targetCell && shortestDistance > 0)
+        {
+            return targetCell.unitController;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public UnitController GetAdjacentEnemy()

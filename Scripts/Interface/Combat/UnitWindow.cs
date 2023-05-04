@@ -1,6 +1,7 @@
 using Microlight.MicroBar;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitWindow : MonoBehaviour
 {
@@ -29,6 +30,11 @@ public class UnitWindow : MonoBehaviour
     [SerializeField] UnitSkillDisplay _skill2;
     [SerializeField] UnitSkillDisplay _skill3;
     [SerializeField] UnitSkillDisplay _skill4;
+
+    [SerializeField] Image unitClassImage;
+    [SerializeField] Image unitFactionImage;
+    [SerializeField] Image unitSpecialImage;
+    [SerializeField] TextMeshProUGUI traitsText;
 
     public PortraitCamera portraitCamera;
 
@@ -83,8 +89,36 @@ public class UnitWindow : MonoBehaviour
         speedText.SetText("" + data.GetCurrentSpeed());
         critText.SetText("" + data.GetCurrentCrit() + "%");
 
+        string traits = "";
+
+        if (data.faction) {
+            unitFactionImage.sprite = data.faction.icon;
+            traits += (" " + data.faction.name);
+        }
+        else
+        {
+            unitFactionImage.gameObject.SetActive(false);
+        }
+        if (data.special) {
+            unitSpecialImage.sprite = data.special.icon;
+            traits += (" " + data.special.name);
+        }
+        else
+        {
+            unitSpecialImage.gameObject.SetActive(false);
+        }
+        if (data.unitClass)
+        {
+            unitClassImage.sprite = data.unitClass.icon;
+            traits += (" " + data.unitClass.name);
+        }
+        else
+        {
+            unitClassImage.gameObject.SetActive(false);
+        }
+        traitsText.SetText(traits);
         // Data gets skill information late, so we initialize when it is available.
-        
+
     }
 
     public void UpdateBarValues(UnitDataStore data)

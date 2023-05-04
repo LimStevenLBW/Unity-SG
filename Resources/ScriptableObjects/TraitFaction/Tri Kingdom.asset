@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6d06e37ea54b904da46c9ecc0cf821d, type: 3}
-  m_Name: Infantry
+  m_Script: {fileID: 11500000, guid: ae07cbf51307248448a2cadad04a9cec, type: 3}
+  m_Name: Tri Kingdom
   m_EditorClassIdentifier: 
-  className: Infantry
+  traitName: Tri Kingdom
   description: 
-  movementSkill_ID: 1
+  icon: {fileID: 21300000, guid: 6dd4298ac0b3ce14fa0c2519da266238, type: 3}

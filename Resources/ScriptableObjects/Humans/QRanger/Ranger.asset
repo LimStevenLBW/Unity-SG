@@ -13,15 +13,17 @@ MonoBehaviour:
   m_Name: Ranger
   m_EditorClassIdentifier: 
   model: {fileID: 4548413487223015017, guid: 02b662c136c5e3b4a9dbc67ced8384bc, type: 3}
-  faction: 1
+  unitClass: {fileID: 11400000, guid: 759bd5bc9f0f58041974945393c9e58e, type: 2}
+  faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
+  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Ranger
   bio: 
-  rank: 3
+  rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 9
+  basePower: 15
   powerGrowthRate: 1
-  baseDefense: 2
+  baseDefense: 5
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -30,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 100
+  baseTroopCount: 300
   leadership: 1
   engineering: 1
   magic: 1
@@ -38,8 +40,7 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
-  unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
-  skill1_ID: 200
-  skill2_ID: 100
+  skill1_ID: 102
+  skill2_ID: 0
   skill3_ID: 0
   skill4_ID: 0

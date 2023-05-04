@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Monkroose
   m_EditorClassIdentifier: 
   model: {fileID: 1517585547004432040, guid: 23ac0870e685eea418a6f7326a310b42, type: 3}
-  faction: 1
+  unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
+  faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
+  special: {fileID: 0}
   unitName: Monkroose
   bio: 
   rank: 4
@@ -38,7 +40,6 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
-  unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   skill1_ID: 200
   skill2_ID: 100
   skill3_ID: 0

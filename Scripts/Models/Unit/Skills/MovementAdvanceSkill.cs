@@ -11,8 +11,8 @@ public class MovementAdvanceSkill : Skill
     
     public MovementAdvanceSkill()
     {
-        skillName = "Advance";
-        description = "Fire within range";
+        skillName = "Movement Advance";
+        description = "Get close";
 
         baseCooldown = 1;
         currentCooldown = baseCooldown;
@@ -57,7 +57,7 @@ public class MovementAdvanceSkill : Skill
         
         //First, find the distance of the path to the nearest enemy
         int distance = controller.path.FindPathToNearestEnemy();
-
+        controller.currentRange = distance;
         //If we need to move
         if (distance > 0)
         {
@@ -78,6 +78,9 @@ public class MovementAdvanceSkill : Skill
         }
         else
         {
+            ResetCD();
+            controller.path.ClearPath();
+
             //Movement failed, cancel
             controller.SetState("IDLE");
         }
@@ -121,5 +124,9 @@ public class MovementAdvanceSkill : Skill
     public override bool IsSkillRunning()
     {
         return isRunning;
+    }
+    public override void Resolve()
+    {
+
     }
 }

@@ -13,14 +13,12 @@ MonoBehaviour:
   m_Name: PlayerDeck Test
   m_EditorClassIdentifier: 
   unitList:
-  - {fileID: 11400000, guid: 49f9afedde14fd34a9c1844c40b0b3f4, type: 2}
-  - {fileID: 11400000, guid: 7e5690b406f88e04cab4d5f3ffdfbe74, type: 2}
-  - {fileID: 11400000, guid: 6423bdf458cf7d24496a883b453bc65f, type: 2}
-  - {fileID: 11400000, guid: 0dc1cc96491cba84cb84a856b79e636b, type: 2}
-  - {fileID: 11400000, guid: e6ce764b28fa78c4694056a996f68f1d, type: 2}
-  - {fileID: 11400000, guid: 38404028541f17c49a05ef881b302e36, type: 2}
-  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
-  - {fileID: 11400000, guid: dbbf7e84771d816409dba08b85d25e2d, type: 2}
-  - {fileID: 11400000, guid: e78ea6b6e14f53b40b7d16da389b8ca2, type: 2}
-  - {fileID: 11400000, guid: 6f21fe69c17070c429c66b3481bbfba7, type: 2}
+  - {fileID: 11400000, guid: 556f2e22a81d28842ad088940c2fb545, type: 2}
+  - {fileID: 11400000, guid: 556f2e22a81d28842ad088940c2fb545, type: 2}
+  - {fileID: 11400000, guid: d5389941fac985b4d9cec4434effd1ac, type: 2}
+  - {fileID: 11400000, guid: 831330ba475c71440add4d6b272d27e3, type: 2}
+  - {fileID: 11400000, guid: 83dc065c3e0ea6549a1c79bc36bf4637, type: 2}
+  - {fileID: 11400000, guid: d5389941fac985b4d9cec4434effd1ac, type: 2}
+  - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
+  - {fileID: 11400000, guid: d5389941fac985b4d9cec4434effd1ac, type: 2}
   captain: {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}

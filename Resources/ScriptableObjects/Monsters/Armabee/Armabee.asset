@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Armabee
   m_EditorClassIdentifier: 
   model: {fileID: 3483315159075046299, guid: 74402b93a7e0b0745903a785a1b74d5a, type: 3}
-  faction: 1
+  unitClass: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
+  faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
+  special: {fileID: 0}
   unitName: Armabee
   bio: 
   rank: 5
@@ -38,7 +40,6 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
-  unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   skill1_ID: 200
   skill2_ID: 100
   skill3_ID: 0

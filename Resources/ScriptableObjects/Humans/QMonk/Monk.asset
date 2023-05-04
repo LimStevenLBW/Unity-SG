@@ -13,15 +13,17 @@ MonoBehaviour:
   m_Name: Monk
   m_EditorClassIdentifier: 
   model: {fileID: 4580293783705368720, guid: 66a19d3b3711bb847b82c854d03159f8, type: 3}
-  faction: 1
+  unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
+  faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
+  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Monk
   bio: 
   rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 12
+  basePower: 20
   powerGrowthRate: 1
-  baseDefense: 8
+  baseDefense: 15
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -30,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 6
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 100
+  baseTroopCount: 400
   leadership: 1
   engineering: 1
   magic: 1
@@ -38,8 +40,7 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
-  unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
-  skill1_ID: 200
+  skill1_ID: 101
   skill2_ID: 100
   skill3_ID: 0
   skill4_ID: 0

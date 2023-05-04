@@ -40,7 +40,10 @@ public class Director : MonoBehaviour
     public UnitManager unitManager;
     public PlayerHandPanel playerHand;
     public PlayerHandPanel enemyHand;
+    public TopLeftPrompt topLeftPrompt;
     public CameraControl playerCamera;
+    public StartDeploymentButton startDeploymentButton;
+    public Timer timer;
 
     [SerializeField] private AudioSource AudioPlayer;
     [SerializeField] private AudioClip AudioHover;
@@ -115,9 +118,10 @@ public class Director : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         //Player Card Selection phase
-        phase = Phase.CARDSELECT;
+        
         stageIntro.gameObject.SetActive(false);
         playerHand.gameObject.SetActive(true);
+        SetPhase("CARDSELECT");
         playerHand.DrawStartingHand();
         playerCamera.UnFocus();
         //End intro, start game
@@ -141,12 +145,19 @@ public class Director : MonoBehaviour
     public void SetPhase(string phase)
     {
         if (phase == "INTRO") this.phase = Phase.INTRO;
-        if (phase == "CARDSELECT") this.phase = Phase.CARDSELECT;
+        if (phase == "CARDSELECT")
+        {
+            this.phase = Phase.CARDSELECT;
+            topLeftPrompt.DisplayPrompt();
+            startDeploymentButton.gameObject.SetActive(true);
+        }
         if (phase == "DEPLOYMENT")
         {
             this.phase = Phase.DEPLOYMENT;
+            topLeftPrompt.ResetText();
             playerCamera.UnFocus();
             playerHand.gameObject.SetActive(false);
+            startDeploymentButton.gameObject.SetActive(false);
             selectedCardsCount = 0; //reset order
 
             //Start Unit Deployment
@@ -181,18 +192,22 @@ public class Director : MonoBehaviour
         if (phase == "COMBAT")
         {
             this.phase = Phase.COMBAT;
+            timer.StartTimer();
             OnCombatStarted?.Invoke();
 
         }
         if (phase == "END") this.phase = Phase.END;
     }
 
-    public int GetCardSelectOrder()
+    public int IncCardSelectOrder()
     {
         selectedCardsCount++;
         return selectedCardsCount;
     }
-
+    public int GetCardSelectOrder()
+    {
+        return selectedCardsCount;
+    }
     public void NotifyCardDeselected(int ID)
     {
         selectedCardsCount--;

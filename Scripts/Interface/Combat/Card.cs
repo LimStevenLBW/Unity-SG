@@ -37,7 +37,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if(Director.Instance.GetPhase() == "CARDSELECT")
         {
 
-            if (!isSelected)
+            if (!isSelected && Director.Instance.GetCardSelectOrder() < 3)
             {
                 Select();
             }
@@ -53,7 +53,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void Select()
     {
         AudioPlayer.PlayOneShot(AudioSelect); //Always play selected sound
-        cardSelectOrder = Director.Instance.GetCardSelectOrder();
+        cardSelectOrder = Director.Instance.IncCardSelectOrder();
         isSelected = true;
 
         cardSelectOrderDisplay.gameObject.SetActive(true);

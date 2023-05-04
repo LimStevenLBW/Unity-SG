@@ -178,4 +178,8 @@ public class ExplosionSkill : Skill
     {
         return isRunning;
     }
+    public override void Resolve()
+    {
+
+    }
 }
