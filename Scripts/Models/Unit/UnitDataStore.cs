@@ -172,6 +172,7 @@ public class UnitDataStore
             case 202: return new WideRecoverySkill();
             case 203: return new DivineRecoverySkill();
             case 300: return new ExplosionSkill();
+            case 301: return new ElectroBoltSkill();
         }
         return null;
     }

@@ -12,7 +12,7 @@ public class PlayerHandPanel : MonoBehaviour
     public DeckDataStore myDeck;
     public Card[] cards = new Card[5];
     public DeckCountDisplay deckCounter;
-
+    public int selectedAmount = 5;
 
     public void Init(DeckDataStore deck)
     {
@@ -98,9 +98,9 @@ public class PlayerHandPanel : MonoBehaviour
         yield return new WaitForSeconds(1.1f);
         int randomChoice;
         int selectedCount = 0;
-        while (selectedCount < 3)
+        while (selectedCount < selectedAmount)
         {
-            randomChoice = Random.Range(1, 5);
+            randomChoice = Random.Range(1, 6);
             foreach (Card c in cards)
             {
                 if (c.isSelected) continue; //We skip already selected cards

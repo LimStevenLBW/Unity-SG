@@ -12,7 +12,7 @@ public class UnitController : MonoBehaviour
     //Debugging
     public TextMeshProUGUI statusText;
     public int teamNum;
-    enum State
+    public enum State
     {
         IDLE,
         ACTING,
@@ -32,7 +32,7 @@ public class UnitController : MonoBehaviour
     private UnitManager manager;
     private Animator animator;
 
-    private State state = State.IDLE;
+    public State state = State.IDLE;
 
     private const int MOVECOST = 1;
     private const int MOVECOST_ELEVATION = 5;
@@ -49,7 +49,6 @@ public class UnitController : MonoBehaviour
 
     private HexCell highlightedCell;
     public HexGrid Grid { get; set; }
-    public int currentRange = 20; //If greater than skill range requirement, cant do the skill yet
 
     // Called when a controller is instantiated by the manager
     public void Initialize(UnitManager manager, MicroBarFollow bars)
@@ -138,6 +137,7 @@ public class UnitController : MonoBehaviour
 
     void CalculateNextAction()
     {
+
         if (data.skill1 != null && data.skill1.IsAvailable())
         {
             state = State.ACTING;

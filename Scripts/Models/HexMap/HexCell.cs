@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.IO;
 using Assets.Scripts.Models.Unit;
 using Assets.Scripts.Models.HexMap.HexHelpers;
+using System;
 
 public class HexCell : MonoBehaviour
 {
@@ -42,6 +43,39 @@ public class HexCell : MonoBehaviour
 
     bool explored;
 
+    //Custom coordinates using cell ID as a basis. Disclaimer, this is not related to hexcoordinates.
+    /* No longer used as we can apply hexcoordinates to distance calculations
+    private int x;
+    public int X
+    {
+        get { return x; }
+        private set { x = value; }
+    }
+
+    private int y;
+    public int Y
+    {
+        get { return y; }
+        private set { y = value; }
+    }
+
+    public void SetCoordinates()
+    {
+        //Set X coordinate
+        double val = cell_ID / 10f;
+       // Debug.Log(val / 10 % 10);
+        val = (val - Math.Truncate(val)) * 10;
+
+        //Apply corrections
+        if (val > 0 && val < 1 ) val = 1;
+        if (val == 0) val = 10;
+        x = (int) val;
+
+        //Set Y coordinate
+        val = (cell_ID - 0.001f) / 10f + 1;
+        y = (int) val;
+    }
+    */
     public bool IsExplored
     {
         get

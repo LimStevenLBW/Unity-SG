@@ -213,4 +213,8 @@ public class Director : MonoBehaviour
         selectedCardsCount--;
         OnCardDeselected?.Invoke(ID);
     }
+    public void PlaySound(AudioClip clip)
+    {
+        AudioPlayer.PlayOneShot(clip);
+    }
 }

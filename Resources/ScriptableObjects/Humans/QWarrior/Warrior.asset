@@ -15,15 +15,15 @@ MonoBehaviour:
   model: {fileID: 7297535323292551013, guid: 7ebeaac46fc22194088aa35f0c2df802, type: 3}
   unitClass: {fileID: 11400000, guid: 0de1d24b46b43db4ebe35141c2d79e6d, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Warrior
   bio: 
   rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 5
+  basePower: 10
   powerGrowthRate: 1
-  baseDefense: 8
+  baseDefense: 24
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 100
+  baseTroopCount: 500
   leadership: 1
   engineering: 1
   magic: 1
@@ -40,7 +40,7 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
-  skill1_ID: 200
-  skill2_ID: 100
+  skill1_ID: 100
+  skill2_ID: 0
   skill3_ID: 0
   skill4_ID: 0

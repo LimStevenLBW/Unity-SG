@@ -20,7 +20,7 @@ public class Timer : MonoBehaviour
 
     public void StartTimer()
     {
-        clock = 30;
+        clock = 99;
         clockText.SetText(clock.ToString());
 
         StartCoroutine(Tick());

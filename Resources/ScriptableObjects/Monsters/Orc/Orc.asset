@@ -15,15 +15,15 @@ MonoBehaviour:
   model: {fileID: 5597690903317559734, guid: c841c17965ef0ab4085fba22a6842772, type: 3}
   unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
   faction: {fileID: 11400000, guid: 9a1a2a4c50757714ba13fe7545c8a911, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Orc Raiders
   bio: 
   rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 8
+  basePower: 17
   powerGrowthRate: 1
-  baseDefense: 3
+  baseDefense: 8
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 0000000000000000
-  skill1_ID: 200
-  skill2_ID: 100
+  skill1_ID: 100
+  skill2_ID: 0
   skill3_ID: 0
   skill4_ID: 0

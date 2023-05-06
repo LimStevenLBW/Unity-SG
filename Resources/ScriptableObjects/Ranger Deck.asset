@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6c84092c7e85ed4ba551363560a36df, type: 3}
+  m_Name: Ranger Deck
+  m_EditorClassIdentifier: 
+  unitList:
+  - {fileID: 11400000, guid: 556f2e22a81d28842ad088940c2fb545, type: 2}
+  - {fileID: 11400000, guid: 556f2e22a81d28842ad088940c2fb545, type: 2}
+  - {fileID: 11400000, guid: d5389941fac985b4d9cec4434effd1ac, type: 2}
+  - {fileID: 11400000, guid: 831330ba475c71440add4d6b272d27e3, type: 2}
+  - {fileID: 11400000, guid: 83dc065c3e0ea6549a1c79bc36bf4637, type: 2}
+  - {fileID: 11400000, guid: d5389941fac985b4d9cec4434effd1ac, type: 2}
+  - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
+  - {fileID: 11400000, guid: d5389941fac985b4d9cec4434effd1ac, type: 2}
+  captain: {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}

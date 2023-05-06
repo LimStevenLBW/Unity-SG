@@ -145,13 +145,17 @@ public class HexGrid : MonoBehaviour
         //Set the ID
         cell_ID++;
         cell.cell_ID = cell_ID;
-
+        //cell.SetCoordinates();
         //Cell 1 is the player commander cell
         //Cell 80 is the final cell and is the enemy commander cell
-        //Cells 1-10 comprise player backrow
-        //Cells 31-40 comprise player frontrow
-        //Cells 41-50 comprise enemy frontrow
+
         //Cells 71-80 comprise enemy backrow
+        //Cells 41-50 comprise enemy frontrow
+
+        //Cells 31-40 comprise player frontrow
+        //Cells 1-10 comprise player backrow
+
+
         CreateLabel(cell, position);
 
         cell.Elevation = 0;
@@ -210,12 +214,16 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    /*
+     * Creates the label to be displayed on a hexcell
+     */
     void CreateLabel(HexCell cell, Vector3 position)
     {
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
         //label.text = cell.coordinates.ToStringOnSeparateLines(); //Display Cell Coordinates
-        label.text = cell.cell_ID.ToString();
+        //label.text = cell.cell_ID.ToString();
+        //label.text = cell.X + ", " + cell.Y;
         cell.uiRect = label.rectTransform;
     }
 
