@@ -10,8 +10,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public bool isComparingByOrder = true; //When set to true, sort methods will compare this object by cardSelectOrder, other it will use cardValue
     public bool isSelected = false;
     public int cardSelectOrder = 0;
-    private int cardValue = 0; //How much this card will be valued by the cpu to play
-
+   // private int cardValue = 0; //How much this card will be valued by the cpu to play
+    private int numberOfSelectable = 5;
     public DetailsFooter footer;
     public UnitDataStore unit;
     public PortraitRoom portraitRoom;
@@ -37,7 +37,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if(Director.Instance.GetPhase() == "CARDSELECT")
         {
 
-            if (!isSelected && Director.Instance.GetCardSelectOrder() < 3)
+            if (!isSelected && Director.Instance.GetCardSelectOrder() < numberOfSelectable)
             {
                 Select();
             }

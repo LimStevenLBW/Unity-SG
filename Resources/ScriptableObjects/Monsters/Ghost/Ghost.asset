@@ -21,11 +21,11 @@ MonoBehaviour:
   rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 2
+  basePower: 4
   powerGrowthRate: 1
-  baseDefense: 24
+  baseDefense: 44
   defenseGrowthRate: 1
-  baseMagic: 22
+  baseMagic: 44
   magicGrowthRate: 0
   baseStamina: 100
   staminaGrowthRate: 1

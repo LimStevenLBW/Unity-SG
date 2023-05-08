@@ -14,12 +14,13 @@ public class FistsOfFurySkill : Skill
 {
     float staminaResult;
     UnitController enemyTarget;
-
+    private AudioClip hitSFX;
     public FistsOfFurySkill()
     {
         maxRange = 1;
         minRange = 1;
         effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
+        hitSFX = (AudioClip)Resources.Load("Sounds/undertale/impact big");
         skillName = "Clash";
         description = "ATATATATATATMUDADADADADAORARARARARA";
 
@@ -83,6 +84,7 @@ public class FistsOfFurySkill : Skill
 
         //Calculate the damage done
         CalculateDamage(controller.data, enemyTarget.data);
+        Director.Instance.PlaySound(hitSFX);
         //play sound
     }
 
@@ -92,28 +94,29 @@ public class FistsOfFurySkill : Skill
         {
             Color color = Color.white;
             Vector3 position = enemyTarget.transform.position;
-            position.y += 10;
-            position.x += (float)0.5;
+            int yRandom = UnityEngine.Random.Range(7, 12);
+            float xRandom = UnityEngine.Random.Range(-0.5f, 1);
+            position.y += yRandom;
+            position.x += xRandom;
+
+            //Setup power modifier
+            float powerModifier = data.GetCurrentPower() * 1.5f;
 
             //Base damage is based on max troop count, should help ensure a stable damage range
-            float lowerBound = (thisGuy.GetMaxTroopCount() / 20);
+            float lowerBound = (thisGuy.GetMaxTroopCount() / 30);
             float upperBound = (thisGuy.GetMaxTroopCount() / 15);
 
             //Setup base count modifier, a small debuff or buff based on the current health comparison
-            float baseModifier = (thisGuy.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
+            float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
 
-            //Apply Base Modifier
-            lowerBound += baseModifier;
-            upperBound += baseModifier;
-
-            //Apply Power vs Defense Modifiers
-            float lowerModifier = (thisGuy.GetCurrentPower()*1.5f - enemy.GetCurrentDefense()) * lowerBound * 0.1f;
-            float upperModifier = (thisGuy.GetCurrentPower()*1.5f - enemy.GetCurrentDefense()) * upperBound * 0.1f;
-
-            lowerBound += lowerModifier;
-            upperBound += upperModifier;
+            lowerBound = lowerBound + powerModifier + tcCompareMult;
+            upperBound = upperBound + powerModifier + tcCompareMult;
 
             int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+
+            //Apply Defense Reductions
+            float defValueReduction = (enemy.GetCurrentDefense() / 200) + data.GetBaseDefReduction();
+            damageData -= (int)(damageData * defValueReduction);
 
             if (damageData < 0) damageData = 0; //We don't go below zero
             enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
@@ -152,11 +155,6 @@ public class FistsOfFurySkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -164,5 +162,10 @@ public class FistsOfFurySkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

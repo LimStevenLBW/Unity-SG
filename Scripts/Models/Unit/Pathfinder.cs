@@ -540,7 +540,7 @@ public class Pathfinder
         UnitController adjacentEnemy = GetAdjacentEnemy();
         if (adjacentEnemy != null)
         {
-            distanceToNearestEnemy = 0;
+            distanceToNearestEnemy = 1;
             return adjacentEnemy;
         }
 
@@ -562,61 +562,48 @@ public class Pathfinder
         return target;
     }
 
-    /*
-    public UnitController GetNearestEnemy()
+    public int EscapeFrom(UnitController enemy)
     {
-        UnitController adjacentEnemy = GetAdjacentEnemy();
-        if (adjacentEnemy != null) return adjacentEnemy;
+        HexCell myLocation = controller.Location;
+        //int enemyLocationID = enemy.Location.cell_ID;
 
-        int shortestDistance = 99999;
-        HexCell targetCell = null;
-        List<HexCell> alreadyChecked = new List<HexCell>(); //Cells that were already checked
-        List<UnitController> enemies = controller.GetEnemies();
-
-        //Let's go through our list of controllers
-        for (int i = 0; i < enemies.Count; i++)
+        HexCell target = null;
+        foreach(HexCell n in myLocation.neighbors)
         {
-            UnitController possibleEnemy = enemies[i];
-
-            //if (controller == possibleEnemy) continue;  //If they're the same unit
-            if (controller.teamNum == possibleEnemy.teamNum) continue; //if they have the same team
-            if (possibleEnemy.GetState() == "DEAD") continue; //if they are dead, skip them
-          
-            if (possibleEnemy.Location)
+            if (n == null) continue;
+            foreach (HexCell n2 in myLocation.neighbors)
             {
-                if (alreadyChecked.Contains(possibleEnemy.Location)) continue;
-
-                alreadyChecked.Add(possibleEnemy.Location);
-
-                //Find this unit's route to that selected enemy controller
-                FindPath(controller.Location, possibleEnemy.Location, controller, true);
-
-                if (possibleEnemy.Location.Distance < shortestDistance)
+                if (n2 == null) continue;
+                foreach (HexCell targetLocation in n.neighbors)
                 {
-                    shortestDistance = possibleEnemy.Location.Distance;
-                    targetCell = possibleEnemy.Location;
+                    if (targetLocation == null) continue;
+                    if (targetLocation.unitController != null) continue; //skip if there is a controller there
 
-                    //There is an enemy right next to our unit! We don't have to move
-                    if (shortestDistance <= 0) break;
+                    target = targetLocation; //Set target location
+
+                    foreach (HexCell n3 in targetLocation.neighbors)
+                    {
+                        if (n3 == null) continue;
+                        if (n3.unitController != null && n3.unitController.teamNum != controller.teamNum)
+                        {
+                            target = null; //reset and check the next target
+                            break; //Not suitable target location, there is an enemy there
+                        }
+                    }
                 }
             }
-
+            if (target != null) break; //Found a target
         }
 
-        Debug.Log(controller.data.GetName() + ": " + shortestDistance);
-        Debug.Log(controller.data.GetName() + ": " + targetCell);
-        //If we got a valid target
-        if (targetCell && shortestDistance > 0)
+        if (target != null)
         {
-            return targetCell.unitController;
+            FindPath(controller.Location, target, controller);
+            if(currentPathExists) return target.Distance;
         }
-        
-else
-        {
-            return null;
-        }
+
+        return -1;
     }
-    */
+
     public UnitController GetAdjacentEnemy()
     {
         for (int i = 0; i < controller.Location.neighbors.Length; i++)

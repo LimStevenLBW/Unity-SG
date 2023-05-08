@@ -12,7 +12,7 @@ public class PlayerHandPanel : MonoBehaviour
     public DeckDataStore myDeck;
     public Card[] cards = new Card[5];
     public DeckCountDisplay deckCounter;
-    public int selectedAmount = 5;
+    private int selectedAmount = 3; // The amount of cards that the cpu can select
 
     public void Init(DeckDataStore deck)
     {

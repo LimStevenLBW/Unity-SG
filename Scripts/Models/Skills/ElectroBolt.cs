@@ -18,7 +18,7 @@ public class ElectroBoltSkill : Skill
     private AudioClip hitSFX2;
     public ElectroBoltSkill()
     {
-        maxRange = 7; // The max range that this skill can be used
+        maxRange = 5; // The max range that this skill can be used
        // minRange = 3;
         effect = Resources.Load("Effects/CFX Custom Electro Bolt") as GameObject;
         hitSFX = (AudioClip) Resources.Load("Sounds/undertale/retro impact 6");
@@ -125,18 +125,21 @@ public class ElectroBoltSkill : Skill
         lowerBound = (data.GetMaxTroopCount() / 10);
         upperBound = (data.GetMaxTroopCount() / 5);
 
-
-        //Setup power vs defense modifier
-        float powerVsDefenseMult = (data.GetCurrentMagic() * 2 - enemy.GetCurrentDefense());
+        //Setup magic modifier
+        float magicModifier = data.GetCurrentMagic() * 2.5f;
 
         //Setup troop count modifier
-        float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.01f;
+        float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
 
         //Apply Modifiers
-        lowerBound = lowerBound + powerVsDefenseMult + tcCompareMult;
-        upperBound = upperBound + powerVsDefenseMult + tcCompareMult;
+        lowerBound = lowerBound + magicModifier + tcCompareMult;
+        upperBound = upperBound + magicModifier + tcCompareMult;
 
         int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+
+        //Apply Defense Reductions
+        float defValueReduction = (enemy.GetCurrentDefense() / 200) + data.GetBaseDefReduction();
+        damageData -= (int)(damageData * defValueReduction);
 
         if (damageData < 0) damageData = 0; //We don't go below zero
 
@@ -175,11 +178,6 @@ public class ElectroBoltSkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -187,5 +185,10 @@ public class ElectroBoltSkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

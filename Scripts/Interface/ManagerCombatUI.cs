@@ -9,7 +9,6 @@ namespace Assets.Scripts.Interface
      */
     public class ManagerCombatUI : MonoBehaviour
     {
-        bool isRoundRunning = false;
         public HexGrid grid;
         public UnitWindow unitWindow;
         public PlayerHandPanel playerHandPanel;
@@ -188,7 +187,7 @@ namespace Assets.Scripts.Interface
             //grid.ClearPath(); //Clear any current paths
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            HexCell cell;
+            //HexCell cell;
 
             //Check if a unit/cell was clicked. Most people will try to select the unit, not the cell.
             //If we have the unit, we can get the cell easily

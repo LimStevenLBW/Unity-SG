@@ -10,6 +10,7 @@ public class Timer : MonoBehaviour
     private Animator animator;
     public AudioSource audioSource;
     public AudioClip tickClip;
+    public int fightTimer;
 
     private int clock;
     // Start is called before the first frame update
@@ -20,7 +21,7 @@ public class Timer : MonoBehaviour
 
     public void StartTimer()
     {
-        clock = 99;
+        clock = fightTimer;
         clockText.SetText(clock.ToString());
 
         StartCoroutine(Tick());

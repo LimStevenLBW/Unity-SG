@@ -10,7 +10,7 @@ using UnityEngine;
 public class MoveIntoRangeSkill : Skill
 {
     float staminaResult;
-    
+
     public MoveIntoRangeSkill()
     {
         skillName = "Move into range";
@@ -42,12 +42,11 @@ public class MoveIntoRangeSkill : Skill
         float staminaResult = data.GetCurrentStamina() - currentStaminaCost;
 
         UnitController enemyTarget;
-        int maxRange = 8;
         //If we have a target and that target is within range, continue
         enemyTarget = controller.path.GetNearestEnemy();
         if (enemyTarget == null) return false;
         //Debug.Log(controller.path.distanceToNearestEnemy);
-        if (controller.path.distanceToNearestEnemy < maxRange) return false;
+        if (controller.path.distanceToNearestEnemy < controller.maxRange) return false;
 
         //If we have enough stamina and if it is off cooldown, then the move is available
         if (staminaResult >= 0 && currentCooldown <= 0)
@@ -126,11 +125,6 @@ public class MoveIntoRangeSkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -138,5 +132,10 @@ public class MoveIntoRangeSkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

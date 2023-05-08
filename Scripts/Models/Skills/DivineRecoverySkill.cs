@@ -12,13 +12,14 @@ using UnityEngine;
 public class DivineRecoverySkill : Skill
 {
     float staminaResult;
-
+    private AudioClip hitSFX;
     public DivineRecoverySkill()
     {
         minRange = 0;
-        maxRange = 0;
+        maxRange = 4;
         effect = Resources.Load("Effects/Healing circle") as GameObject;
-        skillName = "Wide Recovery";
+        hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
+        skillName = "Divine Recovery";
         description = "Who needs medicine when you have religion";
 
         baseCooldown = 16;
@@ -48,6 +49,12 @@ public class DivineRecoverySkill : Skill
         //Calculate how much stamina we would have IF we were to do the move
         float staminaResult = data.GetCurrentStamina() - currentStaminaCost;
 
+        UnitController enemyTarget;
+        //If we have a target and that target is within range, continue
+        enemyTarget = controller.path.GetNearestEnemy();
+        if (enemyTarget == null) return false;
+        if (controller.path.distanceToNearestEnemy > maxRange) return false;
+
         //If we have enough stamina and if it is off cooldown
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
@@ -68,7 +75,7 @@ public class DivineRecoverySkill : Skill
         data.SetCurrentStamina(staminaResult);
 
         //Have the unitcontroller play the attack animation(for now)
-        controller.PlayAnim("isAttacking", .45f, this);
+        controller.PlayAnim("isAttacking", .65f, this);
     
     }
 
@@ -87,12 +94,12 @@ public class DivineRecoverySkill : Skill
                 CalculateHealing(ally);
             }
         }
+        Director.Instance.PlaySound(hitSFX);
 
     }
 
     public void CalculateHealing(UnitController ally)
     {
-        Color color = Color.white;
         Vector3 position = ally.transform.position;
         position.y += 10;
         position.x += (float)0.5; 
@@ -103,7 +110,7 @@ public class DivineRecoverySkill : Skill
 
 
         //Setup magic modifier
-        float magicModifier = (data.GetCurrentMagic()) + (data.GetCurrentMagic() * .15f);
+        float magicModifier = data.GetCurrentMagic() * 2;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
@@ -142,11 +149,6 @@ public class DivineRecoverySkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController ally)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -154,5 +156,10 @@ public class DivineRecoverySkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -56,6 +56,7 @@ public class UnitDataStore
     private int economy;
     private int agriculture;
 
+    private float baseDefReduction = 0.25f;
     private float upkeep;
 
     //SKILLS
@@ -137,16 +138,28 @@ public class UnitDataStore
      */
     public void InitSkills() {
         skill1 = FindSkill(unitBase.skill1_ID);
-        if (skill1 != null) skill1.Init(this, controller);
+        if (skill1 != null) { 
+            skill1.Init(this, controller);
+            controller.maxRange = skill1.maxRange;
+        }
 
         skill2 = FindSkill(unitBase.skill2_ID);
-        if (skill2 != null) skill2.Init(this, controller);
+        if (skill2 != null) { 
+            skill2.Init(this, controller);
+            if (skill2.maxRange > controller.maxRange) controller.maxRange = skill2.maxRange;
+        }
 
         skill3 = FindSkill(unitBase.skill3_ID);
-        if (skill3 != null) skill3.Init(this, controller);
+        if (skill3 != null) { 
+            skill3.Init(this, controller);
+            if (skill3.maxRange > controller.maxRange) controller.maxRange = skill3.maxRange;
+        }
 
         skill4 = FindSkill(unitBase.skill4_ID);
-        if (skill4 != null) skill4.Init(this, controller);
+        if (skill4 != null) {
+            skill4.Init(this, controller);
+            if (skill4.maxRange > controller.maxRange) controller.maxRange = skill4.maxRange;
+        }
 
         //The Movement Skill is preset with the unit's class
         movementSkill = FindSkill(unitBase.GetClass().movementSkill_ID);
@@ -164,15 +177,19 @@ public class UnitDataStore
             case 1: return new MovementAdvanceSkill();
             case 2: return new MovementSlowWalkSkill();
             case 3: return new MoveIntoRangeSkill();
+            case 4: return new MovementEvasiveSkill();
             case 100: return new ClashSkill();
             case 101: return new FistsOfFurySkill();
             case 102: return new VolleySkill();
+            case 103: return new RapidFireVolleySkill();
+            case 104: return new ThrowingDaggersSkill();
             case 200: return new SelfRecoverySkill();
             case 201: return new SingleRecoverySkill();
             case 202: return new WideRecoverySkill();
             case 203: return new DivineRecoverySkill();
             case 300: return new ExplosionSkill();
             case 301: return new ElectroBoltSkill();
+            case 400: return new ShieldWallSkill();
         }
         return null;
     }
@@ -287,5 +304,10 @@ public class UnitDataStore
     public void SetMaxStamina(float value) { maxStamina = value; OnBarUpdated?.Invoke(this); }
     public float GetStamina() { return Stamina; }
     public void SetStamina(float value) { Stamina = value; }
+
+    public float GetBaseDefReduction()
+    {
+        return baseDefReduction;
+    }
 
 }

@@ -16,12 +16,12 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
   faction: {fileID: 11400000, guid: 9a1a2a4c50757714ba13fe7545c8a911, type: 2}
   special: {fileID: 0}
-  unitName: Orc Elite
+  unitName: Mutated Orc
   bio: 
   rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 24
+  basePower: 28
   powerGrowthRate: 1
   baseDefense: 12
   defenseGrowthRate: 1
@@ -40,7 +40,7 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 0000000000000000
-  skill1_ID: 200
-  skill2_ID: 100
+  skill1_ID: 100
+  skill2_ID: 200
   skill3_ID: 0
   skill4_ID: 0

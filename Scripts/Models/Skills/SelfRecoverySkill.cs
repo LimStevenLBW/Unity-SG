@@ -12,16 +12,17 @@ using UnityEngine;
 public class SelfRecoverySkill : Skill
 {
     float staminaResult;
-
+    private AudioClip hitSFX;
     public SelfRecoverySkill()
     {
         minRange = 0;
         maxRange = 0;
-        effect = Resources.Load("Effects/Healing circle") as GameObject;
+        //effect = Resources.Load("Effects/Healing circle") as GameObject;
+        hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
         skillName = "Recovery";
-        description = "Heal your people, so they can get hurt again.";
+        description = "It was just a flesh wound";
 
-        baseCooldown = 10;
+        baseCooldown = 6;
         currentCooldown = baseCooldown;
         baseStaminaCost = 0;
         currentStaminaCost = baseStaminaCost;
@@ -72,8 +73,9 @@ public class SelfRecoverySkill : Skill
         data.SetCurrentStamina(staminaResult);
 
         //Have the unitcontroller play the attack animation(for now)
-        controller.PlayAnim("isAttacking", .45f, this);
-    
+        //controller.PlayAnim("isAttacking", .45f, this);
+
+        HandleAnimExtra();
     }
 
     //Plays after the animation timing
@@ -81,28 +83,26 @@ public class SelfRecoverySkill : Skill
     {
         Vector3 pos = controller.transform.position;
         pos.y = 0;
-        controller.PlayEffect(effect, pos, 2);
+        //controller.PlayEffect(effect, pos, 2);
 
-        //Calculate the damage done
+        //Calculate the healing done
         CalculateHealing(data);
-        //play sound
+        Director.Instance.PlaySound(hitSFX);
+
     }
 
     public void CalculateHealing(UnitDataStore data)
     {
-       
-        Color color = Color.white;
         Vector3 position = controller.transform.position;
         position.y += 10;
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 5);
-        float upperBound = (data.GetCurrentTroopCount() / 4);
-
+        float lowerBound = (data.GetMaxTroopCount() / 10);
+        float upperBound = (data.GetMaxTroopCount() / 5);
 
         //Setup magic modifier
-        float magicModifier = (data.GetCurrentMagic()) + (data.GetCurrentMagic() * .05f);
+        float magicModifier = data.GetCurrentMagic();
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
@@ -140,12 +140,6 @@ public class SelfRecoverySkill : Skill
     {
         return description;
     }
-
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -153,5 +147,10 @@ public class SelfRecoverySkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

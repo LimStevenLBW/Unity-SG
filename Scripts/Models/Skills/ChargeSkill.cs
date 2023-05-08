@@ -104,11 +104,6 @@ public class ChargeSkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -116,5 +111,10 @@ public class ChargeSkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

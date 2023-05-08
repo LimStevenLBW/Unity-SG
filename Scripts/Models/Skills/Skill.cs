@@ -27,7 +27,7 @@ public abstract class Skill
     public abstract void DoSkill();
 
     public abstract void HandleAnimExtra();
-
+    public abstract void EffectDestroyed();
     public abstract void Resolve();
     public abstract bool IsAvailable();
     public abstract void Reset();
@@ -38,8 +38,6 @@ public abstract class Skill
     public abstract string GetSkillName();
 
     public abstract string GetDescription();
-
-    public abstract void GetController(UnitController controller);
 
     public abstract bool IsSkillRunning();
 }

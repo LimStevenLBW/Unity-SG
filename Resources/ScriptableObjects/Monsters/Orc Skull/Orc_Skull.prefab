@@ -1271,7 +1271,7 @@ Transform:
   m_GameObject: {fileID: 6008066762397763391}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1442229484339879411}
@@ -1296,6 +1296,8 @@ MonoBehaviour:
   teamNum: 0
   prefab: {fileID: 2362425150502880030}
   bars: {fileID: 0}
+  state: 0
+  maxRange: 0
 --- !u!65 &3589066973973628757
 BoxCollider:
   m_ObjectHideFlags: 0

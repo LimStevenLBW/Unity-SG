@@ -7,17 +7,14 @@ using UnityEngine;
 
 public class MovementSlowWalkSkill : Skill
 {
-    float cooldownIncreased;
+    float travelSpeed;
     float staminaResult;
     
     public MovementSlowWalkSkill()
     {
-        skillName = "Advance";
-        description = "Fire within range";
-
-        baseCooldown = 2;
-        cooldownIncreased = baseCooldown;
-        currentCooldown = baseCooldown;
+        skillName = "Slow Approach";
+        description = "This unit is heavy and moves slowly";
+        baseCooldown = 1;
         baseStaminaCost = 1;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
@@ -27,6 +24,7 @@ public class MovementSlowWalkSkill : Skill
     {
         this.data = data;
         this.controller = controller;
+        controller.SetTravelSpeed(3);
     }
 
     public override void SecondPassed()
@@ -100,8 +98,7 @@ public class MovementSlowWalkSkill : Skill
 
     public override void ResetCD()
     {
-        cooldownIncreased += 0.5f;
-        currentCooldown = cooldownIncreased;
+        currentCooldown = baseCooldown;
     }
 
     public override void ResetAC()
@@ -119,11 +116,6 @@ public class MovementSlowWalkSkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -131,5 +123,10 @@ public class MovementSlowWalkSkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

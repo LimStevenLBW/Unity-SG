@@ -12,16 +12,17 @@ using UnityEngine;
 public class SingleRecoverySkill : Skill
 {
     float staminaResult;
-
+    private AudioClip hitSFX;
     public SingleRecoverySkill()
     {
         minRange = 0;
-        maxRange = 0;
+        maxRange = 4;
         effect = Resources.Load("Effects/Healing circle") as GameObject;
+        hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
         skillName = "Single Recovery";
         description = "Heal the most injured on your team";
 
-        baseCooldown = 6;
+        baseCooldown = 3;
         currentCooldown = baseCooldown;
         baseStaminaCost = 0;
         currentStaminaCost = baseStaminaCost;
@@ -48,6 +49,12 @@ public class SingleRecoverySkill : Skill
         //Calculate how much stamina we would have IF we were to do the move
         float staminaResult = data.GetCurrentStamina() - currentStaminaCost;
 
+        UnitController enemyTarget;
+        //If we have a target and that target is within range, continue
+        enemyTarget = controller.path.GetNearestEnemy();
+        if (enemyTarget == null) return false;
+        if (controller.path.distanceToNearestEnemy > maxRange) return false;
+
         //If we have enough stamina and if it is off cooldown
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
@@ -68,7 +75,7 @@ public class SingleRecoverySkill : Skill
         data.SetCurrentStamina(staminaResult);
 
         //Have the unitcontroller play the attack animation(for now)
-        controller.PlayAnim("isAttacking", .45f, this);
+        controller.PlayAnim("isAttacking", .65f, this);
     
     }
 
@@ -95,7 +102,7 @@ public class SingleRecoverySkill : Skill
                
             }
         }
-        
+        Director.Instance.PlaySound(hitSFX);
         allyToHeal.PlayEffect(effect, pos, 2);
         CalculateHealing(allyToHeal);
 
@@ -103,19 +110,17 @@ public class SingleRecoverySkill : Skill
 
     public void CalculateHealing(UnitController ally)
     {
-       
-        Color color = Color.white;
         Vector3 position = ally.transform.position;
         position.y += 10;
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 5);
-        float upperBound = (data.GetCurrentTroopCount() / 4);
+        float lowerBound = (data.GetCurrentTroopCount() / 20);
+        float upperBound = (data.GetCurrentTroopCount() / 15);
 
 
         //Setup magic modifier
-        float magicModifier = (data.GetCurrentMagic()) + (data.GetCurrentMagic() * .05f);
+        float magicModifier = data.GetCurrentMagic() * 1.5f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
@@ -153,12 +158,6 @@ public class SingleRecoverySkill : Skill
     {
         return description;
     }
-
-    public override void GetController(UnitController ally)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -166,5 +165,10 @@ public class SingleRecoverySkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

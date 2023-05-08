@@ -17,7 +17,7 @@ public class ExplosionSkill : Skill
     private AudioClip hitSFX;
     public ExplosionSkill()
     {
-        maxRange = 7;
+        maxRange = 5;
        // minRange = 3;
         effect = Resources.Load("Effects/CFX_Explosion_B_Smoke+Text") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/impact big 2");
@@ -127,27 +127,30 @@ public class ExplosionSkill : Skill
         //Base damage 
         if (!isSplash)
         {
-            lowerBound = (ally.GetMaxTroopCount() / 4);
+            lowerBound = (ally.GetMaxTroopCount() / 5);
             upperBound = (ally.GetMaxTroopCount() / 3);
         }
         else
         {
             lowerBound = (ally.GetMaxTroopCount() / 10);
-            upperBound = (ally.GetMaxTroopCount() / 5);
+            upperBound = (ally.GetMaxTroopCount() / 7);
         }
-        
 
-        //Setup power vs defense modifier
-        float powerVsDefenseMult = (ally.GetCurrentMagic() * 2 - enemy.GetCurrentDefense());
+        //Setup magic modifier
+        float magicModifier = data.GetCurrentMagic() * 2;
 
         //Setup troop count modifier
         float tcCompareMult = (ally.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
 
         //Apply Modifiers
-        lowerBound = lowerBound + powerVsDefenseMult + tcCompareMult;
-        upperBound = upperBound + powerVsDefenseMult + tcCompareMult;
+        lowerBound = lowerBound + magicModifier + tcCompareMult;
+        upperBound = upperBound + magicModifier + tcCompareMult;
 
         int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+        
+        //Apply Defense Reductions
+        float defValueReduction = (enemy.GetCurrentDefense() / 200) + data.GetBaseDefReduction();
+        damageData -= (int)(damageData * defValueReduction);
 
         if (damageData < 0) damageData = 0; //We don't go below zero
 
@@ -186,11 +189,6 @@ public class ExplosionSkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
@@ -198,5 +196,10 @@ public class ExplosionSkill : Skill
     public override void Resolve()
     {
 
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

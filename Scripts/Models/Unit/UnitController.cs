@@ -36,12 +36,13 @@ public class UnitController : MonoBehaviour
 
     private const int MOVECOST = 1;
     private const int MOVECOST_ELEVATION = 5;
-
+    
     private HexCell location, currentTravelLocation;
     private float orientation;
+    public int maxRange; //The range that unit wants to stay at due to their skills
 
-    const float travelSpeed = 4f;
-    const float rotationSpeed = 360f;
+    private float travelSpeed = 4f;
+    private float rotationSpeed = 360f;
 
     List<HexCell> pathToTravel;
 
@@ -375,6 +376,15 @@ public class UnitController : MonoBehaviour
         obj.SendMessage("SelfDestruct", ms);
     }
 
+    public void AddAura(GameObject aura, Vector3 pos, Skill skill, float ms)
+    {
+        GameObject obj = Instantiate(aura, pos, Quaternion.identity) as GameObject;
+        obj.transform.SetParent(gameObject.transform); //Have the aura follow this unit
+
+        obj.SendMessage("SelfDestruct", ms);
+        obj.SendMessage("SetSkill", skill);
+    }
+
     /*
      * Return true if the cell is a valid location for this unit to travel to
      * I can include conditions for why traveling to a certain cell would be invalid here
@@ -502,5 +512,24 @@ public class UnitController : MonoBehaviour
     public UnitManager GetManager()
     {
         return manager;
+    }
+
+    public float GetTravelSpeed()
+    {
+        return travelSpeed;
+    }
+
+    public void SetTravelSpeed(float travelSpeed)
+    {
+        this.travelSpeed = travelSpeed;
+    }
+    public float GetRotationSpeed()
+    {
+        return rotationSpeed;
+    }
+
+    public void SetRotationSpeed(float rotationSpeed)
+    {
+        this.rotationSpeed = rotationSpeed;
     }
 }

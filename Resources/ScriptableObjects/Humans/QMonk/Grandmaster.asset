@@ -21,9 +21,9 @@ MonoBehaviour:
   rank: 2
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 50
+  basePower: 45
   powerGrowthRate: 1
-  baseDefense: 25
+  baseDefense: 15
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 6
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 300
+  baseTroopCount: 350
   leadership: 1
   engineering: 1
   magic: 1

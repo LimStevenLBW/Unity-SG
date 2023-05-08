@@ -19,7 +19,6 @@ public class RouteColumn : MonoBehaviour
 
     void Awake()
     {
-       active = false;
        image = GetComponent<Image>();
        activeColor = new Color(140f/255, 225f/255, 75f/255, 0.3f);
        completedColor = new Color(45f/255, 45f/255, 45f/255, 0.7f);

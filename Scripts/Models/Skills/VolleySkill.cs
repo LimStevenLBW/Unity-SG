@@ -14,17 +14,21 @@ public class VolleySkill : Skill
 {
     float staminaResult;
     UnitController enemyTarget;
-
+    private AudioClip fireSFX;
+    private AudioClip hitSFX;
     public VolleySkill()
     {
-        maxRange = 8;
+        maxRange = 7;
         //minRange = 1;
         effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
-        projectile = Resources.Load("Effects/chibi-arrow") as GameObject;
+        projectile = Resources.Load("Weapons/chibi-arrow") as GameObject;
+
+        fireSFX = (AudioClip)Resources.Load("Sounds/mixkit-arrow");
+        hitSFX = (AudioClip)Resources.Load("Sounds/mixkit-short-explosion");
         skillName = "Clash";
         description = "Shoot from afar";
 
-        baseCooldown = 2;
+        baseCooldown = 1.5f;
         currentCooldown = baseCooldown;
         baseStaminaCost = 0;
         currentStaminaCost = baseStaminaCost;
@@ -55,6 +59,7 @@ public class VolleySkill : Skill
         //If we have a target and that target is within range, continue
         enemyTarget = controller.path.GetNearestEnemy();
         if (enemyTarget == null) return false;
+
         if (controller.path.distanceToNearestEnemy > maxRange) return false;
 
 
@@ -108,6 +113,8 @@ public class VolleySkill : Skill
         proj.speed = 250;
         proj.skill = this;
 
+        Director.Instance.PlaySound(fireSFX);
+
     }
     public override void Resolve()
     {
@@ -118,10 +125,11 @@ public class VolleySkill : Skill
 
         //Calculate the damage done
         CalculateDamage(controller.data, enemyTarget.data);
+        Director.Instance.PlaySound(hitSFX);
         //play sound
     }
 
-    public void CalculateDamage(UnitDataStore thisGuy, UnitDataStore enemy)
+    public void CalculateDamage(UnitDataStore data, UnitDataStore enemy)
     {
         Color color = Color.white;
         Vector3 position = enemyTarget.transform.position;
@@ -129,24 +137,23 @@ public class VolleySkill : Skill
         position.x += (float)0.5;
 
         //Base damage is based on max troop count, should help ensure a stable damage range
-        float lowerBound = (thisGuy.GetMaxTroopCount() / 15);
-        float upperBound = (thisGuy.GetMaxTroopCount() / 12);
+        float lowerBound = (data.GetMaxTroopCount() / 15);
+        float upperBound = (data.GetMaxTroopCount() / 10);
+
+        //Setup power modifier
+        float powerModifier = data.GetCurrentPower() * 2f;
 
         //Setup base count modifier, a small debuff or buff based on the current health comparison
-        float baseModifier = (thisGuy.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
+        float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
 
-        //Apply Base Modifier
-        lowerBound += baseModifier;
-        upperBound += baseModifier;
-
-        //Apply Power vs Defense Modifiers
-        float lowerModifier = (thisGuy.GetCurrentPower() - enemy.GetCurrentDefense()) * lowerBound * 0.1f;
-        float upperModifier = (thisGuy.GetCurrentPower() - enemy.GetCurrentDefense()) * upperBound * 0.1f;
-
-        lowerBound += lowerModifier;
-        upperBound += upperModifier;
+        lowerBound = lowerBound + powerModifier + tcCompareMult;
+        upperBound = upperBound + powerModifier + tcCompareMult;
 
         int damageData = (int)UnityEngine.Random.Range(lowerBound, upperBound);
+        //Apply Defense Reductions
+
+        float defValueReduction = (enemy.GetCurrentDefense() / 200) + data.GetBaseDefReduction();
+        damageData -= (int)(damageData * defValueReduction);
 
         if (damageData < 0) damageData = 0; //We don't go below zero
         enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
@@ -183,13 +190,17 @@ public class VolleySkill : Skill
         return description;
     }
 
-    public override void GetController(UnitController controller)
-    {
-        this.controller = controller;
-    }
-
     public override bool IsSkillRunning()
     {
         return isRunning;
+    }
+    public int GetMaxRange()
+    {
+        return maxRange;
+    }
+
+    public override void EffectDestroyed()
+    {
+        throw new NotImplementedException();
     }
 }

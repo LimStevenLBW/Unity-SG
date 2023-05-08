@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
+ * Effect behaviour
  * Destroy itself if the particle system is finished
  */
 public class DestroySelf : MonoBehaviour
 {
     int time;
+    Skill skill;
     void OnStart()
     {
        
@@ -17,6 +19,14 @@ public class DestroySelf : MonoBehaviour
     {
         this.time = time;
         StartCoroutine("CheckIfAlive");
+    }
+    public void SetSkill(Skill skill)
+    {
+        this.skill = skill;
+    }
+    public void CallBack()
+    {
+        if(skill != null) skill.EffectDestroyed();
     }
 
     //Destroy this object after its animation finishes, or after a certain amount of time
@@ -30,7 +40,8 @@ public class DestroySelf : MonoBehaviour
             if (time > 0)
             {
                 yield return new WaitForSeconds(time);
-                Destroy(this.gameObject);
+                CallBack();
+                Destroy(gameObject);
                 break;
             }
             else
@@ -38,8 +49,8 @@ public class DestroySelf : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
                 if (!ps.IsAlive(true))
                 {
-
-                   Destroy(this.gameObject);
+                   CallBack();
+                   Destroy(gameObject);
                    break;
                 }
             }
