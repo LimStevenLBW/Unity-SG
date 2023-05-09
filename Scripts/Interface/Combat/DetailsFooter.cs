@@ -11,6 +11,7 @@ public class DetailsFooter : MonoBehaviour
     public TextMeshProUGUI rank;
     public TextMeshProUGUI troops;
     public TextMeshProUGUI attack;
+    public TextMeshProUGUI magic;
     public TextMeshProUGUI defense;
 
     // Start is called before the first frame update
@@ -35,6 +36,7 @@ public class DetailsFooter : MonoBehaviour
         rank.SetText(unit.GetRank() + " RANK");
         troops.SetText(unit.GetMaxTroopCount().ToString() + " TROOPS");
         attack.SetText(unit.GetCurrentPower().ToString() + " POW");
+        magic.SetText(unit.GetCurrentMagic().ToString() + " MGK");
         defense.SetText(unit.GetCurrentDefense().ToString() + " DEF");
 
 
@@ -48,6 +50,7 @@ public class DetailsFooter : MonoBehaviour
         rank.SetText("");
         troops.SetText("");
         attack.SetText("");
+        magic.SetText("");
         defense.SetText("");
         currentDisplay = null;
     }

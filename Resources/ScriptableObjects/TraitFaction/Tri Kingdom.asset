@@ -15,3 +15,5 @@ MonoBehaviour:
   traitName: Tri Kingdom
   description: 
   icon: {fileID: 21300000, guid: 6dd4298ac0b3ce14fa0c2519da266238, type: 3}
+  requirementTiers: 02000000040000000600000008000000
+  effect: Troops start with 20% stamina when first deployed

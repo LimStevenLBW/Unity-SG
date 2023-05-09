@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d06e37ea54b904da46c9ecc0cf821d, type: 3}
   m_Name: Guardian
   m_EditorClassIdentifier: 
-  className: Guardian
+  traitName: Guardian
   description: 
   icon: {fileID: 21300000, guid: 8bfe7c4bc2b416e428381c3b1407559b, type: 3}
+  requirementTiers: 020000000400000006000000
+  effect: 
   movementSkill_ID: 2

@@ -8,12 +8,8 @@ using UnityEngine.UI;
  * The class defines a set of behaviours that all units of that class share
  */
 [CreateAssetMenu(fileName = "New Character Class", menuName = "Unit/Class")]
-public class UnitClass : ScriptableObject
+public class UnitClass : UnitTrait
 {
-    public string className;
-    public string description;
-    public Sprite icon;
-
     public int movementSkill_ID;
 
 }

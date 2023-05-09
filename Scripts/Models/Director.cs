@@ -44,6 +44,8 @@ public class Director : MonoBehaviour
     public CameraControl playerCamera;
     public StartDeploymentButton startDeploymentButton;
     public Timer timer;
+    [SerializeField] private TraitBuffsList playerTraitBuffs;
+    [SerializeField] private TraitBuffsList enemyTraitBuffs;
 
     [SerializeField] private AudioSource AudioPlayer;
     [SerializeField] private AudioClip AudioHover;
@@ -77,7 +79,8 @@ public class Director : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerTraitBuffs.team = 1;
+        enemyTraitBuffs.team = -1;
     }
 
     // Update is called once per frame
@@ -216,5 +219,20 @@ public class Director : MonoBehaviour
     public void PlaySound(AudioClip clip)
     {
         AudioPlayer.PlayOneShot(clip);
+    }
+
+    public void AddControllerTraits(UnitController controller)
+    {
+        if(controller.teamNum == -1)
+        {
+            enemyTraitBuffs.AddTraitsFrom(controller.data, controller.teamNum);
+        }
+        else if(controller.teamNum == 1){
+            playerTraitBuffs.AddTraitsFrom(controller.data, controller.teamNum);
+        }
+        else
+        {
+            Debug.Log("invalid team number " + controller.teamNum);
+        }
     }
 }

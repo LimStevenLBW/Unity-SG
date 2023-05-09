@@ -59,7 +59,7 @@ public class UnitController : MonoBehaviour
 
         //Might have to update later, but for now, update the data with this instantiated controller.
         data.controller = this;
-        data.InitSkills(); //Calling InitSkills for a second time technically to update path references
+        data.InitSkills();
 
         this.bars = bars;
         bars.Initialize(this);
@@ -70,6 +70,7 @@ public class UnitController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         Director.Instance.OnCombatStarted += SetActive;
+        Director.Instance.AddControllerTraits(this);
     }
 
     void Awake()

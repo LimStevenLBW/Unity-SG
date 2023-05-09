@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IComparable<Card>
 {
@@ -17,10 +18,54 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public PortraitRoom portraitRoom;
     public CardSelectOrder cardSelectOrderDisplay;
 
+    public Image factionImageIcon;
+    public Image specialImageIcon;
+    public Image classImageIcon;
+
+    private Image bgImage;
+    private Sprite dRankBG;
+    private Sprite cRankBG;
+    private Sprite bRankBG;
+    private Sprite aRankBG;
+    private Sprite sRankBG;
+
+
     [SerializeField] private AudioSource AudioPlayer;
     [SerializeField] private AudioClip AudioDeselect;
     [SerializeField] private AudioClip AudioSelect;
     [SerializeField] private AudioClip AudioAppear;
+
+
+    void OnEnable()
+    {
+        AudioPlayer.PlayOneShot(AudioAppear);
+
+    }
+
+    void Awake()
+    {
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Card Art/pixelCardAssest_V01");
+        bgImage = GetComponent<Image>();
+        dRankBG = sprites[2];
+        cRankBG = sprites[81];
+        bRankBG = sprites[0];
+        aRankBG = sprites[4];
+        sRankBG = sprites[4];
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Director.Instance.OnCardDeselected += UpdateSelectOrder;
+        
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -93,30 +138,24 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     void UpdatePortrait()
     {
         if (portraitRoom == null) Debug.Log("null?");
-        else { portraitRoom.UpdatePortrait(unit); }
+        else {
+            portraitRoom.UpdatePortrait(unit);
+            if(unit.faction && factionImageIcon) factionImageIcon.sprite = unit.faction.icon;
+            else { return; } //Skip the rest for enemy hand
+            if(unit.special && specialImageIcon) specialImageIcon.sprite = unit.special.icon;
+            if(unit.unitClass && classImageIcon) classImageIcon.sprite = unit.unitClass.icon;
+
+            if (unit.GetRank() == "D") bgImage.sprite = dRankBG;
+            else if (unit.GetRank() == "C") bgImage.sprite = cRankBG;
+            else if (unit.GetRank() == "B") bgImage.sprite = bRankBG;
+            else if (unit.GetRank() == "A") bgImage.sprite = aRankBG;
+            else if (unit.GetRank() == "S") bgImage.sprite = sRankBG;
+        }
     }
 
     void UpdateCardValue()
     {
 
-    }
-
-    void OnEnable()
-    {
-        AudioPlayer.PlayOneShot(AudioAppear);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        Director.Instance.OnCardDeselected += UpdateSelectOrder;
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void UpdateSelectOrder(int ID)

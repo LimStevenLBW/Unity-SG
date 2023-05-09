@@ -15,3 +15,5 @@ MonoBehaviour:
   traitName: Demon
   description: 
   icon: {fileID: 21300000, guid: bcc0188a408d3c146b32db29bc818a72, type: 3}
+  requirementTiers: 0400000006000000
+  effect: 

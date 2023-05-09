@@ -15,3 +15,5 @@ MonoBehaviour:
   traitName: Elite
   description: 
   icon: {fileID: 21300000, guid: 5885d4f43c35c16419914b34289caed2, type: 3}
+  requirementTiers: 0400000006000000
+  effect: 

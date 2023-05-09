@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d06e37ea54b904da46c9ecc0cf821d, type: 3}
   m_Name: Archer
   m_EditorClassIdentifier: 
-  className: Archer
+  traitName: Archer
   description: 
   icon: {fileID: 21300000, guid: 915656b5e72c5d6489165d3ccb25a423, type: 3}
+  requirementTiers: 0200000004000000
+  effect: 
   movementSkill_ID: 3

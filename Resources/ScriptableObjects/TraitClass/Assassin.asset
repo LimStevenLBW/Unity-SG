@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d06e37ea54b904da46c9ecc0cf821d, type: 3}
   m_Name: Assassin
   m_EditorClassIdentifier: 
-  className: Assassin
+  traitName: Assassin
   description: 
   icon: {fileID: 21300000, guid: 090399d6026e5314489e0db59c599627, type: 3}
+  requirementTiers: 0100000004000000
+  effect: 
   movementSkill_ID: 4

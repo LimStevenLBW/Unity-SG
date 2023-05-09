@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d06e37ea54b904da46c9ecc0cf821d, type: 3}
   m_Name: Infantry
   m_EditorClassIdentifier: 
-  className: Infantry
+  traitName: Infantry
   description: 
   icon: {fileID: 21300000, guid: c47b73673af20644eac25787a1210925, type: 3}
+  requirementTiers: 02000000040000000600000008000000
+  effect: 
   movementSkill_ID: 1
