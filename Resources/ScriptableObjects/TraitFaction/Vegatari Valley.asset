@@ -15,5 +15,5 @@ MonoBehaviour:
   traitName: Vegatari
   description: 
   icon: {fileID: 21300000, guid: a26ec91c20efcaf4ca69ea569ecd2206, type: 3}
-  requirementTiers: 02000000040000000600000008000000
-  effect: 
+  requirementTiers: 030000000600000009000000
+  traitBuff_ID: 3

@@ -21,9 +21,11 @@ namespace Assets.Scripts.Interface
         private HexCell selectedCell;
 
         [SerializeField] private AudioSource AudioPlayer;
-        [SerializeField] private AudioClip AudioHover;
-        [SerializeField] private AudioClip AudioClickOpen;
-        [SerializeField] private AudioClip AudioClickClose;
+       // [SerializeField] private AudioClip AudioHover;
+        [SerializeField] private AudioClip AudioClickSelect;
+        [SerializeField] private AudioClip AudioLift;
+        [SerializeField] private AudioClip AudioDrop;
+        [SerializeField] private AudioClip AudioClipDeselect;
 
         void Start()
         {
@@ -33,8 +35,19 @@ namespace Assets.Scripts.Interface
 
         void Update()
         {
+            if (Director.Instance.GetPhase() == "REPOSITIONING") HandleRepositioning();
+            else { HandleNormalInput(); }
+        }
+
+        public void ClearSelectionKeepWindow()
+        {
+            DisableHighlight(selectedController);
+            selectedController = null;
+        }
+
+        private void HandleRepositioning()
+        {
             //Check for mouseclick
-            
             if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit hit;
@@ -42,7 +55,62 @@ namespace Assets.Scripts.Interface
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    
+                    //Check if the hit GameObject is controller
+                    if (!selectedController && hit.collider.gameObject.GetComponent<UnitController>() != null) 
+                    {
+                        UnitController controller = hit.collider.gameObject.GetComponent<UnitController>();
+                        selectedController = controller;
+                        LiftAndSelect(controller);
+                        AudioPlayer.PlayOneShot(AudioLift);
+                    }
+                    else if (selectedController)
+                    {
+                        FollowCursor following = selectedController.gameObject.GetComponent <FollowCursor>();
+                        following.Reposition();
+                        DisableHighlight(selectedController);
+                        DisableUnitWindow(selectedController);
+                        selectedController = null;
+                        AudioPlayer.PlayOneShot(AudioDrop);
+
+                    }
+                    else
+                    {
+                        HexCell cell = grid.GetCell(ray);
+
+                        if(cell) selectedController = cell.unitController;
+                        if (selectedController)
+                        {
+                            LiftAndSelect(selectedController);
+                            AudioPlayer.PlayOneShot(AudioLift);
+                        }
+                        
+                    }
+                }
+            }
+        }
+
+        private void LiftAndSelect(UnitController controller)
+        {
+            EnableHighlight(selectedController);
+            unitWindow.gameObject.SetActive(true);
+            unitWindow.Initialize(controller);
+            FollowCursor following = controller.gameObject.AddComponent<FollowCursor>();
+            following.GetGrid(grid);
+            following.GetController(controller);
+            controller.Location = null;
+        }
+
+        private void HandleNormalInput()
+        {
+            //Check for mouseclick
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+
                     if (hit.collider.gameObject.GetComponent<UnitController>() != null) //Check if the hit GameObject is controller
                     {
                         //print(hit.collider.name);
@@ -53,7 +121,7 @@ namespace Assets.Scripts.Interface
                             ClearSelection();
                             mainCamera.UnFocus();
                             selectedController = controller;
-                            
+
                             selectedCell = selectedController.Location;
                         }
                     }
@@ -62,77 +130,40 @@ namespace Assets.Scripts.Interface
                         //Grid handles cell hits, since raycast is unreliable at hitting them w/o help
                         HexCell cell = grid.GetCell(ray);
                         //print(hit.collider.name);
-                    
+
                         ClearSelection();
                         mainCamera.UnFocus();
- 
+
 
                         //If the hexcell is different from what we have currently selected
-                        if (cell) 
+                        if (cell)
                         {
-                            if(cell != selectedCell)
+                            if (cell != selectedCell)
                             {
                                 selectedCell = cell;
                                 selectedController = selectedCell.unitController;
                             }
-                            
-                        }          
+
+                        }
                     }
-                    
+
                     //Note that a cell may not necessarily have a unit
                     if (selectedController)
                     {
-                        if(priorController != selectedController)
+                        if (priorController != selectedController)
                         {
                             EnableHighlight(selectedController);
                             EnableUnitWindow(selectedController);
                             priorController = selectedController;
-                        }   
+                        }
                     }
-   
+
                 }
             }
             else if (Input.GetMouseButtonDown(1))
             {
                 ClearSelection();
             }
-
-            //If above UI object
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-
-            }
-
-            /*
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                //As long as the pointer is not above a UI element from the event system, then..
-                if (Input.GetMouseButtonDown(0)) //LEFT CLICK
-                {
-                    print("do selection");
-                    DoSelection();
-                }
-                else if (Input.GetMouseButtonDown(1))
-                {
-                    ClearSelection();
-                }
-            }
-           */
-                /*
-                else if (selectedController)
-                {
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        DoMove();
-
-                    }
-                    else
-                    {
-                        DoPathfinding();
-                    }
-                }
-                */
-           // }
         }
 
         public void StartStage(Deck playerDeck, Deck enemyDeck)
@@ -149,34 +180,6 @@ namespace Assets.Scripts.Interface
             //enabled = !enabled;
             //grid.ToggleShowGrid();
             //grid.ShowUI(enabled); 
-        }
-
-        /*
-         * Handle what the user selects
-         */
-        void DoSelection()
-        {
-
-            
-            UpdateSelection();
-
-            if (selectedCell)
-            {
-                selectedController = selectedCell.unitController;
-                
-            }
-            //Note that a cell may not necessarily have a unit
-            if (selectedController)
-            {
-                Debug.Log("found a controller?");
-                EnableHighlight(selectedController);
-                EnableUnitWindow(selectedController);
-
-                
-            }
-
-            priorController = selectedController;
-
         }
 
         /*
@@ -220,7 +223,7 @@ namespace Assets.Scripts.Interface
         void ClearSelection()
         {
             DisableHighlight(selectedController);
-            DisableUnitWindow();
+            DisableUnitWindow(selectedController);
             selectedController = null;
             priorController = null;
             selectedCell = null;    
@@ -245,12 +248,14 @@ namespace Assets.Scripts.Interface
                 unitWindow.Initialize(controller);
                 //unitWindow.SetPosition(unit);
                 if (priorController != selectedController) Focus(controller.transform);
+                
             }
-            PlayAudioClip(AudioClickOpen);
+            PlayAudioClip(AudioClickSelect);
+
         }
-        void DisableUnitWindow()
+        void DisableUnitWindow(UnitController controller)
         {
-            PlayAudioClip(AudioClickClose);
+            if(controller) PlayAudioClip(AudioClipDeselect);
             unitWindow.gameObject.SetActive(false);
         }
 

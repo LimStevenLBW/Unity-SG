@@ -15,6 +15,6 @@ MonoBehaviour:
   traitName: Guardian
   description: 
   icon: {fileID: 21300000, guid: 8bfe7c4bc2b416e428381c3b1407559b, type: 3}
-  requirementTiers: 020000000400000006000000
-  effect: 
+  requirementTiers: 0200000004000000
+  traitBuff_ID: 9
   movementSkill_ID: 2

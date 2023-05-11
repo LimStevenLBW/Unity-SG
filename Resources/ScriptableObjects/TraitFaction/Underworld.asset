@@ -15,3 +15,5 @@ MonoBehaviour:
   traitName: Underworld
   description: 
   icon: {fileID: 21300000, guid: d52330bcd765ea44487163ac934344c0, type: 3}
+  requirementTiers: 030000000600000009000000
+  traitBuff_ID: 2

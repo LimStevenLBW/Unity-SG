@@ -6,16 +6,15 @@ public class TraitBuffsList : MonoBehaviour
 {
     //DO NOT EDIT ANY DATA IN UNIT TRAITS
 
-    [SerializeField] private TraitBuffDisplay enemyTraitBuffActive;
-    [SerializeField] private TraitBuffDisplay enemyTraitBuffInactive;
-    [SerializeField] private TraitBuffDisplay playerTraitBuffActive;
-    [SerializeField] private TraitBuffDisplay playerTraitBuffInactive;
+    [SerializeField] private TraitBuffDataStore enemyTraitBuffActive;
+    [SerializeField] private TraitBuffDataStore enemyTraitBuffInactive;
+    [SerializeField] private TraitBuffDataStore playerTraitBuffActive;
+    [SerializeField] private TraitBuffDataStore playerTraitBuffInactive;
 
     public int team;
 
     private List<UnitTrait> traits = new List<UnitTrait>();
-    private List<UnitTrait> displayedTraits = new List<UnitTrait>();
-    private List<TraitBuffDisplay> traitBuffs = new List<TraitBuffDisplay>();
+    private List<TraitBuffDataStore> traitBuffsList = new List<TraitBuffDataStore>();
     public void AddTraitsFrom(UnitDataStore data, int teamNum)
     {
         ResetTraitBuffs();
@@ -61,7 +60,7 @@ public class TraitBuffsList : MonoBehaviour
 
     private void AddTraitBuff(UnitTrait trait, int counter)
     {
-        TraitBuffDisplay prefab = null;
+        TraitBuffDataStore prefab = null;
 
         //If it doesnt meet the minimum requirement, we create an inactive trait display
         if (counter < trait.requirementTiers[0])
@@ -80,20 +79,28 @@ public class TraitBuffsList : MonoBehaviour
             prefab.gameObject.transform.SetAsFirstSibling();
         }
 
-        prefab.UpdateTraitDisplay(trait, counter);
-        prefab.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
-        traitBuffs.Add(prefab);
+        prefab.AddBuffComponent(trait, counter);
+        prefab.UpdateDisplay();
+        prefab.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        traitBuffsList.Add(prefab);
+    }
+
+    
+    public void ApplyTraitBuffs()
+    {
+
     }
 
     public void ResetTraitBuffs()
     {
-        foreach(TraitBuffDisplay traitBuff in traitBuffs)
+        foreach(TraitBuffDataStore traitBuff in traitBuffsList)
         {
             Destroy(traitBuff.gameObject);
         }
-        traitBuffs.Clear();
+        traitBuffsList.Clear();
     }
+
 
     // Start is called before the first frame update
     void Start()

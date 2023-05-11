@@ -15,5 +15,5 @@ MonoBehaviour:
   traitName: Ethereal
   description: 
   icon: {fileID: 21300000, guid: 67cbdcffbfa805e4b9642833593e49d1, type: 3}
-  requirementTiers: 0200000004000000
-  effect: 
+  requirementTiers: 01000000
+  traitBuff_ID: 103

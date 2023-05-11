@@ -266,6 +266,7 @@ public class HexGrid : MonoBehaviour
         // HexCell cell = cells[index];
         //cell.color = color;
         //hexMesh.Triangulate(cells);
+        if (index >= cells.Length) return null; //Out of bounds
         return cells[index];
     }
 

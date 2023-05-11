@@ -15,3 +15,5 @@ MonoBehaviour:
   traitName: Malebranche
   description: 
   icon: {fileID: 21300000, guid: d8ab02cc18973244f8787411e9c1b808, type: 3}
+  requirementTiers: 0300000006000000
+  traitBuff_ID: 5

@@ -15,6 +15,6 @@ MonoBehaviour:
   traitName: Assassin
   description: 
   icon: {fileID: 21300000, guid: 090399d6026e5314489e0db59c599627, type: 3}
-  requirementTiers: 0100000004000000
-  effect: 
+  requirementTiers: 0100000005000000
+  traitBuff_ID: 7
   movementSkill_ID: 4

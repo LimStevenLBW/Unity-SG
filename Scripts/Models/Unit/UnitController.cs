@@ -210,11 +210,15 @@ public class UnitController : MonoBehaviour
                 location.unitController = null;
             }
             location = value;
-            value.unitController = this;
-            //value.IncreaseVisibility();
 
-            transform.localPosition = value.Position;
-        }
+            if (value)
+            {
+                value.unitController = this;
+                transform.localPosition = value.Position;
+            }
+                //value.IncreaseVisibility();
+
+            }
     }
 
     public void EnableHighlight()

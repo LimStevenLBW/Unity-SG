@@ -11,7 +11,7 @@ public class UnitTrait : ScriptableObject, IComparable<UnitTrait>
     public Sprite icon;
 
     public List<int> requirementTiers;
-    public string effect;
+    public int traitBuff_ID;
 
     public int CompareTo(UnitTrait other)
     {

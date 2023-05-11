@@ -4,7 +4,7 @@ using UnityEngine;
 using Buttons;
 using UnityEngine.EventSystems;
 
-public class StartDeploymentButton : Button, IPointerClickHandler
+public class StartDeploymentButton : Button, IPointerClickHandler, IPointerEnterHandler
 {
 
     /*
@@ -14,6 +14,11 @@ public class StartDeploymentButton : Button, IPointerClickHandler
     {
 
         Director.Instance.SetPhase("DEPLOYMENT");
+        gameObject.SetActive(false);
+    }
+    public override void OnPointerEnter(PointerEventData pointerEventData)
+    {
+        //AudioPlayer.PlayOneShot(AudioHover);
     }
 
     public override void PlayAudioClip(AudioClip clip)
@@ -21,6 +26,8 @@ public class StartDeploymentButton : Button, IPointerClickHandler
         AudioPlayer.clip = clip;
         AudioPlayer.Play();
     }
+
+
     // Start is called before the first frame update
     void Start()
     {

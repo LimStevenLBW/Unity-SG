@@ -18,7 +18,11 @@ public class MicroBarFollow : MonoBehaviour
 
     public void Update()
     {
-        if (unitController) transform.position = new Vector3(unitController.Location.transform.position.x, transform.position.y, unitController.transform.position.z);
+        if (unitController)
+        {
+            transform.position = new Vector3(unitController.transform.position.x, transform.position.y, unitController.transform.position.z);
+            //   transform.position = new Vector3(unitController.Location.transform.position.x, transform.position.y, unitController.transform.position.z);
+        }
     }
     public void LateUpdate()
     {
@@ -48,8 +52,8 @@ public class MicroBarFollow : MonoBehaviour
         Vector3 boxSizeConverted = unitController.transform.TransformVector(box.size);
 
         //Place the bar above the unit controller's head
-        transform.position = new Vector3(unitController.Location.transform.position.x, boxSizeConverted.y+5, unitController.transform.position.z);
-
+        // transform.position = new Vector3(unitController.Location.transform.position.x, boxSizeConverted.y+5, unitController.transform.position.z);
+        transform.position = new Vector3(unitController.transform.position.x, boxSizeConverted.y + 5, unitController.transform.position.z);
         data.OnBarUpdated += UpdateBarValues;
         
     }

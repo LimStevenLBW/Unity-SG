@@ -15,6 +15,6 @@ MonoBehaviour:
   traitName: Caster
   description: 
   icon: {fileID: 21300000, guid: 8eedd240be82d5948a3efd6c11559c9f, type: 3}
-  requirementTiers: 0300000006000000
-  effect: 
+  requirementTiers: 0200000004000000
+  traitBuff_ID: 8
   movementSkill_ID: 3

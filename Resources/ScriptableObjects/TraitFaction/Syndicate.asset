@@ -15,3 +15,5 @@ MonoBehaviour:
   traitName: Syndicate
   description: 
   icon: {fileID: 21300000, guid: 3866c29988e48f847a27ea54b019c95a, type: 3}
+  requirementTiers: 02000000040000000600000008000000
+  traitBuff_ID: 4

@@ -15,5 +15,5 @@ MonoBehaviour:
   traitName: Goon
   description: 
   icon: {fileID: 21300000, guid: 0e8dc9830e7f86e44bb48eb0e310cf5b, type: 3}
-  requirementTiers: 0400000006000000
-  effect: 
+  requirementTiers: 09000000
+  traitBuff_ID: 105

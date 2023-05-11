@@ -40,17 +40,18 @@ public class Director : MonoBehaviour
     public UnitManager unitManager;
     public PlayerHandPanel playerHand;
     public PlayerHandPanel enemyHand;
-    public TopLeftPrompt topLeftPrompt;
+    public CenterPrompt centerPrompt;
     public CameraControl playerCamera;
     public StartDeploymentButton startDeploymentButton;
+    public StartCombatButton startCombatButton;
+
     public Timer timer;
     [SerializeField] private TraitBuffsList playerTraitBuffs;
     [SerializeField] private TraitBuffsList enemyTraitBuffs;
 
     [SerializeField] private AudioSource AudioPlayer;
-    [SerializeField] private AudioClip AudioHover;
     [SerializeField] private AudioClip AudioPlayStart;
-    [SerializeField] private AudioClip AudioClickClose;
+
 
     public static Director Instance { get; private set; }
 
@@ -151,16 +152,15 @@ public class Director : MonoBehaviour
         if (phase == "CARDSELECT")
         {
             this.phase = Phase.CARDSELECT;
-            topLeftPrompt.DisplayPrompt();
+            centerPrompt.DisplayPrompt();
             startDeploymentButton.gameObject.SetActive(true);
         }
         if (phase == "DEPLOYMENT")
         {
             this.phase = Phase.DEPLOYMENT;
-            topLeftPrompt.ResetText();
+            centerPrompt.ResetText();
             playerCamera.UnFocus();
             playerHand.gameObject.SetActive(false);
-            startDeploymentButton.gameObject.SetActive(false);
             selectedCardsCount = 0; //reset order
 
             //Start Unit Deployment
@@ -186,11 +186,15 @@ public class Director : MonoBehaviour
 
         if (phase == "REPOSITIONING")
         {
+            startCombatButton.gameObject.SetActive(true);
             this.phase = Phase.REPOSITIONING;
+            combatManager.ClearSelectionKeepWindow();
+            playerTraitBuffs.ApplyTraitBuffs();
+            enemyTraitBuffs.ApplyTraitBuffs();
             playerCamera.UnFocus();
             //Skipping repositioning for now
 
-            SetPhase("COMBAT");
+            //SetPhase("COMBAT");
         }
         if (phase == "COMBAT")
         {
