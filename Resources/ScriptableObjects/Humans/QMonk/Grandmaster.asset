@@ -18,12 +18,12 @@ MonoBehaviour:
   special: {fileID: 11400000, guid: a2dcf144552abbd4589e6df8e5208988, type: 2}
   unitName: Grandmaster
   bio: 
-  rank: 2
+  rank: 3
   baseLevel: 1
   expGrowthRate: 1
   basePower: 45
   powerGrowthRate: 1
-  baseDefense: 15
+  baseDefense: 20
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0

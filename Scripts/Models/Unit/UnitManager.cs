@@ -170,24 +170,24 @@ public class UnitManager : MonoBehaviour
 
     public void RemoveUnit(UnitController controller)
     {
-
         int teamNum = controller.teamNum;
         while (true)
-        {
+        {        
+            //We cannot edit anything that affects unit pathfinding without permission first
             if (PATHFINDING_IN_USE) continue;
             PATHFINDING_IN_USE = true;
             break;
         }
 
-        //We cannot edit anything that affects unit pathfinding without permission first
-
         if (teamNum == 1)
         {
             firstTeamControllers.Remove(controller);
+            if(firstTeamControllers.Count == 0) Director.Instance.SetPhase("ENDCOMBAT");
         }
         else if (teamNum == -1)
         {
             secondTeamControllers.Remove(controller);
+            if (secondTeamControllers.Count == 0) Director.Instance.SetPhase("ENDCOMBAT");
         }
         else
         {
@@ -195,6 +195,18 @@ public class UnitManager : MonoBehaviour
         }
 
         controller.Die();
+    }
+
+    public void ResetUnitPositions()
+    {
+        foreach(UnitController unit in firstTeamControllers)
+        {
+            if(unit.gameObject) unit.ResetLocation();
+        }
+        foreach (UnitController unit in secondTeamControllers)
+        {
+            if (unit.gameObject) unit.ResetLocation();
+        }
     }
 
     public FormationController GetFormation(Ray ray)

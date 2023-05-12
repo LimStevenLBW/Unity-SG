@@ -19,6 +19,7 @@ namespace Assets.Scripts.Interface
         private UnitController priorController;
         private UnitController selectedController;
         private HexCell selectedCell;
+        public GameObject startCombatButton;
 
         [SerializeField] private AudioSource AudioPlayer;
        // [SerializeField] private AudioClip AudioHover;
@@ -65,12 +66,33 @@ namespace Assets.Scripts.Interface
                     }
                     else if (selectedController)
                     {
-                        FollowCursor following = selectedController.gameObject.GetComponent <FollowCursor>();
-                        following.Reposition();
-                        DisableHighlight(selectedController);
-                        DisableUnitWindow(selectedController);
-                        selectedController = null;
-                        AudioPlayer.PlayOneShot(AudioDrop);
+                        //Temporary fix, for if the player selected enemy controllers
+                        if(selectedController.teamNum == -1)
+                        {
+                            DisableHighlight(selectedController);
+                            DisableUnitWindow(selectedController);
+                            selectedController = null;
+
+                            if(hit.collider.gameObject.GetComponent<UnitController>() != null)
+                            {
+                                UnitController controller = hit.collider.gameObject.GetComponent<UnitController>();
+                                selectedController = controller;
+                                LiftAndSelect(controller);
+                                AudioPlayer.PlayOneShot(AudioLift);
+                            }
+                            return;
+                        }
+
+                        FollowCursor following = selectedController.gameObject.GetComponent <FollowCursor>();     
+                        bool wasSet = following.Reposition();
+                        if (wasSet)
+                        {
+                            DisableHighlight(selectedController);
+                            DisableUnitWindow(selectedController);
+                            selectedController = null;
+                            AudioPlayer.PlayOneShot(AudioDrop);
+                            startCombatButton.SetActive(true);
+                        }
 
                     }
                     else
@@ -82,6 +104,7 @@ namespace Assets.Scripts.Interface
                         {
                             LiftAndSelect(selectedController);
                             AudioPlayer.PlayOneShot(AudioLift);
+ 
                         }
                         
                     }
@@ -94,10 +117,17 @@ namespace Assets.Scripts.Interface
             EnableHighlight(selectedController);
             unitWindow.gameObject.SetActive(true);
             unitWindow.Initialize(controller);
+
+            if(controller.teamNum != 1)
+            {
+                return;
+            }
+
             FollowCursor following = controller.gameObject.AddComponent<FollowCursor>();
             following.GetGrid(grid);
             following.GetController(controller);
             controller.Location = null;
+            startCombatButton.SetActive(false);
         }
 
         private void HandleNormalInput()

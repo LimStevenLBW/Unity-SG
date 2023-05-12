@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO MAKE FOLLOW CURSOR MORE GENERIC, MOVE LOGIC ELSEWHERE
 public class FollowCursor : MonoBehaviour
 {
     private UnitController controller;
@@ -23,7 +24,7 @@ public class FollowCursor : MonoBehaviour
     void ObjectFollowCursor()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Vector3 point = ray.origin + (ray.direction * distance);
+        //Vector3 point = ray.origin + (ray.direction * distance);
         //Debug.Log( "World point " + point );
 
         cell = grid.GetCell(ray);
@@ -58,9 +59,17 @@ public class FollowCursor : MonoBehaviour
         this.controller = controller;
     }
 
-    public void Reposition()
+    public bool Reposition()
     {
-        controller.Location = cell;
-        Destroy(this);
+        if(cell.cell_ID < 41)
+        {
+            if (cell.unitController != null) return false; //Occupied
+            controller.Location = cell;
+            controller.UpdateStartingLocation();
+            Destroy(this);
+            return true;
+        }
+
+        return false;
     }
 }

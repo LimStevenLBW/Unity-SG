@@ -37,7 +37,7 @@ public class UnitController : MonoBehaviour
     private const int MOVECOST = 1;
     private const int MOVECOST_ELEVATION = 5;
     
-    private HexCell location, currentTravelLocation;
+    private HexCell location, currentTravelLocation, startingLocation;
     private float orientation;
     public int maxRange; //The range that unit wants to stay at due to their skills
 
@@ -63,6 +63,7 @@ public class UnitController : MonoBehaviour
 
         this.bars = bars;
         bars.Initialize(this);
+        startingLocation = location;
 
         //Copy a reference the controller lists. Remember to only edit this in UnitManager for organization!
         myAllies = manager.GetControllers(teamNum, true);
@@ -70,6 +71,7 @@ public class UnitController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         Director.Instance.OnCombatStarted += SetActive;
+        Director.Instance.OnCombatEnded += SetInactive;
         Director.Instance.AddControllerTraits(this);
     }
 
@@ -137,9 +139,25 @@ public class UnitController : MonoBehaviour
         data.StartListening();
     }
 
+    public void SetInactive()
+    {
+        ACTIVE = false;
+        data.StopListening();
+        data.ResetCooldowns();
+    }
+
+    public void UpdateStartingLocation()
+    {
+        startingLocation = location;
+    }
+
+    public void ResetLocation()
+    {
+        Location = startingLocation;
+    }
+
     void CalculateNextAction()
     {
-
         if (data.skill1 != null && data.skill1.IsAvailable())
         {
             state = State.ACTING;

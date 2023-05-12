@@ -206,6 +206,16 @@ public class UnitDataStore
         Timer.OnSecondPassed -= SecondPassed;
     }
 
+    public void ResetCooldowns()
+    {
+
+        if (skill1 != null) skill1.ResetCD();
+        if (skill2 != null) skill2.ResetCD();
+        if (skill3 != null) skill3.ResetCD();
+        if (skill4 != null) skill4.ResetCD();
+        if (movementSkill != null) movementSkill.ResetCD();
+    }
+
     void SecondPassed()
     {
         if (skill1 != null) skill1.SecondPassed();

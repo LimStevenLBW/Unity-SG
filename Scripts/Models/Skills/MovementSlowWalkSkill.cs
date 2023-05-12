@@ -15,6 +15,7 @@ public class MovementSlowWalkSkill : Skill
         skillName = "Slow Approach";
         description = "This unit is heavy and moves slowly";
         baseCooldown = 1;
+        currentCooldown = 0;
         baseStaminaCost = 1;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;

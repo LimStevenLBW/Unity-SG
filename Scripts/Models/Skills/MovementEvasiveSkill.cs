@@ -17,7 +17,7 @@ public class MovementEvasiveSkill : Skill
         description = "Float like a butterfly";
 
         baseCooldown = 1f;
-        currentCooldown = baseCooldown;
+        currentCooldown = 0;
         baseStaminaCost = 2;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;

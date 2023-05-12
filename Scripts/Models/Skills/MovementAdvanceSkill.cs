@@ -15,7 +15,7 @@ public class MovementAdvanceSkill : Skill
         description = "Get close";
 
         baseCooldown = 1;
-        currentCooldown = baseCooldown;
+        currentCooldown = 0;
         baseStaminaCost = 1;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;

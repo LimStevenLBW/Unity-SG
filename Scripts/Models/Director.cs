@@ -1,6 +1,7 @@
 using Assets.Scripts.Interface;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -15,13 +16,14 @@ public class Director : MonoBehaviour
         ENEMYDEPLOYMENT,
         REPOSITIONING,
         COMBAT,
-        END
+        ENDCOMBAT
     }
 
     private int selectedCardsCount = 0;
 
     public Action<int> OnCardDeselected;
     public Action OnCombatStarted;
+    public Action OnCombatEnded;
 
     private Phase phase = Phase.INTRO;
     private bool gameNotStarted = true;
@@ -41,6 +43,8 @@ public class Director : MonoBehaviour
     public PlayerHandPanel playerHand;
     public PlayerHandPanel enemyHand;
     public CenterPrompt centerPrompt;
+    public GameObject sortiePrompt;
+
     public CameraControl playerCamera;
     public StartDeploymentButton startDeploymentButton;
     public StartCombatButton startCombatButton;
@@ -51,7 +55,7 @@ public class Director : MonoBehaviour
 
     [SerializeField] private AudioSource AudioPlayer;
     [SerializeField] private AudioClip AudioPlayStart;
-
+    [SerializeField] private AudioClip AudioSortie;
 
     public static Director Instance { get; private set; }
 
@@ -122,14 +126,11 @@ public class Director : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         //Player Card Selection phase
-        
-        stageIntro.gameObject.SetActive(false);
-        playerHand.gameObject.SetActive(true);
         SetPhase("CARDSELECT");
-        playerHand.DrawStartingHand();
-        playerCamera.UnFocus();
-        //End intro, start game
-        // combatManager.StartStage(playerDeck, enemyDeck);
+        stageIntro.gameObject.SetActive(false);
+        centerPrompt.DisplayPrompt();
+
+
     }
 
     public string GetPhase()
@@ -141,7 +142,7 @@ public class Director : MonoBehaviour
         if (phase == Phase.ENEMYDEPLOYMENT) return "ENEMYDEPLOYMENT";
         if (phase == Phase.REPOSITIONING) return "REPOSITIONING";
         if (phase == Phase.COMBAT) return "COMBAT";
-        if (phase == Phase.END) return "END";
+        if (phase == Phase.ENDCOMBAT) return "END";
 
         return "Unknown State";
     }
@@ -152,8 +153,12 @@ public class Director : MonoBehaviour
         if (phase == "CARDSELECT")
         {
             this.phase = Phase.CARDSELECT;
-            centerPrompt.DisplayPrompt();
+
+            playerHand.gameObject.SetActive(true);
+            playerHand.DrawStartingHand();
+            playerCamera.UnFocus();
             startDeploymentButton.gameObject.SetActive(true);
+            unitManager.ResetUnitPositions();
         }
         if (phase == "DEPLOYMENT")
         {
@@ -199,11 +204,34 @@ public class Director : MonoBehaviour
         if (phase == "COMBAT")
         {
             this.phase = Phase.COMBAT;
-            timer.StartTimer();
-            OnCombatStarted?.Invoke();
+            StartCoroutine(BeginCombat());
+        }
+        if (phase == "ENDCOMBAT")
+        {
+            this.phase = Phase.ENDCOMBAT;
+            StartCoroutine(EndCombat());
 
         }
-        if (phase == "END") this.phase = Phase.END;
+    }
+
+    IEnumerator BeginCombat()
+    {
+        sortiePrompt.SetActive(true);
+        AudioPlayer.PlayOneShot(AudioSortie);
+        yield return new WaitForSeconds(1f);
+
+        sortiePrompt.SetActive(false);
+       
+        timer.StartTimer();
+        OnCombatStarted?.Invoke();
+    }
+    IEnumerator EndCombat()
+    {
+        AudioPlayer.PlayOneShot(AudioSortie);
+        RecalculateControllerTraits();
+        OnCombatEnded?.Invoke();
+        yield return new WaitForSeconds(2f);
+        SetPhase("CARDSELECT");
     }
 
     public int IncCardSelectOrder()
@@ -229,14 +257,35 @@ public class Director : MonoBehaviour
     {
         if(controller.teamNum == -1)
         {
-            enemyTraitBuffs.AddTraitsFrom(controller.data, controller.teamNum);
+            enemyTraitBuffs.GetTraitsFrom(controller.data);
         }
         else if(controller.teamNum == 1){
-            playerTraitBuffs.AddTraitsFrom(controller.data, controller.teamNum);
+            playerTraitBuffs.GetTraitsFrom(controller.data);
         }
         else
         {
             Debug.Log("invalid team number " + controller.teamNum);
         }
+    }
+
+    public void RecalculateControllerTraits()
+    {
+        playerTraitBuffs.ClearTraitBuffs(true);
+        enemyTraitBuffs.ClearTraitBuffs(true);
+
+        List<UnitController> firstTeamControllers = unitManager.firstTeamControllers;
+        List<UnitController> secondTeamControllers = unitManager.secondTeamControllers;
+
+        
+        foreach (UnitController controller in firstTeamControllers)
+        {
+            AddControllerTraits(controller);
+        }
+        foreach (UnitController controller in secondTeamControllers)
+        { 
+            AddControllerTraits(controller);
+        }
+        
+        
     }
 }

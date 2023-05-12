@@ -14,10 +14,11 @@ public class TraitBuffsList : MonoBehaviour
     public int team;
 
     private List<UnitTrait> traits = new List<UnitTrait>();
-    private List<TraitBuffDataStore> traitBuffsList = new List<TraitBuffDataStore>();
-    public void AddTraitsFrom(UnitDataStore data, int teamNum)
+    public List<TraitBuffDataStore> traitBuffsList = new List<TraitBuffDataStore>();
+
+    public void GetTraitsFrom(UnitDataStore data)
     {
-        ResetTraitBuffs();
+        ClearTraitBuffs(false);
         traits.Add(data.unitClass);
         traits.Add(data.special);
         traits.Add(data.faction);
@@ -92,13 +93,19 @@ public class TraitBuffsList : MonoBehaviour
 
     }
 
-    public void ResetTraitBuffs()
+    /*
+     * when false, only the shown prefabs will be cleared
+     * and the actual stored traits will remain intact
+     */
+    public void ClearTraitBuffs(bool fullReset)
     {
         foreach(TraitBuffDataStore traitBuff in traitBuffsList)
         {
             Destroy(traitBuff.gameObject);
         }
         traitBuffsList.Clear();
+
+        if (fullReset) traits.Clear();
     }
 
 

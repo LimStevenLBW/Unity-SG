@@ -17,15 +17,23 @@ public class Timer : MonoBehaviour
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();
+        Director.Instance.OnCombatEnded += EndTimer;
     }
 
     public void StartTimer()
     {
         clock = fightTimer;
         clockText.SetText(clock.ToString());
+        clockText.color = Color.white;
 
         StartCoroutine(Tick());
         
+    }
+
+    public void EndTimer()
+    {
+        StopAllCoroutines();
+        clockText.SetText("");
     }
 
     private IEnumerator Tick()
@@ -34,6 +42,7 @@ public class Timer : MonoBehaviour
         clockText.color = Color.white;
         while (clock > 0)
         {
+            yield return new WaitForSeconds(1);
             OnSecondPassed?.Invoke();
             clock--;
             clockText.SetText(clock.ToString());
@@ -48,10 +57,10 @@ public class Timer : MonoBehaviour
                     animator.SetTrigger("TimerBouncing");
                 }
             }
-           
-
-            yield return new WaitForSeconds(1);
         }
-        
+
+        yield return new WaitForSeconds(0.5f);
+        clockText.SetText("");
+        Director.Instance.SetPhase("ENDCOMBAT");
     }
 }

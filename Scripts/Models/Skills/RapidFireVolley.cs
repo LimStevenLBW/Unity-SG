@@ -18,7 +18,7 @@ public class RapidFireVolleySkill : Skill
     private AudioClip hitSFX;
     public RapidFireVolleySkill()
     {
-        maxRange = 8;
+        maxRange = 6;
         //minRange = 1;
         effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
         projectile = Resources.Load("Weapons/chibi-arrow") as GameObject;

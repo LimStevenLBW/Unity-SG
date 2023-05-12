@@ -18,7 +18,7 @@ public class VolleySkill : Skill
     private AudioClip hitSFX;
     public VolleySkill()
     {
-        maxRange = 7;
+        maxRange = 6;
         //minRange = 1;
         effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
         projectile = Resources.Load("Weapons/chibi-arrow") as GameObject;

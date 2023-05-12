@@ -9,7 +9,7 @@ public class HexGrid : MonoBehaviour
 {
     private int chunkCountX, chunkCountZ;
     public int cellCountX = 20, cellCountZ = 15;
-    
+
     //public Color defaultColor = Color.white;
     public Color[] colors;
 
@@ -44,8 +44,21 @@ public class HexGrid : MonoBehaviour
         cellShaderData.Grid = this;
         CreateMap(cellCountX, cellCountZ);
 
+
+        //TEMPORARY, Color enemy and allied  cells
+        foreach (HexCell cell in cells)
+        {
+            if (cell.cell_ID < 41)
+            {
+                cell.TerrainTypeIndex = 1;
+            }
+            else
+            {
+                cell.TerrainTypeIndex = 3;
+            }
+        }
         unitManager.InitGrid(this);
-        
+
         //gridCanvas = GetComponentInChildren<Canvas>();
         //hexMesh = GetComponentInChildren<HexMesh>();
     }
@@ -167,7 +180,7 @@ public class HexGrid : MonoBehaviour
 
         AddCellToChunk(x, z, cell);
 
-        
+
     }
 
     /**
@@ -266,7 +279,7 @@ public class HexGrid : MonoBehaviour
         // HexCell cell = cells[index];
         //cell.color = color;
         //hexMesh.Triangulate(cells);
-        if (index >= cells.Length) return null; //Out of bounds
+        if (index >= cells.Length || index < 0) return null; //Out of bounds
         return cells[index];
     }
 
