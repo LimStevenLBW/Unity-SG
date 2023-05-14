@@ -155,7 +155,7 @@ public class Director : MonoBehaviour
             this.phase = Phase.CARDSELECT;
 
             playerHand.gameObject.SetActive(true);
-            playerHand.DrawStartingHand();
+            playerHand.FillHand();
             playerCamera.UnFocus();
             startDeploymentButton.gameObject.SetActive(true);
             unitManager.ResetUnitPositions();
@@ -165,17 +165,19 @@ public class Director : MonoBehaviour
             this.phase = Phase.DEPLOYMENT;
             centerPrompt.ResetText();
             playerCamera.UnFocus();
-            playerHand.gameObject.SetActive(false);
+
             selectedCardsCount = 0; //reset order
 
             //Start Unit Deployment
-            unitManager.DeployQueuedUnits(playerHand.GetDeployableUnits(), true);
+            unitManager.DeployQueuedUnits(playerHand.PlayCards(), true);
+            playerHand.RearrangeCards();
+            playerHand.gameObject.SetActive(false);
         }
         if(phase == "ENEMYCARDSELECT")
         {
             this.phase = Phase.ENEMYCARDSELECT;
             enemyHand.gameObject.SetActive(true);
-            enemyHand.DrawStartingHand();
+            enemyHand.FillHand();
             enemyHand.CPUSelectCards();
             playerCamera.UnFocus();
         }
@@ -183,10 +185,10 @@ public class Director : MonoBehaviour
         {
             this.phase = Phase.ENEMYDEPLOYMENT;
             playerCamera.UnFocus();
-            enemyHand.gameObject.SetActive(false);
             selectedCardsCount = 0;
-
-            unitManager.DeployQueuedUnits(enemyHand.GetDeployableUnits(), false);
+            unitManager.DeployQueuedUnits(enemyHand.PlayCards(), false);
+            enemyHand.RearrangeCards();
+            enemyHand.gameObject.SetActive(false);
         }
 
         if (phase == "REPOSITIONING")
@@ -230,7 +232,7 @@ public class Director : MonoBehaviour
         AudioPlayer.PlayOneShot(AudioSortie);
         RecalculateControllerTraits();
         OnCombatEnded?.Invoke();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
         SetPhase("CARDSELECT");
     }
 

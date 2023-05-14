@@ -12,7 +12,7 @@ public class PlayerHandPanel : MonoBehaviour
     public DeckDataStore myDeck;
     public Card[] cards = new Card[5];
     public DeckCountDisplay deckCounter;
-    private int selectedAmount = 3; // The amount of cards that the cpu can select
+    private int cpuSelectAmount = 3; // The amount of cards that the cpu can select
 
     public void Init(DeckDataStore deck)
     {
@@ -31,7 +31,28 @@ public class PlayerHandPanel : MonoBehaviour
     {
         
     }
-    public void DrawStartingHand()
+
+    //Move cards around so the cards that contains units are on the lefthand side
+    public void RearrangeCards()
+    {
+        List<UnitDataStore> unitList = new List<UnitDataStore>();
+        foreach(Card c in cards)
+        {
+            if (c.unit != null)
+            {
+                unitList.Add(c.unit);
+                c.ClearCard();
+            }
+        }
+
+        for(int i = 0; i < unitList.Count; i++)
+        {
+            cards[i].unit = unitList[i];
+        }
+    }
+
+    // Determines how to draw
+    public void FillHand()
     {
         StartCoroutine(DrawFull());
     }
@@ -43,8 +64,18 @@ public class PlayerHandPanel : MonoBehaviour
         foreach (Card c in cards)
         {
             yield return new WaitForSeconds(.1f);
-            c.DrawCard(myDeck);
-            deckCounter.UpdateCount(myDeck.GetDeckCount());
+
+            //If there is no card, draw a card from the deck and update the counter display
+            if(c.unit == null)
+            {
+                c.DrawCard(myDeck);
+                deckCounter.UpdateCount(myDeck.GetDeckCount());
+            }
+            else
+            {
+                c.SetupCard();
+            }
+           
         }
 
 
@@ -54,22 +85,28 @@ public class PlayerHandPanel : MonoBehaviour
     }
 
     /*
-     * Get a list of units to summon based on the selection order
+     * Create a list of units to summon based on the selection order
      */
-    public Queue<UnitDataStore> GetDeployableUnits()
+    public Queue<UnitDataStore> PlayCards()
     {
-        List<Card> temp = new List<Card>();
+        List<Card> selectedCards = new List<Card>();
         foreach (Card c in cards)
         {
-            if(c.isSelected) temp.Add(c);
-            c.Deselected();
+            if (c.isSelected)
+            {
+                selectedCards.Add(c);
+                c.Deselected();
+            }
+            else { c.gameObject.SetActive(false);  }
+           
         }
-        temp.Sort();
+        selectedCards.Sort();
         Queue<UnitDataStore> unitQueue = new Queue<UnitDataStore>();
 
-        foreach(Card c in temp)
+        foreach(Card c in selectedCards)
         {
             unitQueue.Enqueue(c.unit);
+            c.ClearCard();
         }
 
         return unitQueue;
@@ -96,22 +133,29 @@ public class PlayerHandPanel : MonoBehaviour
     IEnumerator RandomSelect()
     {
         yield return new WaitForSeconds(1.1f);
-        int randomChoice;
-        int selectedCount = 0;
-        while (selectedCount < selectedAmount)
-        {
-            randomChoice = Random.Range(1, 6);
-            foreach (Card c in cards)
-            {
-                if (c.isSelected) continue; //We skip already selected cards
-                if (randomChoice == c.cardNum)
-                {
-                    c.Select();
-                    selectedCount++;
-                    yield return new WaitForSeconds(0.2f);
-                }
+        int randomValue;
 
+        List<Card> selectionPriority = new List<Card>();
+        //Fill each card with a random value
+        foreach(Card c in cards)
+        {
+            if (c.unit != null)
+            {
+                randomValue = Random.Range(1, 99);
+                c.cardValue = randomValue;
+                selectionPriority.Add(c);
             }
+        }
+
+        //Sort from greatest to least, compare cards by their card value
+        selectionPriority.Sort((left, right) => right.cardValue.CompareTo(left.cardValue));
+        if (cpuSelectAmount > selectionPriority.Count) cpuSelectAmount = selectionPriority.Count;
+   
+
+        for(int i=0; i < cpuSelectAmount; i++)
+        {
+            selectionPriority[i].Select();
+            yield return new WaitForSeconds(0.2f);
         }
 
         Director.Instance.SetPhase("ENEMYDEPLOYMENT");

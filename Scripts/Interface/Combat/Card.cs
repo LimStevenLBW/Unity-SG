@@ -11,7 +11,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public bool isComparingByOrder = true; //When set to true, sort methods will compare this object by cardSelectOrder, other it will use cardValue
     public bool isSelected = false;
     public int cardSelectOrder = 0;
-   // private int cardValue = 0; //How much this card will be valued by the cpu to play
+
+    public int cardValue = 0; //How much this card will be valued by the cpu to play, todo, currently valued at random
     private int numberOfSelectable = 5;
     public DetailsFooter footer;
     public UnitDataStore unit;
@@ -100,7 +101,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         AudioPlayer.PlayOneShot(AudioSelect); //Always play selected sound
         cardSelectOrder = Director.Instance.IncCardSelectOrder();
         isSelected = true;
-
+        
         cardSelectOrderDisplay.gameObject.SetActive(true);
         cardSelectOrderDisplay.UpdateOrder(cardSelectOrder);
 
@@ -120,6 +121,12 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         cardSelectOrderDisplay.gameObject.SetActive(false);
     }
 
+    public void ClearCard()
+    {
+        unit = null;
+        gameObject.SetActive(false);
+    }
+
     public void DrawCard(DeckDataStore deck)
     {
         //If this unit doesnt have any data, draw a card
@@ -129,10 +136,15 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
 
         if (unit != null) {
-            gameObject.SetActive(true);
-            UpdatePortrait();
-            UpdateCardValue();
+            SetupCard();
         }
+    }
+
+    public void SetupCard()
+    {
+        gameObject.SetActive(true);
+        UpdatePortrait();
+        UpdateCardValue();
     }
 
     void UpdatePortrait()
