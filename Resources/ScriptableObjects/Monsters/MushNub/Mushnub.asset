@@ -15,7 +15,7 @@ MonoBehaviour:
   model: {fileID: 4046627599654500939, guid: 391963458359a68499a32dbb9b1b2822, type: 3}
   unitClass: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
   faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: 0684df260fe4ba94eb4f5e9cf0232b44, type: 2}
   unitName: Mushnub
   bio: 
   rank: 5

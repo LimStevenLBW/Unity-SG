@@ -100,11 +100,11 @@ public class FistsOfFurySkill : Skill
             position.x += xRandom;
 
             //Setup power modifier
-            float powerModifier = data.GetCurrentPower() * 1.5f;
+            float powerModifier = data.GetCurrentPower() * 2f;
 
             //Base damage is based on max troop count, should help ensure a stable damage range
             float lowerBound = (thisGuy.GetMaxTroopCount() / 30);
-            float upperBound = (thisGuy.GetMaxTroopCount() / 15);
+            float upperBound = (thisGuy.GetMaxTroopCount() / 20);
 
             //Setup base count modifier, a small debuff or buff based on the current health comparison
             float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;

@@ -15,7 +15,7 @@ MonoBehaviour:
   model: {fileID: 3479041650223357548, guid: 331f7bcdb09540045b4dabbbd9608440, type: 3}
   unitClass: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
   faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: 0684df260fe4ba94eb4f5e9cf0232b44, type: 2}
   unitName: Mushnub E
   bio: 
   rank: 4
@@ -23,7 +23,7 @@ MonoBehaviour:
   expGrowthRate: 1
   basePower: 12
   powerGrowthRate: 1
-  baseDefense: 5
+  baseDefense: 12
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0

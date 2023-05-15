@@ -52,12 +52,15 @@ public class SelfRecoverySkill : Skill
         //If we have enough stamina and if it is off cooldown
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
-          
+
+            /*
           //Don't bother to heal if our health is full
           if(data.GetCurrentTroopCount() != data.GetMaxTroopCount())
           {
                 return true;
           }
+          */
+          return true;
 
         }
         return false;
@@ -114,6 +117,9 @@ public class SelfRecoverySkill : Skill
         DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
         //Terminate
         isRunning = false;
+
+        //Manually setstate because this skill doesnt have an animation
+        controller.SetState("IDLE");
     }
 
     public override void Reset()

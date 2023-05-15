@@ -852,6 +852,8 @@ MonoBehaviour:
   teamNum: 0
   prefab: {fileID: 7297535323292551013}
   bars: {fileID: 0}
+  state: 0
+  maxRange: 0
 --- !u!65 &5240023256817334902
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -875,7 +877,7 @@ Animator:
   m_GameObject: {fileID: 2647684196615447566}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 54ef84f767b0ea740ba85e95208dc97b, type: 2}
+  m_Controller: {fileID: 9100000, guid: bbaa37131a52a1346b7702ebb63f9025, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

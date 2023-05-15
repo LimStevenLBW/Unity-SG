@@ -19,6 +19,9 @@ public class Director : MonoBehaviour
         ENDCOMBAT
     }
 
+    public HeartBar playerHearts;
+    public HeartBar cpuHearts;
+
     private int selectedCardsCount = 0;
 
     public Action<int> OnCardDeselected;
@@ -288,6 +291,28 @@ public class Director : MonoBehaviour
             AddControllerTraits(controller);
         }
         
-        
     }
+    public void TakeDamage(bool isPlayer, int damage)
+    {
+        if (isPlayer)
+        {
+            bool playerSurvived = playerHearts.TakeDamage(1);
+            if (!playerSurvived) GameOver();
+        }
+        else
+        {
+            bool cpuSurvived = cpuHearts.TakeDamage(1);
+            if (!cpuSurvived) Victory();
+        }
+    }
+
+    void GameOver()
+    {
+        Debug.Log("You lost");
+    }
+    void Victory()
+    {
+        Debug.Log("You won");
+    }
+
 }

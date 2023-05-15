@@ -15,15 +15,15 @@ MonoBehaviour:
   model: {fileID: -2678795074763268468, guid: 0b5a5f6421dcb004481d6eae12e6551b, type: 3}
   unitClass: {fileID: 11400000, guid: b8f5dc32668ca9f42a6bd0af36037465, type: 2}
   faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: e6e093c7ed0935e4581ae804de1a455e, type: 2}
   unitName: Froggo
   bio: 
   rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 2
+  basePower: 11
   powerGrowthRate: 1
-  baseDefense: 12
+  baseDefense: 16
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 100
+  baseTroopCount: 200
   leadership: 1
   engineering: 1
   magic: 1
@@ -40,7 +40,7 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
-  skill1_ID: 200
+  skill1_ID: 104
   skill2_ID: 100
   skill3_ID: 0
   skill4_ID: 0

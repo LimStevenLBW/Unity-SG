@@ -111,8 +111,8 @@ public class WideRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 10);
-        float upperBound = (data.GetCurrentTroopCount() / 5);
+        float lowerBound = (data.GetCurrentTroopCount() / 15);
+        float upperBound = (data.GetCurrentTroopCount() / 10);
 
         //Setup magic modifier
         float magicModifier = data.GetCurrentMagic() * 2;

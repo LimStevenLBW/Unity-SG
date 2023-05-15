@@ -15,15 +15,15 @@ MonoBehaviour:
   model: {fileID: 5477987023178181673, guid: ac832cebe73796b41ae38c68867d0ecb, type: 3}
   unitClass: {fileID: 11400000, guid: b8f5dc32668ca9f42a6bd0af36037465, type: 2}
   faction: {fileID: 11400000, guid: 9a1a2a4c50757714ba13fe7545c8a911, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Goblin Ninjas
   bio: 
-  rank: 4
+  rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 1
+  basePower: 12
   powerGrowthRate: 5
-  baseDefense: 5
+  baseDefense: 12
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   agriculture: 1
   upkeep: 0.1
   positionSpawnPref: 0000000000000000
-  skill1_ID: 100
-  skill2_ID: 0
+  skill1_ID: 104
+  skill2_ID: 100
   skill3_ID: 0
   skill4_ID: 0

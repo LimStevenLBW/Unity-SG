@@ -182,12 +182,20 @@ public class UnitManager : MonoBehaviour
         if (teamNum == 1)
         {
             firstTeamControllers.Remove(controller);
-            if(firstTeamControllers.Count == 0) Director.Instance.SetPhase("ENDCOMBAT");
+            if (firstTeamControllers.Count == 0)
+            {
+                Director.Instance.SetPhase("ENDCOMBAT");
+                Director.Instance.TakeDamage(true, 1);
+            }
         }
         else if (teamNum == -1)
         {
             secondTeamControllers.Remove(controller);
-            if (secondTeamControllers.Count == 0) Director.Instance.SetPhase("ENDCOMBAT");
+            if (secondTeamControllers.Count == 0)
+            {
+                Director.Instance.SetPhase("ENDCOMBAT");
+                Director.Instance.TakeDamage(false, 1);
+            }
         }
         else
         {

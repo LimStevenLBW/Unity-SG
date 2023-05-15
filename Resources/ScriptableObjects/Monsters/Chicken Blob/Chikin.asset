@@ -15,7 +15,7 @@ MonoBehaviour:
   model: {fileID: 8144614351123981840, guid: 25684e102441fdb43aece48c6a058c54, type: 3}
   unitClass: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
   faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: e6e093c7ed0935e4581ae804de1a455e, type: 2}
   unitName: Chikin
   bio: 
   rank: 5
@@ -32,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 100
+  baseTroopCount: 500
   leadership: 1
   engineering: 1
   magic: 1

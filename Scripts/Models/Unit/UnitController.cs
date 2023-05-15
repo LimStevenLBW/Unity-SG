@@ -160,23 +160,23 @@ public class UnitController : MonoBehaviour
     {
         if (data.skill1 != null && data.skill1.IsAvailable())
         {
-            state = State.ACTING;
+            SetState("ACTING");
             data.skill1.DoSkill();
         }
         else if (data.skill2 != null && data.skill2.IsAvailable())
         {
-            state = State.ACTING;
+            SetState("ACTING");
             data.skill2.DoSkill();
             
         }
         else if (data.skill3 != null && data.skill3.IsAvailable())
         {
-            state = State.ACTING;
+            SetState("ACTING");
             data.skill3.DoSkill();
         }
         else if (data.skill4 != null && data.skill4.IsAvailable())
         {
-            state = State.ACTING;
+            SetState("ACTING");
             data.skill4.DoSkill();
         }
         else if (data.movementSkill != null && data.movementSkill.IsAvailable())
@@ -305,9 +305,13 @@ public class UnitController : MonoBehaviour
         {
             state = State.DEAD;
         }
-        if (text.Equals("IDLE"))
+        else if (text.Equals("IDLE"))
         {
             state = State.IDLE;
+        }
+        else if(text.Equals("ACTING"))
+        {
+            state = State.ACTING;
         }
     }
 
@@ -338,7 +342,7 @@ public class UnitController : MonoBehaviour
     //With direction
     public void PlayAnim(string anim, float timing, Skill skill, HexCell cell)
     {
-        animator.SetBool(anim, true);
+
        
         StartCoroutine(OnPerformAnimation(anim, timing, skill, cell));
 
@@ -349,11 +353,38 @@ public class UnitController : MonoBehaviour
         
     }
 
-    /*
+    IEnumerator OnPerformAnimation(string anim, float timing, Skill skill, HexCell cell)
+    {
+        float animationLength = 1f;
+        //Turn to look at target cell, if need be
+        if (cell)
+        {
+            yield return LookAt(cell.Position);
+        }
+
+        animator.SetBool(anim, true);
+
+        yield return new WaitForSeconds(timing);
+        skill.HandleAnimExtra();
+
+        if (timing < animationLength) animationLength -= timing;
+        yield return new WaitForSeconds(animationLength);
+
+        animator.SetBool(anim, false);
+
+        while (skill.IsSkillRunning() == true) yield return null;
+
+        //Return to IDLE state after completion
+        SetState("IDLE");
+    }
+
+    /* OLDER VERSION KEPT HERE
      * Works in tandem with Talent/Skill
      * todo, normalizedtime may be very unreliable depending on the animation, look into animation events
      * We run into problems with animation timings, for example, some models have faster attack animations than others, this affects the skill usefulness
      */
+
+    /*
     IEnumerator OnPerformAnimation(string anim, float timing, Skill skill, HexCell cell)
     {
         //Turn to look at cell, if need be
@@ -384,6 +415,7 @@ public class UnitController : MonoBehaviour
         SetState("IDLE");
 
     }
+    */
 
     public void PlayEffect(GameObject effect, Vector3 pos)
     {
