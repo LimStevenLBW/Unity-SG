@@ -13,7 +13,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public int cardSelectOrder = 0;
 
     public int cardValue = 0; //How much this card will be valued by the cpu to play, todo, currently valued at random
-    private int numberOfSelectable = 5;
+    private int numberOfSelectable;
     public DetailsFooter footer;
     public UnitDataStore unit;
     public PortraitRoom portraitRoom;
@@ -190,5 +190,10 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             //Currently the cpu won't calculate that
             return other.cardSelectOrder.CompareTo(cardSelectOrder);
         }
+    }
+
+    public void SetNumberOfSelectable(int selectable)
+    {
+        numberOfSelectable = selectable;
     }
 }

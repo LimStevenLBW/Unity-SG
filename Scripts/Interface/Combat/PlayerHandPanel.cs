@@ -12,12 +12,18 @@ public class PlayerHandPanel : MonoBehaviour
     public DeckDataStore myDeck;
     public Card[] cards = new Card[5];
     public DeckCountDisplay deckCounter;
-    private int cpuSelectAmount = 3; // The amount of cards that the cpu can select
+
+    private int playerSelectAmount; // The amount of cards that the cpu can select
+    private int cpuSelectAmount; // The amount of cards that the cpu can select
 
     public void Init(DeckDataStore deck)
     {
         myDeck = deck;
         deckCounter.UpdateCount(deck.GetDeckCount());
+        foreach (Card c in cards)
+        {
+            c.SetNumberOfSelectable(playerSelectAmount);
+        }
     }
 
     void OnEnable()
@@ -159,6 +165,21 @@ public class PlayerHandPanel : MonoBehaviour
         }
 
         Director.Instance.SetPhase("ENEMYDEPLOYMENT");
+    }
+
+    public void UpdateSelectableAmount(bool isPlayer, int amount)
+    {
+        if (isPlayer) {
+            playerSelectAmount = amount;
+            foreach(Card c in cards)
+            {
+                c.SetNumberOfSelectable(playerSelectAmount);
+            }
+        }
+        else
+        {
+            cpuSelectAmount = amount;
+        }
     }
 
 }

@@ -21,9 +21,9 @@ MonoBehaviour:
   rank: 2
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 45
+  basePower: 50
   powerGrowthRate: 1
-  baseDefense: 45
+  baseDefense: 50
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -41,6 +41,6 @@ MonoBehaviour:
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
   skill1_ID: 100
-  skill2_ID: 200
+  skill2_ID: 400
   skill3_ID: 0
   skill4_ID: 0

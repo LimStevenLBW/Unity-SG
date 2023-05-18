@@ -16,12 +16,21 @@ public class Director : MonoBehaviour
         ENEMYDEPLOYMENT,
         REPOSITIONING,
         COMBAT,
-        ENDCOMBAT
+        ENDCOMBAT,
+        CONCLUSION
     }
 
+    public int playerHealth;
+    public int cpuHealth;
     public HeartBar playerHearts;
     public HeartBar cpuHearts;
 
+    public int playerSelectable = 3;
+    public int cpuSelectable = 3;
+    private int defaultPlayerSelectable;
+    private int defaultCpuSelectable;
+
+    //for counting selected cards
     private int selectedCardsCount = 0;
 
     public Action<int> OnCardDeselected;
@@ -40,6 +49,9 @@ public class Director : MonoBehaviour
     public TextMeshProUGUI playPromptText;
     public RouteMap route;
     public StageIntro stageIntro;
+    public CombatEnd combatEndScreen;
+    private float damageDone;
+    private float timeElapsed;
 
     public ManagerCombatUI combatManager;
     public UnitManager unitManager;
@@ -47,6 +59,8 @@ public class Director : MonoBehaviour
     public PlayerHandPanel enemyHand;
     public CenterPrompt centerPrompt;
     public GameObject sortiePrompt;
+
+    public RoundIndicator roundIndicator;
 
     public CameraControl playerCamera;
     public StartDeploymentButton startDeploymentButton;
@@ -89,12 +103,21 @@ public class Director : MonoBehaviour
     {
         playerTraitBuffs.team = 1;
         enemyTraitBuffs.team = -1;
+        playerHearts.SetHearts(playerHealth);
+        playerHearts.HealMax();
+        cpuHearts.SetHearts(cpuHealth);
+        cpuHearts.HealMax();
+        defaultPlayerSelectable = playerSelectable;
+        defaultCpuSelectable = cpuSelectable;
+
+        playerHand.UpdateSelectableAmount(true, playerSelectable);
+        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && gameNotStarted)
+        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0)) && gameNotStarted)
         {
             gameNotStarted = false;
 
@@ -131,7 +154,6 @@ public class Director : MonoBehaviour
         //Player Card Selection phase
         SetPhase("CARDSELECT");
         stageIntro.gameObject.SetActive(false);
-        centerPrompt.DisplayPrompt();
 
 
     }
@@ -146,7 +168,7 @@ public class Director : MonoBehaviour
         if (phase == Phase.REPOSITIONING) return "REPOSITIONING";
         if (phase == Phase.COMBAT) return "COMBAT";
         if (phase == Phase.ENDCOMBAT) return "END";
-
+        if (phase == Phase.CONCLUSION) return "CONCLUSION";
         return "Unknown State";
     }
 
@@ -155,12 +177,12 @@ public class Director : MonoBehaviour
         if (phase == "INTRO") this.phase = Phase.INTRO;
         if (phase == "CARDSELECT")
         {
+            roundIndicator.Init();
             this.phase = Phase.CARDSELECT;
-
+            centerPrompt.DisplayPrompt(playerSelectable);
             playerHand.gameObject.SetActive(true);
             playerHand.FillHand();
             playerCamera.UnFocus();
-            startDeploymentButton.gameObject.SetActive(true);
             unitManager.ResetUnitPositions();
         }
         if (phase == "DEPLOYMENT")
@@ -214,8 +236,20 @@ public class Director : MonoBehaviour
         if (phase == "ENDCOMBAT")
         {
             this.phase = Phase.ENDCOMBAT;
-            StartCoroutine(EndCombat());
+            AudioPlayer.PlayOneShot(AudioSortie);
+            RecalculateControllerTraits();
+            OnCombatEnded?.Invoke();
 
+            StartCoroutine(EndCombat());
+        }
+        if (phase == "CONCLUSION")
+        {
+            this.phase = Phase.CONCLUSION;
+            AudioPlayer.PlayOneShot(AudioSortie);
+            RecalculateControllerTraits();
+            OnCombatEnded?.Invoke();
+
+            playerCamera.UnFocus();
         }
     }
 
@@ -232,16 +266,29 @@ public class Director : MonoBehaviour
     }
     IEnumerator EndCombat()
     {
-        AudioPlayer.PlayOneShot(AudioSortie);
-        RecalculateControllerTraits();
-        OnCombatEnded?.Invoke();
         yield return new WaitForSeconds(1.5f);
-        SetPhase("CARDSELECT");
+        if (playerHealth <= 0)
+        {
+            SetPhase("CONCLUSION");
+            GameOver();
+        }
+        else if (cpuHealth <= 0)
+        {
+            SetPhase("CONCLUSION");
+            Victory();
+        }
+        else
+        {
+            roundIndicator.NextRound();
+            SetPhase("CARDSELECT");
+        }
+
     }
 
     public int IncCardSelectOrder()
     {
         selectedCardsCount++;
+        if (selectedCardsCount > 0 && GetPhase() == "CARDSELECT") startDeploymentButton.Display();
         return selectedCardsCount;
     }
     public int GetCardSelectOrder()
@@ -251,6 +298,7 @@ public class Director : MonoBehaviour
     public void NotifyCardDeselected(int ID)
     {
         selectedCardsCount--;
+        if (selectedCardsCount <= 0 && GetPhase() == "CARDSELECT") startDeploymentButton.Hide();
         OnCardDeselected?.Invoke(ID);
     }
     public void PlaySound(AudioClip clip)
@@ -278,8 +326,8 @@ public class Director : MonoBehaviour
         playerTraitBuffs.ClearTraitBuffs(true);
         enemyTraitBuffs.ClearTraitBuffs(true);
 
-        List<UnitController> firstTeamControllers = unitManager.firstTeamControllers;
-        List<UnitController> secondTeamControllers = unitManager.secondTeamControllers;
+        List<UnitController> firstTeamControllers = unitManager.playerControllers;
+        List<UnitController> secondTeamControllers = unitManager.cpuControllers;
 
         
         foreach (UnitController controller in firstTeamControllers)
@@ -296,23 +344,98 @@ public class Director : MonoBehaviour
     {
         if (isPlayer)
         {
-            bool playerSurvived = playerHearts.TakeDamage(1);
-            if (!playerSurvived) GameOver();
+            playerHearts.TakeDamage(1);
+            cpuSelectable = defaultCpuSelectable; // Reset back to default
+            playerSelectable++;
+
+            ValidatePlayerSelectable();
+
+            playerHand.UpdateSelectableAmount(true, playerSelectable);
+            enemyHand.UpdateSelectableAmount(false, cpuSelectable);
         }
         else
         {
-            bool cpuSurvived = cpuHearts.TakeDamage(1);
-            if (!cpuSurvived) Victory();
+            cpuHearts.TakeDamage(1);
+            playerSelectable = defaultPlayerSelectable;
+            cpuSelectable++;
+
+            ValidatePlayerSelectable();
+
+            playerHand.UpdateSelectableAmount(true, playerSelectable);
+            enemyHand.UpdateSelectableAmount(false, cpuSelectable);
         }
     }
 
-    void GameOver()
+    
+    void ValidatePlayerSelectable()
     {
-        Debug.Log("You lost");
+        if (playerSelectable > 5) playerSelectable = 5;
+        if (playerSelectable <= 0) playerSelectable = 1;
+        if (cpuSelectable > 5) cpuSelectable = 5;
+        if (cpuSelectable <= 0) cpuSelectable = 1;
     }
-    void Victory()
+
+    public void ResetPlayerSelectable()
     {
-        Debug.Log("You won");
+        playerSelectable = defaultPlayerSelectable;
+        cpuSelectable = defaultCpuSelectable;
+        playerHand.UpdateSelectableAmount(true, playerSelectable);
+        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
+    }
+
+    public void UpdateHealth(bool isPlayerHealth, int health)
+    {
+        if (isPlayerHealth)
+        {
+            playerHealth = health;
+        }
+        else
+        {
+            cpuHealth = health;
+        }
+
+        SetPhase("ENDCOMBAT");
+
+    }
+
+    public void AddToDamageDone(float additive)
+    {
+        damageDone += additive;
+    }
+
+    public void AddToTimer(float additive)
+    {
+        timeElapsed += additive;
+    }
+
+    public void GameOver()
+    {
+        SetPhase("CONCLUSION");
+        combatEndScreen.SetDamageDone(damageDone);
+        combatEndScreen.SetTimeElapsed(timeElapsed);
+        combatEndScreen.DisplayGameOver();
+
+        damageDone = 0;
+        timeElapsed = 0;
+    }
+    public void Victory()
+    {
+        SetPhase("CONCLUSION");
+        combatEndScreen.SetDamageDone(damageDone);
+        combatEndScreen.SetTimeElapsed(timeElapsed);
+        combatEndScreen.DisplayVictory();
+
+        damageDone = 0;
+        timeElapsed = 0;
+    }
+
+    public void NextStage()
+    {
+
+    }
+    public void RestartGame()
+    {
+
     }
 
 }

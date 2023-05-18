@@ -7,14 +7,16 @@ public class CenterPrompt : MonoBehaviour
 {
     // Start is called before the first frame update
     public TextMeshProUGUI prompt;
-    public void DisplayPrompt()
-    {
-        prompt.SetText("Select 3 cards to play");
-        if (Director.Instance.GetPhase() == "CARDSELECT")
-        {
-           
 
-        }
+    void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void DisplayPrompt(int playerCardSelect)
+    {
+        gameObject.SetActive(true);
+        prompt.SetText("Select " + playerCardSelect + " cards to play");
     }
 
     public void ResetText()

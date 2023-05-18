@@ -190,6 +190,7 @@ public class UnitDataStore
             case 300: return new ExplosionSkill();
             case 301: return new ElectroBoltSkill();
             case 400: return new ShieldWallSkill();
+            case 401: return new PumpedUpSkill();
         }
         return null;
     }

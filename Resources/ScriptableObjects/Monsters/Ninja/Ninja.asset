@@ -21,9 +21,9 @@ MonoBehaviour:
   rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 12
+  basePower: 25
   powerGrowthRate: 5
-  baseDefense: 12
+  baseDefense: 5
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0

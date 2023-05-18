@@ -17,18 +17,10 @@ public class UnitManager : MonoBehaviour
     public FormationController unitPrefab;
 
     //Fielded Controllers
-    public List<UnitController> firstTeamControllers = new List<UnitController>();
-    public List<UnitController> secondTeamControllers = new List<UnitController>();
+    public List<UnitController> playerControllers = new List<UnitController>();
+    public List<UnitController> cpuControllers = new List<UnitController>();
 
     private UnitController currentController;
-
-    //Preset Types
-    public UnitController testUnit1;
-    public UnitController testUnit2;
-    public UnitController testUnit3;
-    public UnitController testUnit4;
-    public UnitController testUnit5;
-    public UnitController testUnit6;
 
     public HexGrid grid;
 
@@ -181,19 +173,17 @@ public class UnitManager : MonoBehaviour
 
         if (teamNum == 1)
         {
-            firstTeamControllers.Remove(controller);
-            if (firstTeamControllers.Count == 0)
+            playerControllers.Remove(controller);
+            if (playerControllers.Count == 0)
             {
-                Director.Instance.SetPhase("ENDCOMBAT");
                 Director.Instance.TakeDamage(true, 1);
             }
         }
         else if (teamNum == -1)
         {
-            secondTeamControllers.Remove(controller);
-            if (secondTeamControllers.Count == 0)
+            cpuControllers.Remove(controller);
+            if (cpuControllers.Count == 0)
             {
-                Director.Instance.SetPhase("ENDCOMBAT");
                 Director.Instance.TakeDamage(false, 1);
             }
         }
@@ -207,11 +197,11 @@ public class UnitManager : MonoBehaviour
 
     public void ResetUnitPositions()
     {
-        foreach(UnitController unit in firstTeamControllers)
+        foreach(UnitController unit in playerControllers)
         {
             if(unit.gameObject) unit.ResetLocation();
         }
-        foreach (UnitController unit in secondTeamControllers)
+        foreach (UnitController unit in cpuControllers)
         {
             if (unit.gameObject) unit.ResetLocation();
         }
@@ -304,12 +294,12 @@ public class UnitManager : MonoBehaviour
 
         if (teamNum == 1)
         {
-            firstTeamControllers.Add(controller); //Make sure UnitManager knows about the controller}
+            playerControllers.Add(controller); //Make sure UnitManager knows about the controller}
             bars = Instantiate(microBars.prefab);
         }
         else if (teamNum == -1)
         {
-            secondTeamControllers.Add(controller);
+            cpuControllers.Add(controller);
             bars = Instantiate(microBarsEnemy.prefab);
         }
         else
@@ -335,8 +325,8 @@ public class UnitManager : MonoBehaviour
         //Reverse the team we're looking for if false
         teamNum = (isSameTeam ? teamNum : teamNum * -1 );
 
-        if (teamNum == 1) return firstTeamControllers;
-        else if (teamNum == -1) return secondTeamControllers;
+        if (teamNum == 1) return playerControllers;
+        else if (teamNum == -1) return cpuControllers;
 
         Debug.Log("Invalid teamNum provided on GetControllers");
         return null;

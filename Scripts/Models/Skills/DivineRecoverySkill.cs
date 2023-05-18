@@ -105,8 +105,8 @@ public class DivineRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 5);
-        float upperBound = (data.GetCurrentTroopCount() / 2);
+        float lowerBound = (data.GetCurrentTroopCount() / 15);
+        float upperBound = (data.GetCurrentTroopCount() / 10);
 
 
         //Setup magic modifier

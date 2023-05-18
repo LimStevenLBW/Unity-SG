@@ -32,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 200
+  baseTroopCount: 250
   leadership: 1
   engineering: 1
   magic: 1

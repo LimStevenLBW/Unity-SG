@@ -5,10 +5,18 @@ using UnityEngine;
  */
 public abstract class Skill
 {
+    public enum Type
+    {
+        BASIC,
+        SPECIAL,
+        SUPER
+    }
+
     internal bool isRunning;
     internal int maxRange;
     internal int minRange;
     public string skillName;
+    public Type skillType;
     public string description;
     
     public float baseCooldown;

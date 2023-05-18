@@ -115,8 +115,8 @@ public class SingleRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 20);
-        float upperBound = (data.GetCurrentTroopCount() / 15);
+        float lowerBound = (data.GetCurrentTroopCount() / 25);
+        float upperBound = (data.GetCurrentTroopCount() / 20);
 
 
         //Setup magic modifier

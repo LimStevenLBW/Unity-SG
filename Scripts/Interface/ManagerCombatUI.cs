@@ -22,7 +22,6 @@ namespace Assets.Scripts.Interface
         public GameObject startCombatButton;
 
         [SerializeField] private AudioSource AudioPlayer;
-       // [SerializeField] private AudioClip AudioHover;
         [SerializeField] private AudioClip AudioClickSelect;
         [SerializeField] private AudioClip AudioLift;
         [SerializeField] private AudioClip AudioDrop;
@@ -36,8 +35,13 @@ namespace Assets.Scripts.Interface
 
         void Update()
         {
-            if (Director.Instance.GetPhase() == "REPOSITIONING") HandleRepositioning();
-            else { HandleNormalInput(); }
+            //Disable input when  in intro and conclusion phases
+            if(Director.Instance.GetPhase() != "INTRO" && Director.Instance.GetPhase() != "CONCLUSION")
+            {
+                if (Director.Instance.GetPhase() == "REPOSITIONING") HandleRepositioning();
+                else { HandleNormalInput(); }
+            }
+
         }
 
         public void ClearSelectionKeepWindow()

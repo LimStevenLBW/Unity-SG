@@ -10,7 +10,7 @@ public class MusicPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Play();
+        PlayCombatBGM();
     }
 
     // Update is called once per frame
@@ -19,9 +19,10 @@ public class MusicPlayer : MonoBehaviour
         
     }
 
-    public void Play()
+    public void PlayCombatBGM()
     {
         AudioPlayer.clip = BGM;
+        AudioPlayer.time = 13.21f;
         AudioPlayer.Play();
     }
 }

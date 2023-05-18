@@ -44,6 +44,7 @@ public class Timer : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             OnSecondPassed?.Invoke();
+            Director.Instance.AddToTimer(1);
             clock--;
             clockText.SetText(clock.ToString());
             if(clock <= 11)
@@ -59,6 +60,8 @@ public class Timer : MonoBehaviour
             }
         }
 
+        //Out of time
+        Director.Instance.ResetPlayerSelectable();
         yield return new WaitForSeconds(0.5f);
         clockText.SetText("");
         Director.Instance.SetPhase("ENDCOMBAT");

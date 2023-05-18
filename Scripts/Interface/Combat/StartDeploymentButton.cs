@@ -14,7 +14,7 @@ public class StartDeploymentButton : Button, IPointerClickHandler, IPointerEnter
     {
 
         Director.Instance.SetPhase("DEPLOYMENT");
-        gameObject.SetActive(false);
+        Hide();
     }
     public override void OnPointerEnter(PointerEventData pointerEventData)
     {
@@ -27,16 +27,31 @@ public class StartDeploymentButton : Button, IPointerClickHandler, IPointerEnter
         AudioPlayer.Play();
     }
 
+    public void Display()
+    {
+        gameObject.SetActive(true);
+    }
 
-    // Start is called before the first frame update
-    void Start()
+    public void Hide()
     {
         gameObject.SetActive(false);
     }
 
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Hide();
+    }
+
+
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Director.Instance.SetPhase("DEPLOYMENT");
+            Hide();
+        }
     }
 }

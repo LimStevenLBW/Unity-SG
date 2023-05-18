@@ -139,9 +139,9 @@ public class ElectroBoltSkill : Skill
 
         //Apply Defense Reductions
         float defValueReduction = (enemy.GetCurrentDefense() / 200) + data.GetBaseDefReduction();
-        Debug.Log("Base Damage = " + damageData + ", Damage Reduce Multiplier = " + damageData * defValueReduction);
+        //Debug.Log("Base Damage = " + damageData + ", Damage Reduce Multiplier = " + damageData * defValueReduction);
         damageData -= (int)(damageData * defValueReduction);
-        Debug.Log("Actual Damage = " + damageData);
+       // Debug.Log("Actual Damage = " + damageData);
         if (damageData < 0) damageData = 0; //We don't go below zero
 
         //Damage to Center

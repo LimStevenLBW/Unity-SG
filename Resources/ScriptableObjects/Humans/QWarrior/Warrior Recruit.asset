@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Warrior Recruit
   m_EditorClassIdentifier: 
   model: {fileID: 7297535323292551013, guid: 7ebeaac46fc22194088aa35f0c2df802, type: 3}
-  unitClass: {fileID: 11400000, guid: 0de1d24b46b43db4ebe35141c2d79e6d, type: 2}
+  unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Warrior Recruit
@@ -21,9 +21,9 @@ MonoBehaviour:
   rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 8
+  basePower: 17
   powerGrowthRate: 1
-  baseDefense: 10
+  baseDefense: 15
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -41,6 +41,6 @@ MonoBehaviour:
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
   skill1_ID: 100
-  skill2_ID: 400
+  skill2_ID: 401
   skill3_ID: 0
   skill4_ID: 0

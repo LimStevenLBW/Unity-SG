@@ -33,10 +33,24 @@ public class StartCombatButton : Button, IPointerClickHandler, IPointerEnterHand
     {
         gameObject.SetActive(false);
     }
+    public void Display()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Director.Instance.SetPhase("COMBAT");
+            Hide();
+        }
     }
 }
