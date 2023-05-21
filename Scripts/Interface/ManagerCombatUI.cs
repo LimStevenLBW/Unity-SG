@@ -10,6 +10,8 @@ namespace Assets.Scripts.Interface
     public class ManagerCombatUI : MonoBehaviour
     {
         public HexGrid grid;
+
+        public GameObject header;
         public UnitWindow unitWindow;
         public PlayerHandPanel playerHandPanel;
 
@@ -44,6 +46,16 @@ namespace Assets.Scripts.Interface
 
         }
 
+        public void DisplayHeader()
+        {
+            header.SetActive(true);
+        }
+
+        public void HideHeader()
+        {
+            header.SetActive(false);
+        }
+
         public void ClearSelectionKeepWindow()
         {
             DisableHighlight(selectedController);
@@ -74,7 +86,7 @@ namespace Assets.Scripts.Interface
                         if(selectedController.teamNum == -1)
                         {
                             DisableHighlight(selectedController);
-                            DisableUnitWindow(selectedController);
+                            DisableUnitWindow();
                             selectedController = null;
 
                             if(hit.collider.gameObject.GetComponent<UnitController>() != null)
@@ -92,7 +104,7 @@ namespace Assets.Scripts.Interface
                         if (wasSet)
                         {
                             DisableHighlight(selectedController);
-                            DisableUnitWindow(selectedController);
+                            DisableUnitWindow();
                             selectedController = null;
                             AudioPlayer.PlayOneShot(AudioDrop);
                             startCombatButton.SetActive(true);
@@ -257,7 +269,7 @@ namespace Assets.Scripts.Interface
         void ClearSelection()
         {
             DisableHighlight(selectedController);
-            DisableUnitWindow(selectedController);
+            DisableUnitWindow();
             selectedController = null;
             priorController = null;
             selectedCell = null;    
@@ -287,9 +299,9 @@ namespace Assets.Scripts.Interface
             PlayAudioClip(AudioClickSelect);
 
         }
-        void DisableUnitWindow(UnitController controller)
+        public void DisableUnitWindow()
         {
-            if(controller) PlayAudioClip(AudioClipDeselect);
+            if(selectedController) PlayAudioClip(AudioClipDeselect);
             unitWindow.gameObject.SetActive(false);
         }
 

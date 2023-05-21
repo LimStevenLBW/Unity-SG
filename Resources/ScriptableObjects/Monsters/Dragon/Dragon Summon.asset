@@ -15,7 +15,7 @@ MonoBehaviour:
   model: {fileID: 3561716668365625288, guid: d277f93875767594fa482b06a6cb96eb, type: 3}
   unitClass: {fileID: 11400000, guid: 759bd5bc9f0f58041974945393c9e58e, type: 2}
   faction: {fileID: 11400000, guid: d69344b60a05286429204a02c7a2e905, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
   unitName: Dragon Summon
   bio: 
   rank: 4

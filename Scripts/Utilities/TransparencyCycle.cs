@@ -18,7 +18,7 @@ public class TransparencyCycle : MonoBehaviour
     private bool shouldFade = true;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         text = gameObject.GetComponent<TextMeshProUGUI>();
         image = gameObject.GetComponent<Image>();

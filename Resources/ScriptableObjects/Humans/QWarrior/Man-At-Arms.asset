@@ -23,7 +23,7 @@ MonoBehaviour:
   expGrowthRate: 1
   basePower: 20
   powerGrowthRate: 1
-  baseDefense: 25
+  baseDefense: 30
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0

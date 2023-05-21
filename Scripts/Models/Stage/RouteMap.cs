@@ -44,4 +44,14 @@ public class RouteMap : MonoBehaviour
 
         
     }
+
+    public void DisplayRoute()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void HideRoute()
+    {
+        gameObject.SetActive(false);
+    }
 }

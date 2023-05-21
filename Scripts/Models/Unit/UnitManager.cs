@@ -32,7 +32,7 @@ public class UnitManager : MonoBehaviour
 
     public void InitGrid(HexGrid grid)
     {
-        this.grid = grid; 
+        this.grid = grid;
     }
 
     void Awake()
@@ -67,7 +67,7 @@ public class UnitManager : MonoBehaviour
 
 
         //Cycle for the same number of elements as the queue size
-        while(i < size) {
+        while (i < size) {
             wasDeployed = false;
             if (currentController == null)
             {
@@ -100,7 +100,7 @@ public class UnitManager : MonoBehaviour
                         if (wasDeployed) break;
                     }
                 }
-              
+
                 currentController = null;
             }
 
@@ -118,12 +118,12 @@ public class UnitManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+
         //Unit Manager will deploy all selected units in order
-        if(Director.Instance.GetPhase() == "DEPLOYMENT")
+        if (Director.Instance.GetPhase() == "DEPLOYMENT")
         {
-       
-            
+
+
         }
         /*
         if (Input.GetKeyDown(KeyCode.A)) CreateCombatUnit(testUnit1, 1);
@@ -142,6 +142,7 @@ public class UnitManager : MonoBehaviour
         */
     }
 
+    //For formation  controllers
     public void ClearUnits()
     {
         for (int i = 0; i < units.Count; i++)
@@ -164,7 +165,7 @@ public class UnitManager : MonoBehaviour
     {
         int teamNum = controller.teamNum;
         while (true)
-        {        
+        {
             //We cannot edit anything that affects unit pathfinding without permission first
             if (PATHFINDING_IN_USE) continue;
             PATHFINDING_IN_USE = true;
@@ -192,14 +193,14 @@ public class UnitManager : MonoBehaviour
             Debug.Log("Invalid Team Number provided on RemoveUnit");
         }
 
-        controller.Die();
+        controller.Die(4f);
     }
 
     public void ResetUnitPositions()
     {
-        foreach(UnitController unit in playerControllers)
+        foreach (UnitController unit in playerControllers)
         {
-            if(unit.gameObject) unit.ResetLocation();
+            if (unit.gameObject) unit.ResetLocation();
         }
         foreach (UnitController unit in cpuControllers)
         {
@@ -270,7 +271,7 @@ public class UnitManager : MonoBehaviour
             AddUnit(
                 Instantiate(template), cell, Random.Range(0f, 360f), template.data, teamNum
             );
-         }
+        }
     }
 
     /*
@@ -313,9 +314,9 @@ public class UnitManager : MonoBehaviour
         controller.Orientation = orientation;
 
         //Setup health and stamina bars
-        
+
         controller.Initialize(this, bars); //Pass itself down, likewise, make sure the unit knows about the manager
-       
+
         controller.PlayEffect(effect, controller.transform.position, 3);
         AudioPlayer.PlayOneShot(AudioDeployedUnit);
     }
@@ -323,13 +324,32 @@ public class UnitManager : MonoBehaviour
     public List<UnitController> GetControllers(int teamNum, bool isSameTeam)
     {
         //Reverse the team we're looking for if false
-        teamNum = (isSameTeam ? teamNum : teamNum * -1 );
+        teamNum = (isSameTeam ? teamNum : teamNum * -1);
 
         if (teamNum == 1) return playerControllers;
         else if (teamNum == -1) return cpuControllers;
 
         Debug.Log("Invalid teamNum provided on GetControllers");
         return null;
+    }
+
+    public void ClearField()
+    {
+        foreach (UnitController c in playerControllers)
+        {
+            c.data.StopListening();
+            c.Die(0.1f);
+        }
+
+
+        foreach (UnitController c in cpuControllers)
+        {
+            c.data.StopListening();
+            c.Die(0.1f);
+        }
+
+        playerControllers.Clear();
+        cpuControllers.Clear();
     }
 
 }

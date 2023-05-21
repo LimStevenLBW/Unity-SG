@@ -41,7 +41,11 @@ public class RouteColumn : MonoBehaviour
         image.color = activeColor;
         active = true;
 
-        routeOptions.NextStage();
+        if(routeOptions) routeOptions.NextStage();
+        else
+        {
+            Debug.Log("no stage data");
+        }
     }
 
     public void SetCompleted()
@@ -50,6 +54,7 @@ public class RouteColumn : MonoBehaviour
         active = false;
     }
 
+    //Grant a prefab to the column that contains the stage display information and data
     public void Initialize(int id)
     {
         this.id = id;
@@ -59,8 +64,12 @@ public class RouteColumn : MonoBehaviour
         {
             InstantiateRoute("Route Display/1 Stage");
         }
-        else if(id == 2) { 
-
+        else if(id == 2) {
+            //InstantiateRoute("Route Display/1 Stage test 2");
+        }
+        else if(id == 3)
+        {
+            //InstantiateRoute("Route Display/1 Stage test 3");
         }
 
     }
@@ -68,7 +77,7 @@ public class RouteColumn : MonoBehaviour
     void InstantiateRoute(string prefabLocation)
     {
 
-        //The Instantiate function returns an abstract Object reference, that's why it effectively instantiates the object but ca also give you a type error. so we do this instead
+        //The Instantiate function returns an abstract Object reference, that's why it effectively instantiates the object but can also give you a type error. so we do this instead
         GameObject obj = Instantiate(Resources.Load(prefabLocation),
                transform.position,
                Quaternion.identity,

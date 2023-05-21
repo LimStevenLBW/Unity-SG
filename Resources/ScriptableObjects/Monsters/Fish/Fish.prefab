@@ -511,7 +511,7 @@ Transform:
   m_GameObject: {fileID: 2507451860929435126}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 5.7, y: 6, z: 5.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7327188226504380218}
@@ -548,6 +548,8 @@ MonoBehaviour:
   teamNum: 0
   prefab: {fileID: 923658134792168538}
   bars: {fileID: 0}
+  state: 0
+  maxRange: 0
 --- !u!114 &4221551096046564184
 MonoBehaviour:
   m_ObjectHideFlags: 0

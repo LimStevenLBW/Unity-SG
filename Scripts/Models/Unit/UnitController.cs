@@ -88,7 +88,6 @@ public class UnitController : MonoBehaviour
             StopAllCoroutines();
             animator.SetTrigger("die");
             ACTIVE = false; //Prevents consecutive runs of this block
-
             data.StopListening();
             manager.RemoveUnit(this); //problematic at the moment
         }
@@ -283,19 +282,21 @@ public class UnitController : MonoBehaviour
         return moveCost;
     }
 
-    public void Die()
+    public void Die(float time)
     {
         if (location)
         {
+            location.DisableHighlight(false); //Disable cell highlight
+            location.unitController = null;
             // Grid.DecreaseVisibility(location, VisionRange);
         }
 
         //works with unitmanager, removeunit()
-        location.unitController = null;
+
         manager.PATHFINDING_IN_USE = false;
 
-        Destroy(gameObject, 4f);
-        Destroy(bars.gameObject, 4f);
+        Destroy(gameObject, time);
+        Destroy(bars.gameObject, time);
     }
 
 

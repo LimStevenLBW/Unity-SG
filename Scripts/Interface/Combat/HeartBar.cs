@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HeartBar : MonoBehaviour
 {
-    private int hearts;
+    public int hearts;
     public GameObject heartPrefab;
     public bool isPlayerHealth; //Determines who owns the heartbar
 
@@ -21,7 +21,20 @@ public class HeartBar : MonoBehaviour
 
     public void HealMax()
     {
-       for(int i = 0; i < hearts; i++)
+        StartCoroutine(ClearThenInstantiate());
+       
+    }
+
+    IEnumerator ClearThenInstantiate()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        yield return null;
+
+        for (int i = 0; i < hearts; i++)
         {
             GameObject prefab = Instantiate(heartPrefab);
             prefab.transform.SetParent(transform);

@@ -20,15 +20,17 @@ public class Director : MonoBehaviour
         CONCLUSION
     }
 
-    public int playerHealth;
-    public int cpuHealth;
+    private int playerHealth;
+    private int cpuHealth;
+    public int defaultPlayerHealth;
+    public int defaultCpuHealth;
     public HeartBar playerHearts;
     public HeartBar cpuHearts;
 
-    public int playerSelectable = 3;
-    public int cpuSelectable = 3;
-    private int defaultPlayerSelectable;
-    private int defaultCpuSelectable;
+    private int playerSelectable = 3;
+    private int cpuSelectable = 3;
+    public int defaultPlayerSelectable;
+    public int defaultCpuSelectable;
 
     //for counting selected cards
     private int selectedCardsCount = 0;
@@ -38,7 +40,7 @@ public class Director : MonoBehaviour
     public Action OnCombatEnded;
 
     private Phase phase = Phase.INTRO;
-    private bool gameNotStarted = true;
+    private bool gameStarted = false;
 
     public Deck playerDeckBase;
     private Deck enemyDeckBase;
@@ -101,61 +103,70 @@ public class Director : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerTraitBuffs.team = 1;
-        enemyTraitBuffs.team = -1;
-        playerHearts.SetHearts(playerHealth);
-        playerHearts.HealMax();
-        cpuHearts.SetHearts(cpuHealth);
-        cpuHearts.HealMax();
-        defaultPlayerSelectable = playerSelectable;
-        defaultCpuSelectable = cpuSelectable;
-
-        playerHand.UpdateSelectableAmount(true, playerSelectable);
-        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0)) && gameNotStarted)
+        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0)) && !gameStarted)
         {
-            gameNotStarted = false;
-
-            AudioPlayer.PlayOneShot(AudioPlayStart);
-            route.Initialize(this);
-            
-            //Turn off the prompt text
-            playPromptText.gameObject.SetActive(false);
-
-            //Game Start
-            route.AdvanceRoute();
-
-            //Deck is available now to use by monobehaviours
-            playerDeck = new DeckDataStore(playerDeckBase); //Preset currently in editor
-            enemyDeck = new DeckDataStore(enemyDeckBase); //Obtained from stage
-
-            stageIntro.Init(playerDeck, enemyDeck);
-            playerHand.Init(playerDeck);
-            enemyHand.Init(enemyDeck);
-
-            StartCoroutine(DisplayIntroduction());
+            StartGame();  
         }
     }
 
-    IEnumerator DisplayIntroduction()
+    void StartGame()
     {
-        yield return new WaitForSeconds(1);
+        //Setup player hearts
+        playerTraitBuffs.team = 1;
+        enemyTraitBuffs.team = -1;
 
-        route.gameObject.SetActive(false);
-        stageIntro.gameObject.SetActive(true);
+        gameStarted = true;
 
-        yield return new WaitForSeconds(1);
+        AudioPlayer.PlayOneShot(AudioPlayStart);
+        route.Initialize(this);
 
-        //Player Card Selection phase
-        SetPhase("CARDSELECT");
-        stageIntro.gameObject.SetActive(false);
+        //Turn off the prompt text
+        playPromptText.gameObject.SetActive(false);
 
+        //Game Start
+        route.DisplayRoute();
+        route.AdvanceRoute();
+        
 
+        InitStageData();
+    }
+
+    void ResetHealth()
+    {
+        playerHearts.SetHearts(defaultPlayerHealth);
+        playerHearts.HealMax();
+        cpuHearts.SetHearts(defaultCpuHealth);
+        cpuHearts.HealMax();
+    }
+
+    void InitStageData()
+    {
+        //Deck is available now to use by monobehaviours
+        playerDeck = new DeckDataStore(playerDeckBase); //Preset currently in editor
+        enemyDeck = new DeckDataStore(enemyDeckBase); //Obtained from stage
+
+        stageIntro.Init(playerDeck, enemyDeck);
+
+        //Set selectable counts
+        playerSelectable = defaultPlayerSelectable;
+        cpuSelectable = defaultCpuSelectable;
+
+        playerHand.UpdateSelectableAmount(true, playerSelectable);
+        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
+
+        playerHand.Init(playerDeck);
+        enemyHand.Init(enemyDeck);
+
+        //Health set
+        playerHealth = defaultPlayerHealth;
+        cpuHealth = defaultCpuHealth;
+
+        SetPhase("INTRO");
     }
 
     public string GetPhase()
@@ -174,11 +185,16 @@ public class Director : MonoBehaviour
 
     public void SetPhase(string phase)
     {
-        if (phase == "INTRO") this.phase = Phase.INTRO;
+        if (phase == "INTRO")
+        {
+            this.phase = Phase.INTRO;
+            StartCoroutine(DisplayIntroduction());
+        }
         if (phase == "CARDSELECT")
         {
-            roundIndicator.Init();
             this.phase = Phase.CARDSELECT;
+
+            roundIndicator.Init();
             centerPrompt.DisplayPrompt(playerSelectable);
             playerHand.gameObject.SetActive(true);
             playerHand.FillHand();
@@ -251,6 +267,24 @@ public class Director : MonoBehaviour
 
             playerCamera.UnFocus();
         }
+    }
+    IEnumerator DisplayIntroduction()
+    {
+        yield return new WaitForSeconds(2.5f);
+
+        route.HideRoute();
+        stageIntro.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(3f);
+
+        combatManager.DisplayHeader();
+        ResetHealth();
+
+        stageIntro.gameObject.SetActive(false);
+
+        //Player Card Selection phase
+        SetPhase("CARDSELECT");
+
     }
 
     IEnumerator BeginCombat()
@@ -429,13 +463,27 @@ public class Director : MonoBehaviour
         timeElapsed = 0;
     }
 
+    //Clear everything
+    public void ClearStage()
+    {
+        playerTraitBuffs.ClearTraitBuffs(true);
+        enemyTraitBuffs.ClearTraitBuffs(true);
+        combatManager.DisableUnitWindow();
+        combatManager.HideHeader();
+        unitManager.ClearField();
+    }
+
+    //Prepare next stage data
     public void NextStage()
     {
-
+        route.DisplayRoute();
+        route.AdvanceRoute();
+        InitStageData();
     }
+
     public void RestartGame()
     {
-
+        unitManager.ClearField();
     }
 
 }

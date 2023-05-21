@@ -92,7 +92,7 @@ public class ThrowingDaggersSkill : Skill
         data.SetCurrentStamina(staminaResult);
 
         //Have the unitcontroller play the attack animation
-        controller.PlayAnim("isAttacking", .75f, this, enemyTarget.Location);
+        controller.PlayAnim("isAttacking", .55f, this, enemyTarget.Location);
         //Debug.Log("started Attack anim");
     }
 

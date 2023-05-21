@@ -116,7 +116,7 @@ public class PumpedUpSkill : Skill
     {
         auraActive = false;
         ResetCD();
-        data.SetCurrentDefense(data.GetCurrentPower() - attackModifier);
+        data.SetCurrentPower(data.GetCurrentPower() - attackModifier);
     }
 
     public override void Reset()

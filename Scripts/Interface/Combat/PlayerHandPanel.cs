@@ -22,7 +22,8 @@ public class PlayerHandPanel : MonoBehaviour
         deckCounter.UpdateCount(deck.GetDeckCount());
         foreach (Card c in cards)
         {
-            c.SetNumberOfSelectable(playerSelectAmount);
+            c.ClearCard();
+            c.SetNumberOfSelectable(playerSelectAmount); //not used by cpu
         }
     }
 

@@ -27,7 +27,11 @@ public class RouteOptionsDisplay : MonoBehaviour
     {
         if(option2 == null && option3 == null)
         {
-            option1.InitSceneData();
+            if(option1) option1.InitSceneData();
+            else
+            {
+                Debug.Log("Option data is null");
+            }
         }
         else
         {

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayerDeck Test
   m_EditorClassIdentifier: 
   unitList:
-  - {fileID: 11400000, guid: a67ba0f881dfa724eba9187d46222212, type: 2}
-  - {fileID: 11400000, guid: a67ba0f881dfa724eba9187d46222212, type: 2}
-  - {fileID: 11400000, guid: a67ba0f881dfa724eba9187d46222212, type: 2}
+  - {fileID: 11400000, guid: 1891fa7fbc582714fa5c7947d1c491f4, type: 2}
+  - {fileID: 11400000, guid: 1891fa7fbc582714fa5c7947d1c491f4, type: 2}
+  - {fileID: 11400000, guid: 1891fa7fbc582714fa5c7947d1c491f4, type: 2}
   - {fileID: 11400000, guid: 55c99018f8a0291439d6c1d55b0a3c09, type: 2}
   - {fileID: 11400000, guid: bcffe2f46a97f784095605e1b3f178f6, type: 2}
   - {fileID: 11400000, guid: 55c99018f8a0291439d6c1d55b0a3c09, type: 2}

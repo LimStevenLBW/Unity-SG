@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
+  m_Name: Dart Frog
+  m_EditorClassIdentifier: 
+  model: {fileID: 6847958335517232270, guid: bc6dc49be737afd47b7066180de8e82c, type: 3}
+  unitClass: {fileID: 11400000, guid: b8f5dc32668ca9f42a6bd0af36037465, type: 2}
+  faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
+  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
+  unitName: Froggo
+  bio: 
+  rank: 3
+  baseLevel: 1
+  expGrowthRate: 1
+  basePower: 32
+  powerGrowthRate: 1
+  baseDefense: 16
+  defenseGrowthRate: 1
+  baseMagic: 0
+  magicGrowthRate: 0
+  baseStamina: 100
+  staminaGrowthRate: 1
+  baseSpeed: 5
+  speedGrowthRate: 1
+  baseCrit: 0
+  baseTroopCount: 325
+  leadership: 1
+  engineering: 1
+  magic: 1
+  economy: 1
+  agriculture: 1
+  upkeep: 0.1
+  positionSpawnPref: 330000004f000000
+  skill1_ID: 104
+  skill2_ID: 100
+  skill3_ID: 0
+  skill4_ID: 0

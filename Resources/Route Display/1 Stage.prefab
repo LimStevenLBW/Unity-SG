@@ -103,6 +103,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f9f7e926e2822d49b75109cf8f2acf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cycleSpeed: 3
+  maxVisibility: 255
+  minVisibility: 50
 --- !u!1 &2472346134002874695
 GameObject:
   m_ObjectHideFlags: 0

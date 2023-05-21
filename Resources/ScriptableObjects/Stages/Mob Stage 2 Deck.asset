@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6c84092c7e85ed4ba551363560a36df, type: 3}
+  m_Name: Mob Stage 2 Deck
+  m_EditorClassIdentifier: 
+  unitList:
+  - {fileID: 11400000, guid: d5cc05b1659532d4185517d8a7de8711, type: 2}
+  - {fileID: 11400000, guid: 0dc1cc96491cba84cb84a856b79e636b, type: 2}
+  - {fileID: 11400000, guid: 0dc1cc96491cba84cb84a856b79e636b, type: 2}
+  - {fileID: 11400000, guid: e6ce764b28fa78c4694056a996f68f1d, type: 2}
+  - {fileID: 11400000, guid: e6ce764b28fa78c4694056a996f68f1d, type: 2}
+  - {fileID: 11400000, guid: d5cc05b1659532d4185517d8a7de8711, type: 2}
+  - {fileID: 11400000, guid: d5cc05b1659532d4185517d8a7de8711, type: 2}
+  - {fileID: 11400000, guid: d5cc05b1659532d4185517d8a7de8711, type: 2}
+  - {fileID: 11400000, guid: d5cc05b1659532d4185517d8a7de8711, type: 2}
+  - {fileID: 11400000, guid: 169ac9c375e584c49903bdacb8681018, type: 2}
+  - {fileID: 11400000, guid: 169ac9c375e584c49903bdacb8681018, type: 2}
+  - {fileID: 11400000, guid: 169ac9c375e584c49903bdacb8681018, type: 2}
+  - {fileID: 11400000, guid: 169ac9c375e584c49903bdacb8681018, type: 2}
+  - {fileID: 11400000, guid: 49f9afedde14fd34a9c1844c40b0b3f4, type: 2}
+  - {fileID: 11400000, guid: 49f9afedde14fd34a9c1844c40b0b3f4, type: 2}
+  - {fileID: 11400000, guid: 2830d88a30854f34890a21a3c43758aa, type: 2}
+  - {fileID: 11400000, guid: 2830d88a30854f34890a21a3c43758aa, type: 2}
+  - {fileID: 11400000, guid: 2830d88a30854f34890a21a3c43758aa, type: 2}
+  - {fileID: 11400000, guid: 2830d88a30854f34890a21a3c43758aa, type: 2}
+  - {fileID: 11400000, guid: 2830d88a30854f34890a21a3c43758aa, type: 2}
+  - {fileID: 11400000, guid: 2830d88a30854f34890a21a3c43758aa, type: 2}
+  - {fileID: 11400000, guid: 49f9afedde14fd34a9c1844c40b0b3f4, type: 2}
+  - {fileID: 11400000, guid: 49f9afedde14fd34a9c1844c40b0b3f4, type: 2}
+  - {fileID: 11400000, guid: 49f9afedde14fd34a9c1844c40b0b3f4, type: 2}
+  - {fileID: 11400000, guid: 49f9afedde14fd34a9c1844c40b0b3f4, type: 2}
+  captain: {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}

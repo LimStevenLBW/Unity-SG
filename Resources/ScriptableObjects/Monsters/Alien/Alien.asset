@@ -15,7 +15,7 @@ MonoBehaviour:
   model: {fileID: -5859788529888520437, guid: d8e04b2303b4b7b42a7d85e03b9b5e46, type: 3}
   unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   faction: {fileID: 11400000, guid: d69344b60a05286429204a02c7a2e905, type: 2}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: 02df44a37a6152942bfde47faf1cf2de, type: 2}
   unitName: Alien
   bio: 
   rank: 3
