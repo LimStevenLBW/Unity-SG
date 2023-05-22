@@ -242,7 +242,9 @@ public class UnitController : MonoBehaviour
     {
         highlightedCell = location;
         GetComponent<Outline>().enabled = true;
-        location.EnableHighlight(Color.white, false);
+
+        //Do not hightlight the cell if the unit is dead
+        if(state != State.DEAD) location.EnableHighlight(Color.white, false);
     }
     public void DisableHighlight()
     {

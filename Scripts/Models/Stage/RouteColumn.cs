@@ -65,11 +65,11 @@ public class RouteColumn : MonoBehaviour
             InstantiateRoute("Route Display/1 Stage");
         }
         else if(id == 2) {
-            //InstantiateRoute("Route Display/1 Stage test 2");
+            InstantiateRoute("Route Display/1 Stage test 2");
         }
         else if(id == 3)
         {
-            //InstantiateRoute("Route Display/1 Stage test 3");
+            InstantiateRoute("Route Display/1 Stage test 3");
         }
 
     }

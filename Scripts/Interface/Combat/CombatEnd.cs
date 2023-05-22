@@ -38,9 +38,12 @@ public class CombatEnd : MonoBehaviour
 
     IEnumerator Restart()
     {
-        yield return new WaitForSeconds(1.5f);
+        //Delay before next stage starts
+        yield return new WaitForSeconds(4.0f);
+        transition.Enter();
 
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(2f);
+
         Director.Instance.RestartGame();
     }
 
@@ -59,6 +62,20 @@ public class CombatEnd : MonoBehaviour
         victory.gameObject.SetActive(false);
         timeElapsed = 0;
         timeTotal.SetText("");
+
+        //TEMP///////
+        Director.Instance.tempCurrentStageID++;
+
+        if (Director.Instance.tempCurrentStageID > 3)
+        {
+            Director.Instance.EndGame();
+
+        }
+        else
+        {
+            Director.Instance.ChangeWeather(Director.Instance.tempCurrentStageID);
+        }
+        //TEMP////////
 
         transition.Exit();
 

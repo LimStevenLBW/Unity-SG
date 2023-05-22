@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Director : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class Director : MonoBehaviour
         ENDCOMBAT,
         CONCLUSION
     }
+    //Temporary until stages are reworked
+    public int tempNumberofStages = 3;
+    public int tempCurrentStageID = 0;
 
     private int playerHealth;
     private int cpuHealth;
@@ -61,12 +65,19 @@ public class Director : MonoBehaviour
     public PlayerHandPanel enemyHand;
     public CenterPrompt centerPrompt;
     public GameObject sortiePrompt;
+    public GameObject repositioningPrompt;
 
     public RoundIndicator roundIndicator;
 
     public CameraControl playerCamera;
     public StartDeploymentButton startDeploymentButton;
     public StartCombatButton startCombatButton;
+
+    //Weather
+    public GameObject rainDropSystem;
+    public GameObject rainy;
+    public GameObject sunset;
+    public GameObject night;
 
     public Timer timer;
     [SerializeField] private TraitBuffsList playerTraitBuffs;
@@ -116,6 +127,9 @@ public class Director : MonoBehaviour
 
     void StartGame()
     {
+        tempCurrentStageID = 0;
+        tempCurrentStageID++;
+
         //Setup player hearts
         playerTraitBuffs.team = 1;
         enemyTraitBuffs.team = -1;
@@ -209,6 +223,7 @@ public class Director : MonoBehaviour
 
             selectedCardsCount = 0; //reset order
 
+
             //Start Unit Deployment
             unitManager.DeployQueuedUnits(playerHand.PlayCards(), true);
             playerHand.RearrangeCards();
@@ -217,6 +232,7 @@ public class Director : MonoBehaviour
         if(phase == "ENEMYCARDSELECT")
         {
             this.phase = Phase.ENEMYCARDSELECT;
+
             enemyHand.gameObject.SetActive(true);
             enemyHand.FillHand();
             enemyHand.CPUSelectCards();
@@ -236,6 +252,8 @@ public class Director : MonoBehaviour
         {
             startCombatButton.gameObject.SetActive(true);
             this.phase = Phase.REPOSITIONING;
+            repositioningPrompt.gameObject.SetActive(true);
+
             combatManager.ClearSelectionKeepWindow();
             playerTraitBuffs.ApplyTraitBuffs();
             enemyTraitBuffs.ApplyTraitBuffs();
@@ -246,6 +264,8 @@ public class Director : MonoBehaviour
         }
         if (phase == "COMBAT")
         {
+
+            repositioningPrompt.gameObject.SetActive(false);
             this.phase = Phase.COMBAT;
             StartCoroutine(BeginCombat());
         }
@@ -483,7 +503,29 @@ public class Director : MonoBehaviour
 
     public void RestartGame()
     {
-        unitManager.ClearField();
+        //unitManager.ClearField();
+
+        SceneManager.LoadScene("Combat");
+    }
+
+    public void EndGame()
+    {
+        SceneManager.LoadScene("GameEnd");
+    }
+
+    public void ChangeWeather(int stageID)
+    {
+        if (stageID == 2)
+        {
+            rainy.gameObject.SetActive(false);
+            rainDropSystem.gameObject.SetActive(false);
+            sunset.gameObject.SetActive(true);
+        }
+        else if(stageID == 3)
+        {
+            sunset.gameObject.SetActive(false);
+            night.gameObject.SetActive(true);
+        }
     }
 
 }
