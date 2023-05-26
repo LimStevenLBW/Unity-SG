@@ -15,15 +15,15 @@ MonoBehaviour:
   model: {fileID: 6847958335517232270, guid: bc6dc49be737afd47b7066180de8e82c, type: 3}
   unitClass: {fileID: 11400000, guid: b8f5dc32668ca9f42a6bd0af36037465, type: 2}
   faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
-  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
-  unitName: Froggo
+  special: {fileID: 11400000, guid: 0684df260fe4ba94eb4f5e9cf0232b44, type: 2}
+  unitName: Dart Froggo
   bio: 
   rank: 3
   baseLevel: 1
   expGrowthRate: 1
   basePower: 32
   powerGrowthRate: 1
-  baseDefense: 16
+  baseDefense: 14
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -41,6 +41,6 @@ MonoBehaviour:
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
   skill1_ID: 104
-  skill2_ID: 100
+  skill2_ID: 0
   skill3_ID: 0
   skill4_ID: 0

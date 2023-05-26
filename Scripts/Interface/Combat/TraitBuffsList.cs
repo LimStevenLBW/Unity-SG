@@ -14,7 +14,7 @@ public class TraitBuffsList : MonoBehaviour
     public int team;
 
     private List<UnitTrait> traits = new List<UnitTrait>();
-    public List<TraitBuffDataStore> traitBuffsList = new List<TraitBuffDataStore>();
+    public List<TraitBuffDataStore> dataStoreList = new List<TraitBuffDataStore>();
 
     public void GetTraitsFrom(UnitDataStore data)
     {
@@ -54,43 +54,49 @@ public class TraitBuffsList : MonoBehaviour
                 AddTraitBuff(workingTrait, counter);
             }
 
-
-
         }
     }
 
+    //If it doesnt meet the minimum requirement of the trait, we create an inactive trait display
+    //If it does, we create an active display
     private void AddTraitBuff(UnitTrait trait, int counter)
     {
-        TraitBuffDataStore prefab = null;
+        TraitBuffDataStore dataStore = null;
 
-        //If it doesnt meet the minimum requirement, we create an inactive trait display
+
         if (counter < trait.requirementTiers[0])
         {
-            if (team == 1) prefab = Instantiate(playerTraitBuffInactive);
-            if (team == -1) prefab = Instantiate(enemyTraitBuffInactive);
+            if (team == 1) dataStore = Instantiate(playerTraitBuffInactive);
+            if (team == -1) dataStore = Instantiate(enemyTraitBuffInactive);
 
-            prefab.gameObject.transform.SetParent(gameObject.transform);
-            prefab.gameObject.transform.SetAsLastSibling();
+            dataStore.gameObject.transform.SetParent(gameObject.transform);
+            dataStore.gameObject.transform.SetAsLastSibling();
         }
         else if(counter >= trait.requirementTiers[0]){
-            if (team == 1) prefab = Instantiate(playerTraitBuffActive);
-            if (team == -1) prefab = Instantiate(enemyTraitBuffActive);
+            if (team == 1) dataStore = Instantiate(playerTraitBuffActive);
+            if (team == -1) dataStore = Instantiate(enemyTraitBuffActive);
             
-            prefab.gameObject.transform.SetParent(gameObject.transform);
-            prefab.gameObject.transform.SetAsFirstSibling();
+            dataStore.gameObject.transform.SetParent(gameObject.transform);
+            dataStore.gameObject.transform.SetAsFirstSibling();
         }
 
 
-        prefab.AddBuffComponent(trait, counter);
-        prefab.UpdateDisplay();
-        prefab.gameObject.transform.localScale = new Vector3(1, 1, 1);
-        traitBuffsList.Add(prefab);
+        dataStore.AddBuffComponent(trait, counter);
+        dataStore.UpdateDisplay();
+        dataStore.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        dataStoreList.Add(dataStore);
     }
 
     
-    public void ApplyTraitBuffs()
+    public List<TraitBuffDataStore> GetActiveBuffs()
     {
+        List<TraitBuffDataStore> activeBuffs = new List<TraitBuffDataStore>();
+        foreach (TraitBuffDataStore traitBuff in dataStoreList)
+        {
+            if (traitBuff.isActive) activeBuffs.Add(traitBuff);
+        }
 
+        return activeBuffs;
     }
 
     /*
@@ -99,11 +105,11 @@ public class TraitBuffsList : MonoBehaviour
      */
     public void ClearTraitBuffs(bool fullReset)
     {
-        foreach(TraitBuffDataStore traitBuff in traitBuffsList)
+        foreach(TraitBuffDataStore traitBuff in dataStoreList)
         {
             Destroy(traitBuff.gameObject);
         }
-        traitBuffsList.Clear();
+        dataStoreList.Clear();
 
         if (fullReset) traits.Clear();
     }

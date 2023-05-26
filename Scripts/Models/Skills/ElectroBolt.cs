@@ -126,7 +126,7 @@ public class ElectroBoltSkill : Skill
         upperBound = (data.GetMaxTroopCount() / 5);
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 2.5f;
+        float magicModifier = data.GetCurrentMagic() * 2f;
 
         //Setup troop count modifier
         float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;
@@ -144,11 +144,22 @@ public class ElectroBoltSkill : Skill
        // Debug.Log("Actual Damage = " + damageData);
         if (damageData < 0) damageData = 0; //We don't go below zero
 
-        //Damage to Center
-        enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+        float critValue = data.GetCurrentCrit() * 100;
+        float critCheck = UnityEngine.Random.Range(0, 100);
 
-        //Display Data
-        DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+        if (critCheck <= critValue)
+        { //Successful crit
+
+            damageData = (int)(damageData * 1.5f);
+            enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+            DamageGenerator.gen.CreatePopup(position, damageData.ToString() + "!", Color.red);
+        }
+        else
+        { //Run normally
+
+            enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+            DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+        }
         //Terminate
         isRunning = false;
 

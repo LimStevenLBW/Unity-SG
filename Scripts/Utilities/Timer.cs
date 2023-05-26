@@ -61,7 +61,7 @@ public class Timer : MonoBehaviour
         }
 
         //Out of time
-        Director.Instance.ResetPlayerSelectable();
+        Director.Instance.BoostPlayerSelectable();
         yield return new WaitForSeconds(0.5f);
         clockText.SetText("");
         Director.Instance.SetPhase("ENDCOMBAT");

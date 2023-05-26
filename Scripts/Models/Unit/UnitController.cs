@@ -26,6 +26,7 @@ public class UnitController : MonoBehaviour
     public Pathfinder path;
     public MicroBarFollow bars;
 
+    private List<TraitBuffDataStore> activeBuffs;
     private List<UnitController> myAllies;
     private List<UnitController> myEnemies;
 
@@ -50,6 +51,9 @@ public class UnitController : MonoBehaviour
 
     private HexCell highlightedCell;
     public HexGrid Grid { get; set; }
+
+    //Temporary, used for malebranche buff
+    public bool isJuggernaut;
 
     // Called when a controller is instantiated by the manager
     public void Initialize(UnitManager manager, MicroBarFollow bars)
@@ -85,6 +89,8 @@ public class UnitController : MonoBehaviour
     {
         if (ACTIVE && state == State.DEAD)
         {
+            ApplyDeathEffects();
+
             StopAllCoroutines();
             animator.SetTrigger("die");
             ACTIVE = false; //Prevents consecutive runs of this block
@@ -235,7 +241,7 @@ public class UnitController : MonoBehaviour
             }
                 //value.IncreaseVisibility();
 
-            }
+        }
     }
 
     public void EnableHighlight()
@@ -589,5 +595,56 @@ public class UnitController : MonoBehaviour
     public void SetRotationSpeed(float rotationSpeed)
     {
         this.rotationSpeed = rotationSpeed;
+    }
+
+    
+    //STAMINA TO REFRESH EVERY ROUND
+    public void RefreshStamina()
+    {
+        float current;
+        if(data != null)
+        {
+            current = data.GetCurrentStamina();
+            current += 50; //Stamina to regen
+            data.SetCurrentStamina(current);
+        } 
+    }
+
+    public void GetActiveBuffs(List<TraitBuffDataStore> activeBuffs)
+    {
+        if(this.activeBuffs != null) this.activeBuffs.Clear();
+        this.activeBuffs = activeBuffs;
+    }
+
+    public void ApplyActiveBuffs()
+    {
+        foreach(TraitBuffDataStore traitData in activeBuffs)
+        {
+            traitData.Apply(manager, this);
+        }
+    }
+
+    public void ClearActiveBuffs()
+    {
+        foreach (TraitBuffDataStore traitData in activeBuffs)
+        {
+            traitData.ClearEffect(manager, this);
+        }
+    }
+
+    public void ApplyEffectsOnCombatEnd()
+    {
+        foreach (TraitBuffDataStore traitData in activeBuffs)
+        {
+            traitData.ApplyEffectOnCombatEnd(manager, this);
+        }
+    }
+
+    public void ApplyDeathEffects()
+    {
+        foreach (TraitBuffDataStore traitData in activeBuffs)
+        {
+            traitData.ApplyDeathEffect(manager, this);
+        }
     }
 }

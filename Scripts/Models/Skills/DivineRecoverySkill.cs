@@ -24,7 +24,7 @@ public class DivineRecoverySkill : Skill
 
         baseCooldown = 16;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 0;
+        baseStaminaCost = 25;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }
@@ -110,7 +110,7 @@ public class DivineRecoverySkill : Skill
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 2;
+        float magicModifier = data.GetCurrentMagic();
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

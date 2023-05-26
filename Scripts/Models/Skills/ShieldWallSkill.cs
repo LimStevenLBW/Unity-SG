@@ -29,7 +29,7 @@ public class ShieldWallSkill : Skill
         duration = 5;
         baseCooldown = 3;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 0;
+        baseStaminaCost = 15;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }

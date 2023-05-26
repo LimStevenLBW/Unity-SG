@@ -27,7 +27,7 @@ public class ClashSkill : Skill
 
         baseCooldown = 2;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 0;
+        baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
 
         isRunning = false;
@@ -116,10 +116,25 @@ public class ClashSkill : Skill
         damageData -= (int)(damageData * defValueReduction);
 
         if (damageData < 0) damageData = 0; //We don't go below zero
-        enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
 
-        //Display Data
-        DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+
+        float critValue = thisGuy.GetCurrentCrit() * 100;
+        float critCheck = UnityEngine.Random.Range(0, 100);
+
+        if (critCheck <= critValue)
+        { //Successful crit
+
+            damageData = (int) (damageData * 1.5f);
+            enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+            DamageGenerator.gen.CreatePopup(position, damageData.ToString() + "!", Color.red);
+        }
+        else
+        { //Run normally
+
+            enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+            DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+        }
+
 
         //Terminate
         isRunning = false;

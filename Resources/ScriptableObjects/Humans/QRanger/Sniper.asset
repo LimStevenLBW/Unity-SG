@@ -16,7 +16,7 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: 759bd5bc9f0f58041974945393c9e58e, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: a2dcf144552abbd4589e6df8e5208988, type: 2}
-  unitName: Kingdom Ranger
+  unitName: Kingdom Sniper
   bio: 
   rank: 3
   baseLevel: 1

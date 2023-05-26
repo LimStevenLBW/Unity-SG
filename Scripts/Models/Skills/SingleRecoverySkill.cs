@@ -24,7 +24,7 @@ public class SingleRecoverySkill : Skill
 
         baseCooldown = 3;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 0;
+        baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }
@@ -103,7 +103,8 @@ public class SingleRecoverySkill : Skill
             }
         }
         Director.Instance.PlaySound(hitSFX);
-        allyToHeal.PlayEffect(effect, pos, 2);
+        //allyToHeal.PlayEffect(effect, pos, 2);
+        allyToHeal.AddAura(effect, pos, this, 2);
         CalculateHealing(allyToHeal);
 
     }
@@ -116,11 +117,11 @@ public class SingleRecoverySkill : Skill
 
         //Base healing
         float lowerBound = (data.GetCurrentTroopCount() / 30);
-        float upperBound = (data.GetCurrentTroopCount() / 20);
+        float upperBound = (data.GetCurrentTroopCount() / 25);
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1.5f;
+        float magicModifier = data.GetCurrentMagic() * 1f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
@@ -169,6 +170,6 @@ public class SingleRecoverySkill : Skill
 
     public override void EffectDestroyed()
     {
-        throw new NotImplementedException();
+        //Nothing
     }
 }

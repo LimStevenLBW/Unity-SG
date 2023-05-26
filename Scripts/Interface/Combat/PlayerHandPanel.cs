@@ -70,7 +70,7 @@ public class PlayerHandPanel : MonoBehaviour
         //We draw cards from left to right 
         foreach (Card c in cards)
         {
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.105f);
 
             //If there is no card, draw a card from the deck and update the counter display
             if(c.unit == null)

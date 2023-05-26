@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class MicroBarFollow : MonoBehaviour
 {
+    private float currentStamina = 100;
     public MicroBarFollow prefab;
+    public GameObject slepping;
 
     [SerializeField] MicroBar _tcBar;
     [SerializeField] MicroBar _spBar;
@@ -26,7 +28,8 @@ public class MicroBarFollow : MonoBehaviour
     }
     public void LateUpdate()
     {
-
+        if (currentStamina < 25) { slepping.SetActive(true); }
+        else { slepping.SetActive(false); }
         /*
         //Only when bars are changed
         if (data != null && data.barWasUpdated)
@@ -40,7 +43,6 @@ public class MicroBarFollow : MonoBehaviour
 
     public void Initialize(UnitController unitController)
     {
-
         data = unitController.data;
         this.unitController = unitController;
 
@@ -60,6 +62,8 @@ public class MicroBarFollow : MonoBehaviour
 
     public void UpdateBarValues(UnitDataStore data)
     {
+        currentStamina = data.GetCurrentStamina();
+
         if (_tcBar != null)
         {
             _tcBar.UpdateHealthBar(data.GetCurrentTroopCount());

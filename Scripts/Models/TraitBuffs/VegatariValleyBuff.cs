@@ -17,17 +17,41 @@ public class VegatariValleyBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+        UnitDataStore data = controller.data;
+
+        string factionName = data.faction.traitName;
+        int currentTc = data.GetCurrentTroopCount();
+
+        if (traitLevel == 1 && factionName == "Vegatari") data.SetCurrentTroopCount(currentTc + 25);
+        else if (traitLevel >= 2 && factionName == "Vegatari") data.SetCurrentTroopCount(currentTc + 50);
+        else if (traitLevel >= 3 && factionName == "Vegatari") data.SetCurrentTroopCount(currentTc + 75);
     }
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+        // Do nothing
+    }
+
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+
+    }
+
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Start combat with an extra MushNub";
-        else if (traitLevel == 2) return "Start combat with an evolved MushNub";
-        else if (traitLevel == 3) return "Start combat with a MushNub Hulk";
+        else if (traitLevel == 1) return "All troops recover 25 troops each round";
+        else if (traitLevel == 2) return "All troops recover 50 troops each round";
+        else if (traitLevel == 3) return "All troops recover 75 troops each round";
 
         return effectText;
     }

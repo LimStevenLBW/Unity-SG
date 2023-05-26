@@ -228,7 +228,7 @@ public class CameraControl : MonoBehaviour
         //Vector3.SqrMagnitude(targetPosition - transform.position) > 100.0f
 
         //While close enough, continue to move the camera
-        while (Vector3.Distance(transform.position, targetPosition) > 3f)
+        while (Vector3.Distance(transform.position, targetPosition) > 1f)
         {
 
             //Debug.Log((Vector3.SqrMagnitude(targetPosition - transform.position)));

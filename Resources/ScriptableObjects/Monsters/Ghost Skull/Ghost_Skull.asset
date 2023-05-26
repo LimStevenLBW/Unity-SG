@@ -15,7 +15,7 @@ MonoBehaviour:
   model: {fileID: 188449459254459104, guid: 6d4f7497b065a974e88a13f89dda1e81, type: 3}
   unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   faction: {fileID: 11400000, guid: ccd2743379bc7a34095e7ead63eae81b, type: 2}
-  special: {fileID: 11400000, guid: a3b899814f45bbe49a816603f59701ae, type: 2}
+  special: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
   unitName: Banshee
   bio: 
   rank: 3
@@ -32,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 100
+  baseTroopCount: 150
   leadership: 1
   engineering: 1
   magic: 1

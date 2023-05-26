@@ -16,7 +16,7 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: 759bd5bc9f0f58041974945393c9e58e, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
-  unitName: Hunter
+  unitName: Ranger
   bio: 
   rank: 4
   baseLevel: 1

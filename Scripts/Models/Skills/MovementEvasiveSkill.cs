@@ -66,11 +66,13 @@ public class MovementEvasiveSkill : Skill
     {
         int distance;
 
+
         if (controller.path.distanceToNearestEnemy == 1)
         {
             controller.SetTravelSpeed(12);
             controller.SetRotationSpeed(720f);
             distance = controller.path.EscapeFrom(enemyTarget);
+ 
         }
         else
         {

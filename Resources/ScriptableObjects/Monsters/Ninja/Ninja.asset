@@ -18,7 +18,7 @@ MonoBehaviour:
   special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Goblin Ninjas
   bio: 
-  rank: 3
+  rank: 4
   baseLevel: 1
   expGrowthRate: 1
   basePower: 25
@@ -32,7 +32,7 @@ MonoBehaviour:
   baseSpeed: 1
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 400
+  baseTroopCount: 300
   leadership: 1
   engineering: 1
   magic: 1
@@ -41,6 +41,6 @@ MonoBehaviour:
   upkeep: 0.1
   positionSpawnPref: 0000000000000000
   skill1_ID: 104
-  skill2_ID: 100
+  skill2_ID: 0
   skill3_ID: 0
   skill4_ID: 0

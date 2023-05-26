@@ -101,8 +101,8 @@ public class SelfRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetMaxTroopCount() / 10);
-        float upperBound = (data.GetMaxTroopCount() / 5);
+        float lowerBound = (data.GetMaxTroopCount() / 15);
+        float upperBound = (data.GetMaxTroopCount() / 10);
 
         //Setup magic modifier
         float magicModifier = data.GetCurrentMagic();

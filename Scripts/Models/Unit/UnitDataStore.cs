@@ -45,6 +45,7 @@ public class UnitDataStore
     private float CritBoost;
     private float baseCritBoost = 2; //IE. Crit damage, but more than just damage can be effected, standard for all characters
 
+    private int baseTroopCount;
     private int currentTroopCount;
     private int maxTroopCount; //With buffs, we can go past the normal troop count during combat
     private int TroopCount;
@@ -78,15 +79,11 @@ public class UnitDataStore
         special = unitBase.special;
         //controller.data = this; //Set controller data reference
 
-        //Set the Stamina
-        Stamina = unitBase.baseStamina;
-        maxStamina = Stamina;
-        currentStamina = maxStamina;
-
         //Stats
         unitName = unitBase.unitName;
         rank = unitBase.rank;
 
+        baseTroopCount = unitBase.baseTroopCount;
         maxTroopCount = unitBase.baseTroopCount;
         currentTroopCount = maxTroopCount;
 
@@ -273,6 +270,8 @@ public class UnitDataStore
     public float GetCritBoost() { return CritBoost; }
     public void SetCritBoost(float value) { CritBoost = value; }
 
+    public int GetBaseTroopCount() { return baseTroopCount; }
+
     //TROOP COUNT
     public int GetCurrentTroopCount() { return currentTroopCount; }
     public void SetCurrentTroopCount(int value) {
@@ -299,16 +298,15 @@ public class UnitDataStore
     public float GetCurrentStamina() { return currentStamina; }
     public void SetCurrentStamina(float value)
     {
-        if (value > maxTroopCount)
+        if (value > maxStamina)
         {
             currentStamina = maxStamina; // Cannot go past max
         }
         else
         {
             currentStamina = value;
-
         }
-        currentStamina = value;
+
         OnBarUpdated?.Invoke(this);
     }
     public float GetMaxStamina() { return maxStamina; }

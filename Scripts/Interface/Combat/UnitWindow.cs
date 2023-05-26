@@ -87,7 +87,7 @@ public class UnitWindow : MonoBehaviour
         magicText.SetText("" + data.GetCurrentMagic());
         defenseText.SetText("" + data.GetCurrentDefense());
         speedText.SetText("" + data.GetCurrentSpeed());
-        critText.SetText("" + data.GetCurrentCrit() + "%");
+        critText.SetText("" + data.GetCurrentCrit() * 100 + "%");
 
         string traits = "";
 

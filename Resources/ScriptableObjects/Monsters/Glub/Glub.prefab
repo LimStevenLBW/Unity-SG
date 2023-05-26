@@ -381,7 +381,7 @@ Transform:
   m_GameObject: {fileID: 6025606122585290361}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1512193696378776757}
@@ -418,6 +418,9 @@ MonoBehaviour:
   teamNum: 0
   prefab: {fileID: 4518109830270712189}
   bars: {fileID: 0}
+  state: 0
+  maxRange: 0
+  isJuggernaut: 0
 --- !u!95 &-5759418613134592758
 Animator:
   serializedVersion: 5

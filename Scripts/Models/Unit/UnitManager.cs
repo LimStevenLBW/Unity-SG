@@ -352,4 +352,91 @@ public class UnitManager : MonoBehaviour
         cpuControllers.Clear();
     }
 
+    public void RefreshStamina()
+    {
+        foreach (UnitController c in playerControllers)
+        {
+            c.RefreshStamina();
+        }
+
+
+        foreach (UnitController c in cpuControllers)
+        {
+            c.RefreshStamina();
+        }
+    }
+
+    public void GetActiveTraitBuffs(TraitBuffsList traitBuffs)
+    {
+        List<TraitBuffDataStore> activeBuffs = traitBuffs.GetActiveBuffs();
+
+        if(traitBuffs.team == 1)
+        {
+            foreach (UnitController playerController in playerControllers)
+            {
+                playerController.GetActiveBuffs(activeBuffs);
+            }
+
+        }
+        else
+        {
+            foreach (UnitController enemyController in cpuControllers)
+            {
+                enemyController.GetActiveBuffs(activeBuffs);
+            }
+        }
+
+    }
+
+    public void ApplyActiveTraitBuffs(int teamNum)
+    {
+        if(teamNum == 1)
+        {
+            foreach (UnitController playerController in playerControllers)
+            {
+                playerController.ApplyActiveBuffs();
+            }
+        }
+        else
+        {
+            foreach (UnitController enemyController in cpuControllers)
+            {
+                enemyController.ApplyActiveBuffs();
+            }
+        }
+    }
+    public void ApplyActiveTraitBuffsOnCombatEnd()
+    {
+  
+        foreach (UnitController playerController in playerControllers)
+        {
+            playerController.ApplyEffectsOnCombatEnd();
+        }
+
+
+        foreach (UnitController enemyController in cpuControllers)
+        {
+            enemyController.ApplyEffectsOnCombatEnd();
+        }
+        
+    }
+
+    public void ClearActiveTraitBuffs(int teamNum)
+    {
+        if (teamNum == 1)
+        {
+            foreach (UnitController playerController in playerControllers)
+            {
+                playerController.ClearActiveBuffs();
+            }
+        }
+        else
+        {
+            foreach (UnitController enemyController in cpuControllers)
+            {
+                enemyController.ClearActiveBuffs();
+            }
+        }
+    }
+
 }

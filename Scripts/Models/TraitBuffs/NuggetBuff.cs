@@ -17,10 +17,27 @@ public class NuggetBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+  
     }
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+        // Do nothing
+    }
+
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+
+    }
+
 
     public override string GetEffectText()
     {

@@ -25,7 +25,7 @@ MonoBehaviour:
   powerGrowthRate: 1
   baseDefense: 15
   defenseGrowthRate: 1
-  baseMagic: 35
+  baseMagic: 30
   magicGrowthRate: 0
   baseStamina: 100
   staminaGrowthRate: 1

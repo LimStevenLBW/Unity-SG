@@ -17,16 +17,41 @@ public class AssassinBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+        UnitDataStore data = controller.data;
+
+        string className = data.unitClass.traitName;
+        float power = data.GetCurrentPower();
+
+        if (traitLevel >= 2 && className == "Assassin") data.SetCurrentPower(power + 25);
     }
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+        // Do nothing
+    }
+
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+        UnitDataStore data = controller.data;
+        string className = data.unitClass.traitName;
+        float power = data.GetCurrentPower();
+        if (traitLevel >= 2 && className == "Assassin") data.SetCurrentPower(power - 25);
+    }
+
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Assassins have evasive movement and avoid direct fights";
-        else if (traitLevel == 2) return "Assassins gain 40% crit rate";
+        else if (traitLevel == 1) return "Assassins are fast and keep their distance";
+        else if (traitLevel == 2) return "Assassins gain 25 POW";
 
         return effectText;
     }

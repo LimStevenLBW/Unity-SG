@@ -32,6 +32,6 @@ public class UnitSkillDisplay : MonoBehaviour
 
     public void Initialize(Skill skill)
     {
-        if(this.skill == null) this.skill = skill;
+        this.skill = skill;
     }
 }

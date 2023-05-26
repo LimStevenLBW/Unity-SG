@@ -17,10 +17,37 @@ public class GuardianBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+        UnitDataStore data = controller.data;
+
+        string className = data.unitClass.traitName;
+        float defense = data.GetCurrentDefense();
+
+        if (traitLevel == 1 && className == "Guardian") data.SetCurrentDefense(defense + 10);
+        else if (traitLevel >= 2 && className == "Guardian") data.SetCurrentDefense(defense + 20);
     }
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+        // Do nothing
+    }
+
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+        UnitDataStore data = controller.data;
+        string className = data.unitClass.traitName;
+        float defense = data.GetCurrentDefense();
+        if (traitLevel == 1 && className == "Guardian") data.SetCurrentDefense(defense - 10);
+        else if (traitLevel >= 2 && className == "Guardian") data.SetCurrentDefense(defense - 20);
+    }
+
 
     public override string GetEffectText()
     {

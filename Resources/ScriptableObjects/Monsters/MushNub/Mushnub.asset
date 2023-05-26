@@ -21,7 +21,7 @@ MonoBehaviour:
   rank: 5
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 10
+  basePower: 15
   powerGrowthRate: 1
   baseDefense: 3
   defenseGrowthRate: 1

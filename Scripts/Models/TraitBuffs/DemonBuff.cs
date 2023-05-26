@@ -17,9 +17,61 @@ public class DemonBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+        UnitDataStore data = controller.data;
+
+        string traitName = data.special.traitName;
+        float power = data.GetCurrentPower();
+        float magic = data.GetCurrentMagic();
+        float defense = data.GetCurrentDefense();
+
+        if (traitLevel == 1 && traitName == "Demon")
+        {
+            data.SetCurrentPower(power + 4);
+            data.SetCurrentMagic(magic + 4);
+            data.SetCurrentDefense(defense + 4);
+        }
+        else if (traitLevel >= 2 && traitName == "Demon")
+        {
+            data.SetCurrentPower(power + 6);
+            data.SetCurrentMagic(magic + 6);
+            data.SetCurrentDefense(defense + 6);
+        }
+    }
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+        // Do nothing
+    }
+
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+        UnitDataStore data = controller.data;
+
+        string traitName = data.faction.traitName;
+        float power = data.GetCurrentPower();
+        float magic = data.GetCurrentMagic();
+        float defense = data.GetCurrentDefense();
+
+        if (traitLevel == 1 && traitName == "Demon")
+        {
+            data.SetCurrentPower(power - 4);
+            data.SetCurrentMagic(magic - 4);
+            data.SetCurrentDefense(defense - 4);
+        }
+        else if (traitLevel >= 2 && traitName == "Demon")
+        {
+            data.SetCurrentPower(power - 6);
+            data.SetCurrentMagic(magic - 6);
+            data.SetCurrentDefense(defense - 6);
+        }
     }
 
     public override string GetEffectText()

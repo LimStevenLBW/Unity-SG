@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ArcherBuff : TraitBuff
 {
-
     // Start is called before the first frame update
     void Start()
     {
@@ -17,16 +16,42 @@ public class ArcherBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+        UnitDataStore data = controller.data;
+
+        string className = data.unitClass.traitName;
+        float power = data.GetCurrentPower();
+
+        if (traitLevel == 1 && className == "Archer") data.SetCurrentPower(power + 10);
+        else if (traitLevel >= 2 && className == "Archer") data.SetCurrentPower(power + 20);
+    }
+
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+       // Do nothing
+    }
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+        UnitDataStore data = controller.data;
+        string className = data.unitClass.traitName;
+        float power = data.GetCurrentPower();
+        if (traitLevel == 1 && className == "Archer") data.SetCurrentPower(power - 10);
+        else if (traitLevel >= 2 && className == "Archer") data.SetCurrentPower(power - 20);
     }
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Menaces gain 50 extra troops"; if (traitLevel == 1) return "Archers gain 10 POW";
-        else if (traitLevel == 1) return "Menaces gain 50 extra troops"; if (traitLevel == 2) return "Archers gain 35 POW";
+        else if (traitLevel == 1) return "All Archers gain 10 POW";
+        else if (traitLevel == 2) return "All Archers gain 20 POW";
 
         return effectText;
     }

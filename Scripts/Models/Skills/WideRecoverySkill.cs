@@ -24,7 +24,7 @@ public class WideRecoverySkill : Skill
 
         baseCooldown = 12;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 0;
+        baseStaminaCost = 25;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }
@@ -115,7 +115,7 @@ public class WideRecoverySkill : Skill
         float upperBound = (data.GetCurrentTroopCount() / 20);
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 2;
+        float magicModifier = data.GetCurrentMagic();
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

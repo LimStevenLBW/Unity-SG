@@ -223,8 +223,8 @@ public class Director : MonoBehaviour
 
             selectedCardsCount = 0; //reset order
 
-
             //Start Unit Deployment
+            unitManager.ClearActiveTraitBuffs(1); //Clear allied buffs
             unitManager.DeployQueuedUnits(playerHand.PlayCards(), true);
             playerHand.RearrangeCards();
             playerHand.gameObject.SetActive(false);
@@ -232,6 +232,8 @@ public class Director : MonoBehaviour
         if(phase == "ENEMYCARDSELECT")
         {
             this.phase = Phase.ENEMYCARDSELECT;
+            unitManager.GetActiveTraitBuffs(playerTraitBuffs); // Get buffs to allies after deployment
+            unitManager.ApplyActiveTraitBuffs(1); //Apply allied buffs
 
             enemyHand.gameObject.SetActive(true);
             enemyHand.FillHand();
@@ -243,6 +245,7 @@ public class Director : MonoBehaviour
             this.phase = Phase.ENEMYDEPLOYMENT;
             playerCamera.UnFocus();
             selectedCardsCount = 0;
+            unitManager.ClearActiveTraitBuffs(-1); //Clear enemy buffs
             unitManager.DeployQueuedUnits(enemyHand.PlayCards(), false);
             enemyHand.RearrangeCards();
             enemyHand.gameObject.SetActive(false);
@@ -250,13 +253,14 @@ public class Director : MonoBehaviour
 
         if (phase == "REPOSITIONING")
         {
-            startCombatButton.gameObject.SetActive(true);
             this.phase = Phase.REPOSITIONING;
+            unitManager.GetActiveTraitBuffs(enemyTraitBuffs); //Apply buffs to enemies after deployment
+            unitManager.ApplyActiveTraitBuffs(-1); //Apply enemy buffs
+
+            startCombatButton.gameObject.SetActive(true);
             repositioningPrompt.gameObject.SetActive(true);
 
             combatManager.ClearSelectionKeepWindow();
-            playerTraitBuffs.ApplyTraitBuffs();
-            enemyTraitBuffs.ApplyTraitBuffs();
             playerCamera.UnFocus();
             //Skipping repositioning for now
 
@@ -264,7 +268,6 @@ public class Director : MonoBehaviour
         }
         if (phase == "COMBAT")
         {
-
             repositioningPrompt.gameObject.SetActive(false);
             this.phase = Phase.COMBAT;
             StartCoroutine(BeginCombat());
@@ -272,6 +275,7 @@ public class Director : MonoBehaviour
         if (phase == "ENDCOMBAT")
         {
             this.phase = Phase.ENDCOMBAT;
+            unitManager.ApplyActiveTraitBuffsOnCombatEnd();
             AudioPlayer.PlayOneShot(AudioSortie);
             RecalculateControllerTraits();
             OnCombatEnded?.Invoke();
@@ -321,6 +325,8 @@ public class Director : MonoBehaviour
     IEnumerator EndCombat()
     {
         yield return new WaitForSeconds(1.5f);
+        unitManager.RefreshStamina();
+
         if (playerHealth <= 0)
         {
             SetPhase("CONCLUSION");
@@ -420,17 +426,40 @@ public class Director : MonoBehaviour
         }
     }
 
-    
-    void ValidatePlayerSelectable()
+    public void BoostPlayerSelectable()
     {
-        if (playerSelectable > 5) playerSelectable = 5;
+        int playerTeamSize = unitManager.playerControllers.Count;
+        int cpuTeamSize = unitManager.cpuControllers.Count;
+        playerSelectable = defaultPlayerSelectable;
+        cpuSelectable = defaultCpuSelectable;
+
+
+        if (playerTeamSize < cpuTeamSize)
+        {
+            int countDifference = cpuTeamSize - playerTeamSize;
+            playerSelectable = countDifference + 2;
+        }
+        else if (cpuTeamSize < playerTeamSize)
+        {
+            int countDifference = playerTeamSize - cpuTeamSize;
+            cpuSelectable = countDifference + 2;
+        }
+
+        playerHand.UpdateSelectableAmount(true, playerSelectable);
+        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
+    }
+
+    public void ValidatePlayerSelectable()
+    {
+        if (playerSelectable > 4) playerSelectable = 4;
         if (playerSelectable <= 0) playerSelectable = 1;
-        if (cpuSelectable > 5) cpuSelectable = 5;
+        if (cpuSelectable > 4) cpuSelectable = 4;
         if (cpuSelectable <= 0) cpuSelectable = 1;
     }
 
     public void ResetPlayerSelectable()
     {
+
         playerSelectable = defaultPlayerSelectable;
         cpuSelectable = defaultCpuSelectable;
         playerHand.UpdateSelectableAmount(true, playerSelectable);

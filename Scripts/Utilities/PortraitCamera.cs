@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class PortraitCamera : MonoBehaviour
 {
-    private UnitController unit;
+    //public UnitController unit;
     private float rotationX; //Higher values turns the camera upwards
     private Transform target;
-    Vector3 offset;
-
+    private Vector3 offset;
+    private Vector3 originalPosition;
     // Start is called before the first frame update
     void Start()
     {
-
+        originalPosition = transform.position;
     }
 
     void Init()
     {
-        offset = target.transform.position - transform.position; //Higher values lower the camera at the end, but dont bother messing with offset, it doesnt work too well
+        offset = target.transform.position - originalPosition; //Higher values lower the camera at the end, but dont bother messing with offset, it doesnt work too well
         BoxCollider box = target.GetComponent<BoxCollider>();
         Vector3 boxSizeConverted = target.transform.TransformVector(box.size);
        // Debug.Log("box" + boxSizeConverted.y);

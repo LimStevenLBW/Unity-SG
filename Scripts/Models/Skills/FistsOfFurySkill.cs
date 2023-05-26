@@ -26,7 +26,7 @@ public class FistsOfFurySkill : Skill
 
         baseCooldown = 8;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 0;
+        baseStaminaCost = 25;
         currentStaminaCost = baseStaminaCost;
 
         isRunning = false;
@@ -100,7 +100,7 @@ public class FistsOfFurySkill : Skill
             position.x += xRandom;
 
             //Setup power modifier
-            float powerModifier = data.GetCurrentPower() * 2f;
+            float powerModifier = data.GetCurrentPower() * 1f;
 
             //Base damage is based on max troop count, should help ensure a stable damage range
             float lowerBound = (thisGuy.GetMaxTroopCount() / 30);
@@ -119,10 +119,23 @@ public class FistsOfFurySkill : Skill
             damageData -= (int)(damageData * defValueReduction);
 
             if (damageData < 0) damageData = 0; //We don't go below zero
-            enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
 
-            //Display Data
-            DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+            float critValue = data.GetCurrentCrit() * 100;
+            float critCheck = UnityEngine.Random.Range(0, 100);
+
+            if (critCheck <= critValue)
+            { //Successful crit
+
+                damageData = (int)(damageData * 1.5f);
+                enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+                DamageGenerator.gen.CreatePopup(position, damageData.ToString() + "!", Color.red);
+            }
+            else
+            { //Run normally
+
+                enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+                DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+            }
 
         }
 

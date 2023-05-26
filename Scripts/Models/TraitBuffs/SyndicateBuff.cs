@@ -17,18 +17,42 @@ public class SyndicateBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+        UnitDataStore data = controller.data;
+
+        float stamina = data.GetCurrentStamina();
+
+        if (traitLevel == 1) data.SetCurrentStamina(stamina + 10);
+        else if (traitLevel >= 2) data.SetCurrentStamina(stamina + 20);
+        else if (traitLevel >= 2) data.SetCurrentStamina(stamina + 30);
+        else if (traitLevel >= 2) data.SetCurrentStamina(stamina + 40);
     }
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+        // Do nothing
+    }
+
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+
+    }
+
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Your troops have 10% additional crit";
-        else if (traitLevel == 2) return "Your troops have 20% additional crit";
-        else if (traitLevel == 3) return "Your troops have 30% additional crit";
-        else if (traitLevel == 4) return "Your troops have 40% additional crit";
+        else if (traitLevel == 1) return "Your troops recover 10 stamina at the start of combat";
+        else if (traitLevel == 2) return "Your troops recover 20 stamina at the start of combat";
+        else if (traitLevel == 3) return "Your troops recover 30 stamina at the start of combat";
+        else if (traitLevel == 4) return "Your troops recover 40 stamina at the start of combat";
 
         return effectText;
     }

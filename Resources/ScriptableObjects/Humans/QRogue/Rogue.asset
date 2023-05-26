@@ -41,6 +41,6 @@ MonoBehaviour:
   upkeep: 0.1
   positionSpawnPref: 330000004f000000
   skill1_ID: 104
-  skill2_ID: 100
+  skill2_ID: 0
   skill3_ID: 0
   skill4_ID: 0

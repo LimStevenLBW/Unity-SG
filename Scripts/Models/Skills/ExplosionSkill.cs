@@ -26,7 +26,7 @@ public class ExplosionSkill : Skill
 
         baseCooldown = 9;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 5;
+        baseStaminaCost = 25;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }
@@ -154,11 +154,22 @@ public class ExplosionSkill : Skill
 
         if (damageData < 0) damageData = 0; //We don't go below zero
 
-        //Damage to Center
-        enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+        float critValue = data.GetCurrentCrit() * 100;
+        float critCheck = UnityEngine.Random.Range(0, 100);
 
-        //Display Data
-        DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+        if (critCheck <= critValue)
+        { //Successful crit
+
+            damageData = (int)(damageData * 1.5f);
+            enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+            DamageGenerator.gen.CreatePopup(position, damageData.ToString() + "!", Color.red);
+        }
+        else
+        { //Run normally
+
+            enemy.SetCurrentTroopCount(enemy.GetCurrentTroopCount() - damageData);
+            DamageGenerator.gen.CreatePopup(position, damageData.ToString(), color);
+        }
         //Terminate
         isRunning = false;
 

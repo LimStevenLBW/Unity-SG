@@ -16,14 +16,14 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: 0de1d24b46b43db4ebe35141c2d79e6d, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: a2dcf144552abbd4589e6df8e5208988, type: 2}
-  unitName: Hero
+  unitName: Knight
   bio: 
   rank: 2
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 80
+  basePower: 35
   powerGrowthRate: 1
-  baseDefense: 45
+  baseDefense: 40
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0

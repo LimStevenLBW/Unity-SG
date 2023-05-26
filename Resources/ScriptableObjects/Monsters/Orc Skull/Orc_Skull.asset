@@ -15,7 +15,7 @@ MonoBehaviour:
   model: {fileID: 2362425150502880030, guid: c99609a56489b414abcc702f0d29d8fa, type: 3}
   unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
   faction: {fileID: 11400000, guid: 9a1a2a4c50757714ba13fe7545c8a911, type: 2}
-  special: {fileID: 11400000, guid: 02df44a37a6152942bfde47faf1cf2de, type: 2}
+  special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
   unitName: Mutated Orc
   bio: 
   rank: 3

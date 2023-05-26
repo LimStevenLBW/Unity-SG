@@ -17,15 +17,43 @@ public class EliteBuff : TraitBuff
 
     }
 
-    public override void ApplyEffect()
+    public override void ApplyEffect(UnitManager manager, UnitController controller)
     {
-        throw new System.NotImplementedException();
+        //Do nothing
     }
+
+    public override void ApplyEffectOnDeath(UnitManager manager, UnitController controller)
+    {
+        //Do nothing
+    }
+
+    public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
+    {
+        UnitDataStore data = controller.data;
+        List<UnitController> allies = controller.GetAllies();
+        foreach (UnitController ally in allies)
+        {
+            ally.data.SetCurrentStamina(data.GetMaxStamina());
+
+            Vector3 position = ally.transform.position;
+            position.y += 10;
+            position.x += (float)0.5;
+
+            int staminaHealing = (int)(data.GetMaxStamina() - data.GetCurrentStamina());
+            DamageGenerator.gen.CreatePopup(position, staminaHealing.ToString(), Color.cyan);
+        }
+    }
+
+    public override void ClearEffect(UnitManager manager, UnitController controller)
+    {
+        //Not needed here since its buff is applied once on unit death
+    }
+
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "After using their special, Elites regain 50% of their fervor.";
+        else if (traitLevel == 1) return "At the end of combat, all units recover their stamina";
 
         return effectText;
     }
