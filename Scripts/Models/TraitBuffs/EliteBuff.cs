@@ -30,7 +30,6 @@ public class EliteBuff : TraitBuff
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
     {
         UnitDataStore data = controller.data;
-       
 
         Vector3 position = controller.transform.position;
         position.y += 10;

@@ -333,6 +333,11 @@ public class Director : MonoBehaviour
         unitManager.RefreshStamina();
         UpdatePlayerSelectable();
 
+        if(playerHealth == 0 && cpuHealth == 0)
+        {
+            //Draw game
+        }
+
         if (playerHealth <= 0)
         {
             SetPhase("CONCLUSION");

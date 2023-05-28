@@ -56,6 +56,8 @@ public class SingleRecoverySkill : Skill
         if (enemyTarget == null) return false;
         if (controller.path.distanceToNearestEnemy > maxRange) return false;
 
+
+
         //If we have enough stamina and if it is off cooldown
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
@@ -82,7 +84,7 @@ public class SingleRecoverySkill : Skill
     public override void HandleAnimExtra()
     {
         List<UnitController> allies = controller.GetAllies();
-        Vector3 pos = new Vector3();
+
         int lowestHp = 99999;
         UnitController allyToHeal = null;
         foreach(UnitController ally in allies)
@@ -94,12 +96,17 @@ public class SingleRecoverySkill : Skill
                 {
                     lowestHp = troops;
                     allyToHeal = ally;
-                    pos = allyToHeal.transform.position;
-                    pos.y = 0;
+
                 }
                
             }
         }
+
+        if (allyToHeal == null) allyToHeal = controller; //Just heal yourself if there is no one to heal
+
+        Vector3 pos = allyToHeal.transform.position;
+        pos.y = 0;
+
         Director.Instance.PlaySound(hitSFX);
         //allyToHeal.PlayEffect(effect, pos, 2);
         allyToHeal.AddAura(effect, pos, this, 2);

@@ -22,7 +22,7 @@ public class WideRecoverySkill : Skill
         skillName = "Wide Recovery";
         description = "We come with great healthcare!";
 
-        baseCooldown = 12;
+        baseCooldown = 13;
         currentCooldown = baseCooldown;
         baseStaminaCost = 25;
         currentStaminaCost = baseStaminaCost;
@@ -86,15 +86,17 @@ public class WideRecoverySkill : Skill
 
         foreach(UnitController ally in allies)
         {
-            Vector3 pos = ally.transform.position;
-            pos.y = 0;
             if (ally.GetState() != "DEAD" && ally.data.IsInjured())
             {
+                Vector3 pos = ally.transform.position;
+                pos.y = 0;
                 ally.AddAura(effect, pos, this, 2);
                 CalculateHealing(ally);
             }
         }
 
+        //Terminate
+        isRunning = false;
         Director.Instance.PlaySound(hitSFX);
 
     }
@@ -115,7 +117,7 @@ public class WideRecoverySkill : Skill
         float upperBound = (data.GetCurrentTroopCount() / 20);
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic();
+        float magicModifier = data.GetCurrentMagic() * 1f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
@@ -125,8 +127,6 @@ public class WideRecoverySkill : Skill
 
         //Display Data
         DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
-        //Terminate
-        isRunning = false;
     }
 
     public override void Reset()

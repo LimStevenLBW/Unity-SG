@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DetailsFooter : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class DetailsFooter : MonoBehaviour
     public TextMeshProUGUI attack;
     public TextMeshProUGUI magic;
     public TextMeshProUGUI defense;
+
+    public Image powIcon;
+    public Image mgkIcon;
+    public Image defIcon;
+    public Image troopsIcon;
 
     // Start is called before the first frame update
     void Start()
@@ -39,13 +45,14 @@ public class DetailsFooter : MonoBehaviour
         magic.SetText(unit.GetCurrentMagic().ToString() + " MGK");
         defense.SetText(unit.GetCurrentDefense().ToString() + " DEF");
 
-
+        powIcon.gameObject.SetActive(true);
+        mgkIcon.gameObject.SetActive(true);
+        defIcon.gameObject.SetActive(true);
+        troopsIcon.gameObject.SetActive(true);
     }
 
-
     public void ResetText()
-    {
-        
+    {       
         name.SetText("");
         rank.SetText("");
         troops.SetText("");
@@ -53,5 +60,9 @@ public class DetailsFooter : MonoBehaviour
         magic.SetText("");
         defense.SetText("");
         currentDisplay = null;
+        powIcon.gameObject.SetActive(false);
+        mgkIcon.gameObject.SetActive(false);
+        defIcon.gameObject.SetActive(false);
+        troopsIcon.gameObject.SetActive(false);
     }
 }

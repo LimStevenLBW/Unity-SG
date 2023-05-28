@@ -86,14 +86,17 @@ public class DivineRecoverySkill : Skill
 
         foreach(UnitController ally in allies)
         {
-            Vector3 pos = ally.transform.position;
-            pos.y = 0;
             if (ally.GetState() != "DEAD" && ally.data.IsInjured())
             {
+                Vector3 pos = ally.transform.position;
+                pos.y = 0;
                 ally.AddAura(effect, pos, this, 2);
                 CalculateHealing(ally);
             }
         }
+
+        //Terminate
+        isRunning = false;
         Director.Instance.PlaySound(hitSFX);
 
     }
@@ -120,8 +123,7 @@ public class DivineRecoverySkill : Skill
 
         //Display Data
         DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
-        //Terminate
-        isRunning = false;
+
     }
 
     public override void Reset()
