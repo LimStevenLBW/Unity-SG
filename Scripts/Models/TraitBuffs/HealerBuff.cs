@@ -24,7 +24,7 @@ public class HealerBuff : TraitBuff
         string className = data.unitClass.traitName;
         float magic = data.GetCurrentMagic();
 
-        if (traitLevel == 1 && className == "Healer") data.SetCurrentMagic(magic + 10);
+        if (traitLevel == 1 && className == "Healer") data.SetCurrentMagic(magic + 5);
     }
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
     {
@@ -43,14 +43,14 @@ public class HealerBuff : TraitBuff
         UnitDataStore data = controller.data;
         string className = data.unitClass.traitName;
         float magic = data.GetCurrentMagic();
-        if (traitLevel == 1 && className == "Caster") data.SetCurrentMagic(magic - 10);
+        if (traitLevel == 1 && className == "Healer") data.SetCurrentMagic(magic - 5);
     }
 
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Healers gain 10 magic";
+        else if (traitLevel == 1) return "Healers gain 5 magic";
 
         return effectText;
     }

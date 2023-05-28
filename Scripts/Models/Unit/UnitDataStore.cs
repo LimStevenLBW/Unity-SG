@@ -194,6 +194,12 @@ public class UnitDataStore
 
     public string GetName() { return unitName; }
 
+    public bool IsInjured()
+    {
+        if (currentTroopCount < maxTroopCount) return true;
+        else return false;
+    }
+
     public void StartListening()
     {
         Timer.OnSecondPassed += SecondPassed;

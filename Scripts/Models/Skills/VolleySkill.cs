@@ -29,7 +29,7 @@ public class VolleySkill : Skill
         description = "Shoot from afar";
 
         baseCooldown = 1.5f;
-        currentCooldown = baseCooldown;
+        currentCooldown = 1;
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
 

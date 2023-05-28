@@ -29,7 +29,7 @@ public class ThrowingDaggersSkill : Skill
         description = "Rogues are effective even without numbers";
 
         baseCooldown = 1.5f;
-        currentCooldown = baseCooldown;
+        currentCooldown = 1;
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
 
@@ -136,11 +136,11 @@ public class ThrowingDaggersSkill : Skill
         position.x += (float)0.5;
 
         //Base damage is based on max troop count, should help ensure a stable damage range
-        float lowerBound = (data.GetMaxTroopCount() / 20);
-        float upperBound = (data.GetMaxTroopCount() / 15);
+        float lowerBound = (data.GetMaxTroopCount() / 17);
+        float upperBound = (data.GetMaxTroopCount() / 12);
 
         //Setup power modifier
-        float powerModifier = data.GetCurrentPower() * 3f;
+        float powerModifier = data.GetCurrentPower() * 2.5f;
 
         //Setup base count modifier, a small debuff or buff based on the current health comparison
         //float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;

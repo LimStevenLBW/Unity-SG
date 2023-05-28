@@ -7,8 +7,8 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: transitionBlack
-  m_Speed: 1
+  m_Name: transitionIn
+  m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 5807999112140043491}
@@ -21,7 +21,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 61b3e812b1fc9624eb0d328e5c8ca757, type: 2}
+  m_Motion: {fileID: 7400000, guid: da9dc4fa707094a47bfdb38d8c0b7431, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -66,7 +66,7 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -88,7 +88,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: transitionBlackExit
-  m_Speed: 1
+  m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -100,7 +100,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: da9dc4fa707094a47bfdb38d8c0b7431, type: 2}
+  m_Motion: {fileID: 7400000, guid: a57ffd051f44bce4a8360b7d6202f60a, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

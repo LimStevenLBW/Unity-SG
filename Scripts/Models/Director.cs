@@ -87,6 +87,9 @@ public class Director : MonoBehaviour
     [SerializeField] private AudioClip AudioPlayStart;
     [SerializeField] private AudioClip AudioSortie;
 
+    [SerializeField] private bool playerTookDamage;
+    [SerializeField] private bool cpuTookDamage;
+
     public static Director Instance { get; private set; }
 
     private void Awake()
@@ -208,6 +211,9 @@ public class Director : MonoBehaviour
         {
             this.phase = Phase.CARDSELECT;
 
+            playerTookDamage = false;
+            cpuTookDamage = false;
+
             roundIndicator.Init();
             centerPrompt.DisplayPrompt(playerSelectable);
             playerHand.gameObject.SetActive(true);
@@ -256,15 +262,12 @@ public class Director : MonoBehaviour
             this.phase = Phase.REPOSITIONING;
             unitManager.GetActiveTraitBuffs(enemyTraitBuffs); //Apply buffs to enemies after deployment
             unitManager.ApplyActiveTraitBuffs(-1); //Apply enemy buffs
+            unitManager.RepositionEnemyUnits();
 
-            startCombatButton.gameObject.SetActive(true);
             repositioningPrompt.gameObject.SetActive(true);
 
             combatManager.ClearSelectionKeepWindow();
             playerCamera.UnFocus();
-            //Skipping repositioning for now
-
-            //SetPhase("COMBAT");
         }
         if (phase == "COMBAT")
         {
@@ -276,6 +279,8 @@ public class Director : MonoBehaviour
         {
             this.phase = Phase.ENDCOMBAT;
             unitManager.ApplyActiveTraitBuffsOnCombatEnd();
+
+
             AudioPlayer.PlayOneShot(AudioSortie);
             RecalculateControllerTraits();
             OnCombatEnded?.Invoke();
@@ -326,6 +331,7 @@ public class Director : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         unitManager.RefreshStamina();
+        UpdatePlayerSelectable();
 
         if (playerHealth <= 0)
         {
@@ -348,7 +354,7 @@ public class Director : MonoBehaviour
     public int IncCardSelectOrder()
     {
         selectedCardsCount++;
-        if (selectedCardsCount > 0 && GetPhase() == "CARDSELECT") startDeploymentButton.Display();
+        if (selectedCardsCount >= playerSelectable && GetPhase() == "CARDSELECT") startDeploymentButton.Display();
         return selectedCardsCount;
     }
     public int GetCardSelectOrder()
@@ -358,7 +364,7 @@ public class Director : MonoBehaviour
     public void NotifyCardDeselected(int ID)
     {
         selectedCardsCount--;
-        if (selectedCardsCount <= 0 && GetPhase() == "CARDSELECT") startDeploymentButton.Hide();
+        if (selectedCardsCount < playerSelectable && GetPhase() == "CARDSELECT") startDeploymentButton.Hide();
         OnCardDeselected?.Invoke(ID);
     }
     public void PlaySound(AudioClip clip)
@@ -400,30 +406,46 @@ public class Director : MonoBehaviour
         }
         
     }
+    //A player took damage, start a
     public void TakeDamage(bool isPlayer, int damage)
     {
         if (isPlayer)
         {
             playerHearts.TakeDamage(1);
-            cpuSelectable = defaultCpuSelectable; // Reset back to default
-            playerSelectable++;
-
-            ValidatePlayerSelectable();
-
-            playerHand.UpdateSelectableAmount(true, playerSelectable);
-            enemyHand.UpdateSelectableAmount(false, cpuSelectable);
+            playerTookDamage = true;   
         }
         else
         {
             cpuHearts.TakeDamage(1);
-            playerSelectable = defaultPlayerSelectable;
-            cpuSelectable++;
+            cpuTookDamage = true;
+        }
+    }
 
+    //Process how many cards a player can use next turn
+    void UpdatePlayerSelectable()
+    {
+        //Both players ran out of units
+        if (playerTookDamage && cpuTookDamage) {
+            // Both players reset
+            cpuSelectable = defaultCpuSelectable; 
+            playerSelectable = defaultPlayerSelectable;
             ValidatePlayerSelectable();
 
-            playerHand.UpdateSelectableAmount(true, playerSelectable);
-            enemyHand.UpdateSelectableAmount(false, cpuSelectable);
         }
+        else if (playerTookDamage) { 
+            cpuSelectable = defaultCpuSelectable; // Reset back to default
+            playerSelectable++;
+            ValidatePlayerSelectable();
+        }
+        else if (cpuTookDamage)
+        {
+            playerSelectable = defaultPlayerSelectable;
+            cpuSelectable++;
+            ValidatePlayerSelectable();
+        }
+
+        playerHand.UpdateSelectableAmount(true, playerSelectable);
+        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
     }
 
     public void BoostPlayerSelectable()
@@ -466,8 +488,10 @@ public class Director : MonoBehaviour
         enemyHand.UpdateSelectableAmount(false, cpuSelectable);
     }
 
+    //Update health after healthbars are animated, then start the end combat
     public void UpdateHealth(bool isPlayerHealth, int health)
     {
+        //Set health
         if (isPlayerHealth)
         {
             playerHealth = health;
@@ -556,5 +580,6 @@ public class Director : MonoBehaviour
             night.gameObject.SetActive(true);
         }
     }
+
 
 }

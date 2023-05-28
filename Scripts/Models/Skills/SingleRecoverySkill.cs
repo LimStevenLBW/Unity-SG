@@ -42,7 +42,7 @@ public class SingleRecoverySkill : Skill
 
     }
 
-    //This is an attacking skill, we need a single valid target
+
     public override bool IsAvailable()
     {
         //If we still have stamina
@@ -50,7 +50,8 @@ public class SingleRecoverySkill : Skill
         float staminaResult = data.GetCurrentStamina() - currentStaminaCost;
 
         UnitController enemyTarget;
-        //If we have a target and that target is within range, continue
+        
+        //Check enemy range
         enemyTarget = controller.path.GetNearestEnemy();
         if (enemyTarget == null) return false;
         if (controller.path.distanceToNearestEnemy > maxRange) return false;
@@ -58,9 +59,7 @@ public class SingleRecoverySkill : Skill
         //If we have enough stamina and if it is off cooldown
         if (staminaResult >= 0 && currentCooldown <= 0)
         {
-
             return true;
-
         }
         return false;
        
@@ -88,8 +87,7 @@ public class SingleRecoverySkill : Skill
         UnitController allyToHeal = null;
         foreach(UnitController ally in allies)
         {
-            
-            if (ally.GetState() != "DEAD")
+            if (ally.GetState() != "DEAD" && ally.data.IsInjured())
             {
                 int troops = ally.data.GetCurrentTroopCount();
                 if(troops < lowestHp)

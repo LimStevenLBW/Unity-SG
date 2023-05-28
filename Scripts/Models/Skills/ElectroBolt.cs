@@ -26,8 +26,8 @@ public class ElectroBoltSkill : Skill
         skillName = "Electro Bolt";
         description = "";
 
-        baseCooldown = 3;
-        currentCooldown = baseCooldown;
+        baseCooldown = 3f;
+        currentCooldown = 1.5f; //starting cooldown is reduced
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
@@ -122,8 +122,8 @@ public class ElectroBoltSkill : Skill
         float upperBound;
         //Base damage 
     
-        lowerBound = (data.GetMaxTroopCount() / 10);
-        upperBound = (data.GetMaxTroopCount() / 5);
+        lowerBound = (data.GetMaxTroopCount() / 14);
+        upperBound = (data.GetMaxTroopCount() / 7);
 
         //Setup magic modifier
         float magicModifier = data.GetCurrentMagic() * 2f;

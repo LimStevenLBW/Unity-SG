@@ -30,18 +30,17 @@ public class EliteBuff : TraitBuff
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
     {
         UnitDataStore data = controller.data;
-        List<UnitController> allies = controller.GetAllies();
-        foreach (UnitController ally in allies)
-        {
-            ally.data.SetCurrentStamina(data.GetMaxStamina());
+       
 
-            Vector3 position = ally.transform.position;
-            position.y += 10;
-            position.x += (float)0.5;
+        Vector3 position = controller.transform.position;
+        position.y += 10;
+        position.x += (float)0.5;
 
-            int staminaHealing = (int)(data.GetMaxStamina() - data.GetCurrentStamina());
-            DamageGenerator.gen.CreatePopup(position, staminaHealing.ToString(), Color.cyan);
-        }
+        int staminaHealing = (int)(data.GetMaxStamina() - data.GetCurrentStamina());
+        data.SetCurrentStamina(data.GetMaxStamina());
+
+        if(staminaHealing > 0) DamageGenerator.gen.CreatePopup(position, staminaHealing.ToString(), Color.magenta);
+        
     }
 
     public override void ClearEffect(UnitManager manager, UnitController controller)

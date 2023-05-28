@@ -26,7 +26,7 @@ public class ClashSkill : Skill
         description = "A simple infantry attack. Much more effective with number advantage";
 
         baseCooldown = 2;
-        currentCooldown = baseCooldown;
+        currentCooldown = 1; //starting cooldown is reduced
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
 

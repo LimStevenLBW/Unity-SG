@@ -16,14 +16,14 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: b8f5dc32668ca9f42a6bd0af36037465, type: 2}
   faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
   special: {fileID: 11400000, guid: 0684df260fe4ba94eb4f5e9cf0232b44, type: 2}
-  unitName: Dart Froggo
+  unitName: Super Froggo
   bio: 
   rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 32
+  basePower: 30
   powerGrowthRate: 1
-  baseDefense: 14
+  baseDefense: 12
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -32,14 +32,13 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 325
+  baseTroopCount: 300
   leadership: 1
   engineering: 1
   magic: 1
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 330000004f000000
   skill1_ID: 104
   skill2_ID: 0
   skill3_ID: 0

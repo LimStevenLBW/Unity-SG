@@ -23,7 +23,10 @@ public class Pathfinder
         this.manager = manager;
         this.controller = controller;
         this.formation = formation;
-
+    }
+    
+    public void FaceOpponents()
+    {
         //If combat scene
         if (controller)
         {
@@ -32,8 +35,8 @@ public class Pathfinder
             int lookCellIndex = 0;
 
             //Face opponents
-            if (thisCellIndex < 40) lookCellIndex = 65;
-            if (thisCellIndex >= 40) lookCellIndex = 15;
+            if (thisCellIndex < 40) lookCellIndex = 75;
+            if (thisCellIndex >= 40) lookCellIndex = 5;
             controller.transform.LookAt(grid.cells[lookCellIndex].transform);
         }
     }
@@ -667,5 +670,14 @@ public class Pathfinder
         return workingList;
     }
 
-   
+    //Return target cell
+    public HexCell GetTargetCell(int cell_ID)
+    {
+        //cell_ids are 1 off, they're one above the index(todo: do we really need cell_ids?)
+        HexCell cell = grid.GetCell(cell_ID - 1);
+
+        if(cell != null) return cell;
+        return null;
     }
+
+}

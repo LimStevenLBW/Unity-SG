@@ -57,10 +57,8 @@ public class Unit : ScriptableObject
 
     public float upkeep = 0.1f;
 
-    //41-80 ARE ENEMY SPACES, 80 is reserved for captain
-    public int[] positionSpawnPref = new int[2];
     //Skills
- 
+
     public int skill1_ID;
     public int skill2_ID;
     public int skill3_ID;

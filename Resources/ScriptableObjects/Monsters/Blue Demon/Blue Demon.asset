@@ -39,7 +39,8 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 330000004f000000
+  primarySpawnPref: 3f00000044000000
+  secondarySpawnPref: 350000003a000000
   skill1_ID: 100
   skill2_ID: 300
   skill3_ID: 0

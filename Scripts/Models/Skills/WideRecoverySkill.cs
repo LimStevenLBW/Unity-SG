@@ -42,7 +42,7 @@ public class WideRecoverySkill : Skill
 
     }
 
-    //This is an attacking skill, we need a single valid target
+
     public override bool IsAvailable()
     {
         //If we still have stamina
@@ -88,9 +88,9 @@ public class WideRecoverySkill : Skill
         {
             Vector3 pos = ally.transform.position;
             pos.y = 0;
-            if (ally.GetState() != "DEAD")
+            if (ally.GetState() != "DEAD" && ally.data.IsInjured())
             {
-                ally.PlayEffect(effect, pos, 2);
+                ally.AddAura(effect, pos, this, 2);
                 CalculateHealing(ally);
             }
         }
@@ -161,6 +161,6 @@ public class WideRecoverySkill : Skill
 
     public override void EffectDestroyed()
     {
-        throw new NotImplementedException();
+        //do nothing
     }
 }

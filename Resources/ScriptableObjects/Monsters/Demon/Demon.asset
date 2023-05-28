@@ -21,7 +21,7 @@ MonoBehaviour:
   rank: 2
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 25
+  basePower: 20
   powerGrowthRate: 1
   baseDefense: 5
   defenseGrowthRate: 1
@@ -32,14 +32,13 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 500
+  baseTroopCount: 450
   leadership: 1
   engineering: 1
   magic: 1
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 330000004f000000
   skill1_ID: 100
   skill2_ID: 301
   skill3_ID: 0

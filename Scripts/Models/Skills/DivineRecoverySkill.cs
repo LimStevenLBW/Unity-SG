@@ -42,7 +42,6 @@ public class DivineRecoverySkill : Skill
 
     }
 
-    //This is an attacking skill, we need a single valid target
     public override bool IsAvailable()
     {
         //If we still have stamina
@@ -50,6 +49,7 @@ public class DivineRecoverySkill : Skill
         float staminaResult = data.GetCurrentStamina() - currentStaminaCost;
 
         UnitController enemyTarget;
+
         //If we have a target and that target is within range, continue
         enemyTarget = controller.path.GetNearestEnemy();
         if (enemyTarget == null) return false;
@@ -88,9 +88,9 @@ public class DivineRecoverySkill : Skill
         {
             Vector3 pos = ally.transform.position;
             pos.y = 0;
-            if (ally.GetState() != "DEAD")
+            if (ally.GetState() != "DEAD" && ally.data.IsInjured())
             {
-                ally.PlayEffect(effect, pos, 2);
+                ally.AddAura(effect, pos, this, 2);
                 CalculateHealing(ally);
             }
         }
@@ -160,6 +160,6 @@ public class DivineRecoverySkill : Skill
 
     public override void EffectDestroyed()
     {
-        throw new NotImplementedException();
+        // do nothing
     }
 }

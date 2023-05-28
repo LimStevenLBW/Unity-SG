@@ -60,7 +60,7 @@ public class UnitController : MonoBehaviour
     {
         this.manager = manager;
         path = new Pathfinder(manager.grid, manager, this, null);
-
+        path.FaceOpponents();
         //Might have to update later, but for now, update the data with this instantiated controller.
         data.controller = this;
         data.InitSkills();
@@ -440,6 +440,7 @@ public class UnitController : MonoBehaviour
         obj.SendMessage("SelfDestruct", ms);
     }
 
+    //Instantiates the aura and has it become the child of this controller.
     public void AddAura(GameObject aura, Vector3 pos, Skill skill, float ms)
     {
         GameObject obj = Instantiate(aura, pos, Quaternion.identity) as GameObject;
@@ -646,5 +647,88 @@ public class UnitController : MonoBehaviour
         {
             traitData.ApplyDeathEffect(manager, this);
         }
+    }
+
+    /*
+     * Uses spawn preferences to get a random available cell to move the controller
+     * returns true when done evaluating
+     */
+    public bool RepositionToPreferredCell()
+    {
+        List<int> cellSelectionOptions = new List<int>();
+        //Randomly select between frontSpawnPref or rearSpawnPref
+
+        int value = data.unitClass.frontSpawnPref[0]; //Get the min value of front
+        int endValue = data.unitClass.frontSpawnPref[1]; //Get the max value of front
+        while(value <= endValue)
+        {
+            cellSelectionOptions.Add(value);
+            value++;
+        }
+
+        value = data.unitClass.rearSpawnPref[0]; //Get the min value of rear
+        endValue = data.unitClass.rearSpawnPref[1]; //Get the max value of rear
+
+        while (value <= endValue)
+        {
+            cellSelectionOptions.Add(value);
+            value++;
+        }
+
+        int attemptCount = 0;
+        int rindex = Random.Range(0, cellSelectionOptions.Count - 1);
+
+        while(attemptCount < 6)
+        {
+            //Select a random preferred cell
+            int cell_ID = cellSelectionOptions[rindex];
+            //Debug.Log(data.GetName() + cell_ID);
+            HexCell targetCell = path.GetTargetCell(cell_ID);
+
+            //If it doesnt have a controller on it, it is available
+            if(targetCell.unitController == null)
+            {
+                location.unitController = null; //Clear its current position;
+                location = targetCell; //claim the location(not using property because that will move the transform)
+                targetCell.unitController = this;
+                UpdateStartingLocation();
+                StartCoroutine(MoveToCellPosition(targetCell));
+                return true;
+            }
+            else
+            {
+                attemptCount++;
+            }
+        }
+        return true;
+
+    }
+
+    IEnumerator MoveToCellPosition(HexCell targetCell)
+    {
+        Vector3 targetPos = targetCell.transform.position;
+
+        //First lift the unit
+        transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
+
+        Vector3 adjustedPos = new Vector3(targetPos.x, targetPos.y + 5, targetPos.z); //Adjust target position height
+        //float smoothTime = 0.5f;
+        //Vector3 velocity = Vector3.zero;
+        manager.PlayCpuLift();
+        yield return new WaitForSeconds(0.5f);
+
+        float step = 300f * Time.deltaTime; // calculate distance to move
+
+        while (Vector3.Distance(transform.position, adjustedPos) > 1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, adjustedPos, step);
+            //transform.position = Vector3.SmoothDamp(transform.position, adjustedPos, ref velocity, smoothTime);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.3f);
+        manager.PlayCpuDrop();
+        transform.position = targetPos;
+        path.FaceOpponents();
     }
 }

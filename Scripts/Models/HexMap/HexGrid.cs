@@ -235,7 +235,7 @@ public class HexGrid : MonoBehaviour
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
         //label.text = cell.coordinates.ToStringOnSeparateLines(); //Display Cell Coordinates
-        //label.text = cell.cell_ID.ToString();
+        label.text = cell.cell_ID.ToString();
         //label.text = cell.X + ", " + cell.Y;
         cell.uiRect = label.rectTransform;
     }
@@ -299,6 +299,15 @@ public class HexGrid : MonoBehaviour
             return null;
         }
         return cells[x + z * cellCountX];
+    }
+
+    public HexCell GetCell(int index)
+    {
+        if (index < cells.Length)
+        {
+            return cells[index];
+        }
+        else return null;
     }
 
     /**

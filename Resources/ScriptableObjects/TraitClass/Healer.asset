@@ -18,3 +18,5 @@ MonoBehaviour:
   requirementTiers: 02000000
   traitBuff_ID: 10
   movementSkill_ID: 3
+  frontSpawnPref: 3f00000044000000
+  rearSpawnPref: 4700000050000000

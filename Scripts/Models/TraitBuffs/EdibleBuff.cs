@@ -38,8 +38,8 @@ public class EdibleBuff : TraitBuff
             int healingAmount = 0;
             int currentTroops = ally.data.GetCurrentTroopCount();
             if (traitLevel == 0) return;
-            else if (traitLevel == 1) healingAmount = 50;
-            else if (traitLevel == 2) healingAmount = 100;
+            else if (traitLevel == 1) healingAmount = 35;
+            else if (traitLevel == 2) healingAmount = 75;
 
             //Apply the heal to all allies
             ally.data.SetCurrentTroopCount(currentTroops + healingAmount);
@@ -60,8 +60,8 @@ public class EdibleBuff : TraitBuff
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "When an Edible dies, its allies heal for 50 troops";
-        else if (traitLevel == 2) return "When an Edible dies, its allies heal for 100 troops";
+        else if (traitLevel == 1) return "When an Edible dies, its allies heal for 35 troops";
+        else if (traitLevel == 2) return "When an Edible dies, its allies heal for 75 troops";
 
         return effectText;
     }

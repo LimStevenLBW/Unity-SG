@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Effect behaviour
+ * Todo, refactor, destroy self is the UnitAuraEffect
  * Destroy itself if the particle system is finished
  */
 public class DestroySelf : MonoBehaviour
 {
     int time;
     Skill skill;
+
     void OnStart()
     {
        

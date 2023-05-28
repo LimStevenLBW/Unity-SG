@@ -112,6 +112,7 @@ public class PumpedUpSkill : Skill
         isRunning = false;
     }
 
+    //Called when an aura is destroyed
     public override void EffectDestroyed()
     {
         auraActive = false;

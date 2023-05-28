@@ -21,7 +21,7 @@ MonoBehaviour:
   rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 45
+  basePower: 40
   powerGrowthRate: 1
   baseDefense: 20
   defenseGrowthRate: 1
@@ -39,7 +39,6 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 330000004f000000
   skill1_ID: 101
   skill2_ID: 100
   skill3_ID: 0

@@ -23,9 +23,9 @@ public class MalebrancheBuff : TraitBuff
                 float power = data.GetCurrentPower();
                 float magic = data.GetCurrentMagic();
                 float defense = data.GetCurrentDefense();
-                data.SetCurrentPower(power + 25);
-                data.SetCurrentMagic(magic + 25);
-                data.SetCurrentDefense(defense + 25);
+                data.SetCurrentPower(power + 15);
+                data.SetCurrentMagic(magic + 15);
+                data.SetCurrentDefense(defense + 15);
 
                 controller.isJuggernaut = true;
 
@@ -61,7 +61,7 @@ public class MalebrancheBuff : TraitBuff
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "A malebranche becomes a juggernaut, boosting their POW, MGK DEF by 25";
+        else if (traitLevel == 1) return "A malebranche becomes a juggernaut, boosting their stats!";
 
         return effectText;
     }

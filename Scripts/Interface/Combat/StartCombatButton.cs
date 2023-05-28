@@ -6,13 +6,12 @@ using UnityEngine.EventSystems;
 
 public class StartCombatButton : Button, IPointerClickHandler, IPointerEnterHandler
 {
-
+    private bool ready;
     /*
      * Registered IPointerClickHandler callback
      */
     public override void OnPointerClick(PointerEventData e)
     {
-
         Director.Instance.SetPhase("COMBAT");
         gameObject.SetActive(false);
     }
@@ -33,14 +32,19 @@ public class StartCombatButton : Button, IPointerClickHandler, IPointerEnterHand
     {
         gameObject.SetActive(false);
     }
-    public void Display()
+    public void Show()
     {
-        gameObject.SetActive(true);
+        if(ready) gameObject.SetActive(true);
     }
 
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    public void SetReadyStatus(bool status)
+    {
+        ready = status;
     }
 
 

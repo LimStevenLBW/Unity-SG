@@ -21,7 +21,7 @@ namespace Assets.Scripts.Interface
         private UnitController priorController;
         private UnitController selectedController;
         private HexCell selectedCell;
-        public GameObject startCombatButton;
+        public StartCombatButton startCombatButton;
 
         [SerializeField] private AudioSource AudioPlayer;
         [SerializeField] private AudioClip AudioClickSelect;
@@ -37,7 +37,7 @@ namespace Assets.Scripts.Interface
 
         void Update()
         {
-            //Disable input when  in intro and conclusion phases
+            //Disable input when in intro and conclusion phases
             if(Director.Instance.GetPhase() != "INTRO" && Director.Instance.GetPhase() != "CONCLUSION")
             {
                 if (Director.Instance.GetPhase() == "REPOSITIONING") HandleRepositioning();
@@ -50,7 +50,7 @@ namespace Assets.Scripts.Interface
         {
             header.SetActive(true);
         }
-
+        
         public void HideHeader()
         {
             header.SetActive(false);
@@ -70,7 +70,7 @@ namespace Assets.Scripts.Interface
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     //Check if the hit GameObject is controller
                     if (!selectedController && hit.collider.gameObject.GetComponent<UnitController>() != null) 
@@ -107,7 +107,7 @@ namespace Assets.Scripts.Interface
                             DisableUnitWindow();
                             selectedController = null;
                             AudioPlayer.PlayOneShot(AudioDrop);
-                            startCombatButton.SetActive(true);
+                            startCombatButton.Show();
                         }
 
                     }
@@ -143,7 +143,7 @@ namespace Assets.Scripts.Interface
             following.GetGrid(grid);
             following.GetController(controller);
             controller.Location = null;
-            startCombatButton.SetActive(false);
+            startCombatButton.Hide();
         }
 
         private void HandleNormalInput()
@@ -228,44 +228,6 @@ namespace Assets.Scripts.Interface
             //grid.ShowUI(enabled); 
         }
 
-        /*
-         * A cell can be selected either by clicking the unit or the hexgrid cell itself
-         */
-        bool UpdateSelection()
-        {
-            //grid.ClearPath(); //Clear any current paths
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            //HexCell cell;
-
-            //Check if a unit/cell was clicked. Most people will try to select the unit, not the cell.
-            //If we have the unit, we can get the cell easily
-            /*
-
-         UnitController unit;
-             //= grid.GetUnit(ray);
-
-
-         if (unit)
-         {
-             cell = unit.Location;
-         }
-         else
-         {
-             //Or alternatively, just get the grid cell at mouse position
-             
-         }
-
-            if (cell != selectedCell) //We have a new selected cell
-            {
-                selectedCell = cell;
-                
-                return true;
-            }
-            */
-            return false; //No need to update it if the same thing was selected
-        }
-
         void ClearSelection()
         {
             DisableHighlight(selectedController);
@@ -301,7 +263,7 @@ namespace Assets.Scripts.Interface
         }
         public void DisableUnitWindow()
         {
-            if(selectedController) PlayAudioClip(AudioClipDeselect);
+            if(selectedController && Director.Instance.GetPhase() != "REPOSITIONING") PlayAudioClip(AudioClipDeselect);
             unitWindow.gameObject.SetActive(false);
         }
 

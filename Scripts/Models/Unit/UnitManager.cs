@@ -11,6 +11,9 @@ public class UnitManager : MonoBehaviour
 {
     [SerializeField] internal AudioSource AudioPlayer;
     [SerializeField] internal AudioClip AudioDeployedUnit;
+    [SerializeField] private AudioClip AudioCPULift;
+    [SerializeField] private AudioClip AudioCPUDrop;
+
     private GameObject effect;
     //Temporary for creating Units
     public List<FormationController> units = new List<FormationController>();
@@ -19,7 +22,6 @@ public class UnitManager : MonoBehaviour
     //Fielded Controllers
     public List<UnitController> playerControllers = new List<UnitController>();
     public List<UnitController> cpuControllers = new List<UnitController>();
-
     private UnitController currentController;
 
     public HexGrid grid;
@@ -28,6 +30,8 @@ public class UnitManager : MonoBehaviour
 
     public MicroBarFollow microBars;
     public MicroBarFollow microBarsEnemy;
+
+    public StartCombatButton startCombatButton;
     // public Queue<UnitController> pathfindingQueue;
 
     public void InitGrid(HexGrid grid)
@@ -439,4 +443,43 @@ public class UnitManager : MonoBehaviour
         }
     }
 
+    public void RepositionEnemyUnits()
+    {
+        StartCoroutine(Reposition());
+    }
+
+    IEnumerator Reposition()
+    {
+        startCombatButton.SetReadyStatus(false);
+
+        yield return new WaitForSeconds(0.4f);
+
+        bool isEvaluating = false;
+        foreach (UnitController enemy in cpuControllers)
+        {
+            isEvaluating =  enemy.RepositionToPreferredCell();
+
+            yield return new WaitForSeconds(0.5f);
+
+            while (isEvaluating == false) yield return new WaitForSeconds(0.2f);
+
+            isEvaluating = false;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        startCombatButton.SetReadyStatus(true);
+        startCombatButton.Show();
+        //All Repositioning Done, sortie button is freed up
+
+    }
+    public void PlayCpuLift()
+    {
+        //AudioPlayer.clip = clip;
+        AudioPlayer.PlayOneShot(AudioCPULift);
+    }
+    public void PlayCpuDrop()
+    {
+        //AudioPlayer.clip = clip;
+        AudioPlayer.PlayOneShot(AudioCPUDrop);
+    }
 }
