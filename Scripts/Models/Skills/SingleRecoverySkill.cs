@@ -20,7 +20,7 @@ public class SingleRecoverySkill : Skill
         effect = Resources.Load("Effects/Healing circle") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
         skillName = "Single Recovery";
-        description = "Heal the most injured on your team";
+        description = "Heal your injured, so they can get injured again";
 
         baseCooldown = 3;
         currentCooldown = baseCooldown;
@@ -121,21 +121,37 @@ public class SingleRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 30);
-        float upperBound = (data.GetCurrentTroopCount() / 25);
+        float lowerBound = (data.GetCurrentTroopCount() / 25);
+        float upperBound = (data.GetCurrentTroopCount() / 20);
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1f;
+        float magicModifier = data.GetCurrentMagic() * 1.5f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
         int result = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
-        ally.data.SetCurrentTroopCount(data.GetCurrentTroopCount() + result);
+        float critValue = data.GetCurrentCrit() * 100;
+        float critCheck = UnityEngine.Random.Range(0, 100);
 
+        if (critCheck <= critValue)
+        { //Successful crit
+
+            result = (int)(result * 1.5f);
+            ally.data.SetCurrentTroopCount(ally.data.GetCurrentTroopCount() + result);
+            DamageGenerator.gen.CreatePopup(position, result.ToString() + "!", Color.green);
+        }
+        else
+        { //Run normally
+
+            ally.data.SetCurrentTroopCount(ally.data.GetCurrentTroopCount() + result);
+            DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+        }
+
+      
         //Display Data
-        DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+
         //Terminate
         isRunning = false;
     }

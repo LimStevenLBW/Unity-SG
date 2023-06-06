@@ -22,11 +22,25 @@ public class SyndicateBuff : TraitBuff
         UnitDataStore data = controller.data;
 
         float stamina = data.GetCurrentStamina();
-
-        if (traitLevel == 1) data.SetCurrentStamina(stamina + 10);
-        else if (traitLevel >= 2) data.SetCurrentStamina(stamina + 20);
-        else if (traitLevel >= 2) data.SetCurrentStamina(stamina + 30);
-        else if (traitLevel >= 2) data.SetCurrentStamina(stamina + 40);
+        int troops = data.GetCurrentTroopCount();
+        if (traitLevel == 1) { 
+            data.SetCurrentStamina(stamina + 10);
+            data.SetCurrentTroopCount(troops + 10);
+        }
+        else if (traitLevel >= 2) {
+            data.SetCurrentStamina(stamina + 20);
+            data.SetCurrentTroopCount(troops + 20);
+        }
+        else if (traitLevel >= 3)
+        {
+            data.SetCurrentStamina(stamina + 30);
+            data.SetCurrentTroopCount(troops + 30);
+        }
+        else if (traitLevel >= 4)
+        {
+            data.SetCurrentStamina(stamina + 40);
+            data.SetCurrentTroopCount(troops + 40);
+        }
     }
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
     {
@@ -49,10 +63,10 @@ public class SyndicateBuff : TraitBuff
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Your troops recover 10 stamina at the start of combat";
-        else if (traitLevel == 2) return "Your troops recover 20 stamina at the start of combat";
-        else if (traitLevel == 3) return "Your troops recover 30 stamina at the start of combat";
-        else if (traitLevel == 4) return "Your troops recover 40 stamina at the start of combat";
+        else if (traitLevel == 1) return "Sturdy units recover 10 troops and stamina each round";
+        else if (traitLevel == 2) return "Sturdy units recover 20 troops and stamina each round";
+        else if (traitLevel == 3) return "Sturdy units recover 30 troops and stamina each round";
+        else if (traitLevel == 4) return "Sturdy units recover 40 troops and stamina each round";
 
         return effectText;
     }

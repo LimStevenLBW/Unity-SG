@@ -21,9 +21,9 @@ MonoBehaviour:
   rank: 4
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 27
+  basePower: 25
   powerGrowthRate: 1
-  baseDefense: 12
+  baseDefense: 15
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  skill1_ID: 101
-  skill2_ID: 100
+  skill1_ID: 100
+  skill2_ID: 101
   skill3_ID: 0
   skill4_ID: 0

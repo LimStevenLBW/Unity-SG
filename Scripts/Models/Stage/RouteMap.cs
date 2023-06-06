@@ -5,7 +5,6 @@ using UnityEngine;
 public class RouteMap : MonoBehaviour
 {
     private int num = -1;
-    private Director _director;
     public List<RouteColumn> routeColumns = new List<RouteColumn>();
 
     public StageSelect selectFromTwo;
@@ -25,8 +24,6 @@ public class RouteMap : MonoBehaviour
 
     public void Initialize(Director director)
     {
-        _director = director;
-
         for(int i=0; i< routeColumns.Count; i++){
             routeColumns[i].Initialize(i+1);
         }
@@ -41,7 +38,7 @@ public class RouteMap : MonoBehaviour
 
         //Set a new active column
         if (routeColumns[num]) routeColumns[num].SetActive();
-
+        Director.Instance.stageNum = num + 1;
         
     }
 
@@ -54,4 +51,5 @@ public class RouteMap : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public int cardValue = 0; //How much this card will be valued by the cpu to play, todo, currently valued at random
     private int numberOfSelectable;
     public DetailsFooter footer;
+    public PlayerHandPanel panel;
     public UnitDataStore unit;
     public PortraitRoom portraitRoom;
     public CardSelectOrder cardSelectOrderDisplay;
@@ -29,6 +31,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private Sprite bRankBG;
     private Sprite aRankBG;
     private Sprite sRankBG;
+    [SerializeField] private TextMeshProUGUI rankLetter;
 
 
     [SerializeField] private AudioSource AudioPlayer;
@@ -71,11 +74,16 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Not allowed to see enemy cards
-        if(Director.Instance.GetPhase() != "ENEMYCARDSELECT") footer.UpdateData(unit);
+        if (Director.Instance.GetPhase() != "ENEMYCARDSELECT")
+        {
+            footer.UpdateData(unit);
+            panel.UpdateDescription(unit);
+        }
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        footer.ResetText();
+        if(panel != null) panel.ResetText();
+        if(footer != null) footer.ResetText();
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -144,7 +152,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         gameObject.SetActive(true);
         UpdatePortrait();
-        UpdateCardValue();
+        unit.FindSkills();
     }
 
     void UpdatePortrait()
@@ -152,10 +160,23 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if (portraitRoom == null) Debug.Log("null?");
         else {
             portraitRoom.UpdatePortrait(unit);
+
             if(unit.faction && factionImageIcon) factionImageIcon.sprite = unit.faction.icon;
-            else { return; } //Skip the rest for enemy hand
+            else return;  //Skip filling image data if it is the enemy's hand
+
             if(unit.special && specialImageIcon) specialImageIcon.sprite = unit.special.icon;
             if(unit.unitClass && classImageIcon) classImageIcon.sprite = unit.unitClass.icon;
+
+            if (rankLetter)
+            {
+                string rankText = unit.GetRank();
+                if (rankText == "D") rankLetter.color = Color.grey;
+                if (rankText == "C") rankLetter.color = new Color32(222, 222, 222, 255);
+                if (rankText == "B") rankLetter.color = new Color32(73, 156, 255, 255);
+                if (rankText == "A") rankLetter.color = new Color32(255, 30, 0, 255);
+
+                rankLetter.SetText(unit.GetRank());
+            }
 
             if (unit.GetRank() == "D") bgImage.sprite = dRankBG;
             else if (unit.GetRank() == "C") bgImage.sprite = cRankBG;
@@ -163,11 +184,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             else if (unit.GetRank() == "A") bgImage.sprite = aRankBG;
             else if (unit.GetRank() == "S") bgImage.sprite = sRankBG;
         }
-    }
-
-    void UpdateCardValue()
-    {
-
     }
 
     void UpdateSelectOrder(int ID)

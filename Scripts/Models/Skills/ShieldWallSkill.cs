@@ -23,7 +23,7 @@ public class ShieldWallSkill : Skill
         effect = Resources.Load("Effects/Defense Aura Custom") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/power up 2");
         skillName = "Shield Wall";
-        description = "Nothing on Earth can make you fall.";
+        description = "Nothing can make you fall";
 
         auraActive = false;
         duration = 5;

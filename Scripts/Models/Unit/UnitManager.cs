@@ -452,14 +452,14 @@ public class UnitManager : MonoBehaviour
     {
         startCombatButton.SetReadyStatus(false);
 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.5f);
 
         bool isEvaluating = false;
         foreach (UnitController enemy in cpuControllers)
         {
             isEvaluating =  enemy.RepositionToPreferredCell();
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.3f);
 
             while (isEvaluating == false) yield return new WaitForSeconds(0.2f);
 

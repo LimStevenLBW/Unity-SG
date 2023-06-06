@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 923658134792168538, guid: 349e92cdd8b2061499cd582b664fd1a7, type: 3}
   unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
-  faction: {fileID: 11400000, guid: 9a1a2a4c50757714ba13fe7545c8a911, type: 2}
+  faction: {fileID: 11400000, guid: 63419655af787ac4787e9273d9f4d928, type: 2}
   special: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
   unitName: Fishman
   bio: 
@@ -39,8 +39,6 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  primarySpawnPref: 3e00000045000000
-  secondarySpawnPref: 340000003b000000
   skill1_ID: 101
   skill2_ID: 100
   skill3_ID: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: e9030d59d990b34478efe1d07981ca33, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: a2dcf144552abbd4589e6df8e5208988, type: 2}
-  unitName: Wizard
+  unitName: Spellmaster
   bio: 
   rank: 2
   baseLevel: 1
@@ -32,15 +32,14 @@ MonoBehaviour:
   baseSpeed: 5
   speedGrowthRate: 1
   baseCrit: 0
-  baseTroopCount: 250
+  baseTroopCount: 300
   leadership: 1
   engineering: 1
   magic: 1
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 330000004f000000
-  skill1_ID: 301
-  skill2_ID: 300
+  skill1_ID: 300
+  skill2_ID: 301
   skill3_ID: 0
   skill4_ID: 0

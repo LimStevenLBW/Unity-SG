@@ -4,7 +4,7 @@ using UnityEngine;
 using Buttons;
 using UnityEngine.EventSystems;
 
-public class StartCombatButton : Button, IPointerClickHandler, IPointerEnterHandler
+public class StartCombatButton : Button, IPointerClickHandler
 {
     private bool ready;
     /*
@@ -14,10 +14,6 @@ public class StartCombatButton : Button, IPointerClickHandler, IPointerEnterHand
     {
         Director.Instance.SetPhase("COMBAT");
         gameObject.SetActive(false);
-    }
-    public override void OnPointerEnter(PointerEventData pointerEventData)
-    {
-        //AudioPlayer.PlayOneShot(AudioHover);
     }
 
     public override void PlayAudioClip(AudioClip clip)
@@ -47,6 +43,17 @@ public class StartCombatButton : Button, IPointerClickHandler, IPointerEnterHand
         ready = status;
     }
 
+    public bool IsMousedOver()
+    {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current);
+        pointerData.position = Input.mousePosition;
+
+        List<RaycastResult> raycastResultList = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, raycastResultList);
+        foreach (RaycastResult r in raycastResultList) if (r.gameObject.GetComponent<StartCombatButton>() != null) return true;
+
+        return false;
+    }
 
     // Update is called once per frame
     void Update()
@@ -57,4 +64,6 @@ public class StartCombatButton : Button, IPointerClickHandler, IPointerEnterHand
             Hide();
         }
     }
+
+
 }

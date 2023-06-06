@@ -60,9 +60,9 @@ public class DetailsFooter : MonoBehaviour
         magic.SetText("");
         defense.SetText("");
         currentDisplay = null;
-        powIcon.gameObject.SetActive(false);
-        mgkIcon.gameObject.SetActive(false);
-        defIcon.gameObject.SetActive(false);
-        troopsIcon.gameObject.SetActive(false);
+        if(powIcon != null) powIcon.gameObject.SetActive(false);
+        if(mgkIcon != null) mgkIcon.gameObject.SetActive(false);
+        if(defIcon != null) defIcon.gameObject.SetActive(false);
+        if(troopsIcon != null) troopsIcon.gameObject.SetActive(false);
     }
 }

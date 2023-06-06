@@ -25,7 +25,7 @@ public class VolleySkill : Skill
 
         fireSFX = (AudioClip)Resources.Load("Sounds/mixkit-arrow");
         hitSFX = (AudioClip)Resources.Load("Sounds/mixkit-short-explosion");
-        skillName = "Clash";
+        skillName = "Volley";
         description = "Shoot from afar";
 
         baseCooldown = 1.5f;
@@ -102,7 +102,7 @@ public class VolleySkill : Skill
     {
         // Debug.Log("calculating dmg");
         Vector3 startingPos = controller.transform.position;
-        startingPos.y += 12;
+        startingPos.y += 11;
 
      
         GameObject copy = UnityEngine.Object.Instantiate(projectile, startingPos, controller.transform.rotation) as GameObject;

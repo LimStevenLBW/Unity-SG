@@ -26,7 +26,7 @@ public class ThrowingDaggersSkill : Skill
         fireSFX = (AudioClip)Resources.Load("Sounds/mixkit-arrow");
         hitSFX = (AudioClip)Resources.Load("Sounds/mixkit-short-explosion");
         skillName = "Throwing Daggers";
-        description = "Rogues are effective even without numbers";
+        description = "Effective even without numbers";
 
         baseCooldown = 1.5f;
         currentCooldown = 1;

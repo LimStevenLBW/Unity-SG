@@ -52,7 +52,7 @@ public class UnderworldBuff : TraitBuff
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Revive a random unit at the end of each combat with 1/2 of their troops";
+        else if (traitLevel == 1) return "No Effect";
         else if (traitLevel == 2) return "Revive a random unit at the end of each combat";
         else if (traitLevel == 3) return "Revive two random units at the end of each combat";
 

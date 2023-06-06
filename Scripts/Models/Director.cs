@@ -54,6 +54,7 @@ public class Director : MonoBehaviour
 
     public TextMeshProUGUI playPromptText;
     public RouteMap route;
+    public int stageNum;
     public StageIntro stageIntro;
     public CombatEnd combatEndScreen;
     private float damageDone;
@@ -304,7 +305,7 @@ public class Director : MonoBehaviour
         route.HideRoute();
         stageIntro.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         combatManager.DisplayHeader();
         ResetHealth();
@@ -335,10 +336,11 @@ public class Director : MonoBehaviour
 
         if(playerHealth == 0 && cpuHealth == 0)
         {
-            //Draw game
+            //win on draw game currently
+            SetPhase("CONCLUSION");
+            Victory();
         }
-
-        if (playerHealth <= 0)
+        else if (playerHealth <= 0)
         {
             SetPhase("CONCLUSION");
             GameOver();

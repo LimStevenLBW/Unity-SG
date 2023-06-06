@@ -23,7 +23,7 @@ public class ClashSkill : Skill
         effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/mixkit-short-explosion");
         skillName = "Clash";
-        description = "A simple infantry attack. Much more effective with number advantage";
+        description = "Infantry attack. More effective with number advantage";
 
         baseCooldown = 2;
         currentCooldown = 1; //starting cooldown is reduced
@@ -116,7 +116,6 @@ public class ClashSkill : Skill
         damageData -= (int)(damageData * defValueReduction);
 
         if (damageData < 0) damageData = 0; //We don't go below zero
-
 
         float critValue = thisGuy.GetCurrentCrit() * 100;
         float critCheck = UnityEngine.Random.Range(0, 100);

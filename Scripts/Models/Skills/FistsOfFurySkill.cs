@@ -21,8 +21,8 @@ public class FistsOfFurySkill : Skill
         minRange = 1;
         effect = Resources.Load("Effects/CFX_Hit_C White") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/impact big");
-        skillName = "Clash";
-        description = "ATATATATATATMUDADADADADAORARARARARA";
+        skillName = "Fists of Fury";
+        description = "A powerful barrage";
 
         baseCooldown = 8;
         currentCooldown = baseCooldown;

@@ -20,9 +20,12 @@ public class MicroBarFollow : MonoBehaviour
 
     public void Update()
     {
+        //Track the unit controller
         if (unitController)
         {
-            transform.position = new Vector3(unitController.transform.position.x, transform.position.y, unitController.transform.position.z);
+            BoxCollider box = unitController.GetComponent<BoxCollider>();
+            Vector3 boxSizeConverted = unitController.transform.TransformVector(box.size);
+            transform.position = new Vector3(unitController.transform.position.x, boxSizeConverted.y + 5 + unitController.transform.position.y, unitController.transform.position.z);
             //   transform.position = new Vector3(unitController.Location.transform.position.x, transform.position.y, unitController.transform.position.z);
         }
     }

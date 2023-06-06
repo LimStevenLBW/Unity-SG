@@ -128,38 +128,38 @@ public class UnitDataStore
         currentSpeed = data.currentSpeed;
         currentCrit = data.currentCrit;
     }
-
+    public void FindSkills()
+    {
+        skill1 = FindSkill(unitBase.skill1_ID);
+        skill2 = FindSkill(unitBase.skill2_ID);
+        skill3 = FindSkill(unitBase.skill3_ID);
+        skill4 = FindSkill(unitBase.skill4_ID);        
+        //The Movement Skill is preset with the unit's class
+        movementSkill = FindSkill(unitBase.GetClass().movementSkill_ID);
+    }
 
     /*
      * Setup the skill instances
      */
     public void InitSkills() {
-        skill1 = FindSkill(unitBase.skill1_ID);
         if (skill1 != null) { 
             skill1.Init(this, controller);
             controller.maxRange = skill1.maxRange;
         }
-
-        skill2 = FindSkill(unitBase.skill2_ID);
         if (skill2 != null) { 
             skill2.Init(this, controller);
             if (skill2.maxRange > controller.maxRange) controller.maxRange = skill2.maxRange;
         }
-
-        skill3 = FindSkill(unitBase.skill3_ID);
         if (skill3 != null) { 
             skill3.Init(this, controller);
             if (skill3.maxRange > controller.maxRange) controller.maxRange = skill3.maxRange;
         }
 
-        skill4 = FindSkill(unitBase.skill4_ID);
         if (skill4 != null) {
             skill4.Init(this, controller);
             if (skill4.maxRange > controller.maxRange) controller.maxRange = skill4.maxRange;
         }
 
-        //The Movement Skill is preset with the unit's class
-        movementSkill = FindSkill(unitBase.GetClass().movementSkill_ID);
         if (movementSkill != null) movementSkill.Init(this, controller);
 
     }

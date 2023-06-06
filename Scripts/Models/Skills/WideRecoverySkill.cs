@@ -20,7 +20,7 @@ public class WideRecoverySkill : Skill
         effect = Resources.Load("Effects/Healing circle") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
         skillName = "Wide Recovery";
-        description = "We come with great healthcare!";
+        description = "We come with great healthcare too!";
 
         baseCooldown = 13;
         currentCooldown = baseCooldown;
@@ -113,20 +113,32 @@ public class WideRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 30);
-        float upperBound = (data.GetCurrentTroopCount() / 20);
+        float lowerBound = (data.GetCurrentTroopCount() / 15);
+        float upperBound = (data.GetCurrentTroopCount() / 10);
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1f;
+        float magicModifier = data.GetCurrentMagic() * 1.5f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
         int result = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
-        ally.data.SetCurrentTroopCount(data.GetCurrentTroopCount() + result);
+        float critValue = data.GetCurrentCrit() * 100;
+        float critCheck = UnityEngine.Random.Range(0, 100);
 
-        //Display Data
-        DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+        if (critCheck <= critValue)
+        { //Successful crit
+
+            result = (int)(result * 1.5f);
+            ally.data.SetCurrentTroopCount(ally.data.GetCurrentTroopCount() + result);
+            DamageGenerator.gen.CreatePopup(position, result.ToString() + "!", Color.green);
+        }
+        else
+        { //Run normally
+
+            ally.data.SetCurrentTroopCount(ally.data.GetCurrentTroopCount() + result);
+            DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+        }
     }
 
     public override void Reset()

@@ -10,7 +10,7 @@ public class CameraControl : MonoBehaviour
     private Vector3 enemyDeployPosition;
     private Quaternion originRotation;
     public bool isControlEnabled;
-    
+    public bool isXZPanningEnabled;
     public float panSpeed = 100.0f;
     public float panSpeedBoost = 2;
     public float jumpSpeed = 370.0f; //Unused?
@@ -45,6 +45,8 @@ public class CameraControl : MonoBehaviour
     private Vector3 lastMouseCoordinate = Vector3.zero;
     public float rotationSpeed = (float)0.85;
 
+    private float yaw;
+    private float pitch;
 
     // Start is called before the first frame update
     void Start()
@@ -65,16 +67,17 @@ public class CameraControl : MonoBehaviour
         if (isControlEnabled)
         {
             //rot = transform.rotation;
-            HandleRotation();
+            HandleRestrictedRotation();
 
             pos = transform.position;
-            HandlePanning();
-
+            if(isXZPanningEnabled) HandlePanningXZ();
+            else HandlePanning();
             HandleScrolling();
 
         }
     }
 
+    /* old version
     private void HandleRotation()
     {
         if (Input.GetKey(KeyCode.R) && CAMERA_MODE != 2)
@@ -101,11 +104,59 @@ public class CameraControl : MonoBehaviour
                 transform.Rotate(rotationSpeed, 0, 0);
             }
 
+            if (mouseDelta.x > 0.5)
+            {
+                transform.Rotate(0, rotationSpeed, 0);
+            }
+            else if (mouseDelta.x < -0.5)
+            {
+                transform.Rotate(0, -rotationSpeed, 0);
+            }
+
             lastMouseCoordinate = Input.mousePosition;
         }
     }
+    */
+
+    private void HandleRestrictedRotation()
+    {
+        yaw += 1f * Input.GetAxis("Mouse X");
+        pitch -= 1f * Input.GetAxis("Mouse Y");
+
+        yaw = Mathf.Clamp(yaw, -245, -239);
+        //the rotation range
+        pitch = Mathf.Clamp(pitch, -5f, 5f);
+        //the rotation range
+
+        transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+    }
 
     private void HandlePanning()
+    {
+        if (Input.mousePosition.x <= panBorderThiccness)
+        {
+            transform.position += Vector3.left * Time.deltaTime * panSpeed;
+        }
+
+        if (Input.mousePosition.x >= Screen.width - panBorderThiccness)
+        {
+            transform.position += Vector3.right * Time.deltaTime * panSpeed;
+        }
+
+        if (Input.mousePosition.y >= Screen.height - panBorderThiccness)
+        {
+            transform.position += Vector3.up * Time.deltaTime * panSpeed;
+        }
+
+        if (Input.mousePosition.y <= panBorderThiccness)
+        {
+            transform.position += Vector3.down * Time.deltaTime * panSpeed;
+        }
+
+        transform.position = pos; // Submit Result
+    }
+
+    private void HandlePanningXZ()
     {
         //Pan Left
         if (Input.GetKey(KeyCode.A) && Input.mousePosition.x <= panBorderThiccness)

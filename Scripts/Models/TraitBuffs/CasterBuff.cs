@@ -24,7 +24,7 @@ public class CasterBuff : TraitBuff
         string className = data.unitClass.traitName;
         float magic = data.GetCurrentMagic();
 
-        if (traitLevel == 1 && className == "Caster") data.SetCurrentMagic(magic + 15);
+        if (traitLevel == 1 && className == "Caster") data.SetCurrentMagic(magic + 10);
         else if (traitLevel >= 2 && className == "Caster") data.SetCurrentMagic(magic + 25);
     }
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
@@ -44,7 +44,7 @@ public class CasterBuff : TraitBuff
         UnitDataStore data = controller.data;
         string className = data.unitClass.traitName;
         float magic = data.GetCurrentMagic();
-        if (traitLevel == 1 && className == "Caster") data.SetCurrentMagic(magic - 15);
+        if (traitLevel == 1 && className == "Caster") data.SetCurrentMagic(magic - 10);
         else if (traitLevel >= 2 && className == "Caster") data.SetCurrentMagic(magic - 25);
     }
 
@@ -52,7 +52,7 @@ public class CasterBuff : TraitBuff
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "Casters gain 15 MGK";
+        else if (traitLevel == 1) return "Casters gain 10 MGK";
         else if (traitLevel == 2) return "Casters gain 25 MGK";
 
         return effectText;

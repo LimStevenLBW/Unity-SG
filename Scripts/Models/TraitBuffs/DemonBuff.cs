@@ -30,13 +30,11 @@ public class DemonBuff : TraitBuff
         {
             data.SetCurrentPower(power + 4);
             data.SetCurrentMagic(magic + 4);
-            data.SetCurrentDefense(defense + 4);
         }
         else if (traitLevel >= 2 && traitName == "Demon")
         {
             data.SetCurrentPower(power + 6);
             data.SetCurrentMagic(magic + 6);
-            data.SetCurrentDefense(defense + 6);
         }
     }
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
@@ -63,22 +61,20 @@ public class DemonBuff : TraitBuff
         if (traitLevel == 1 && traitName == "Demon")
         {
             data.SetCurrentPower(power - 4);
-            data.SetCurrentMagic(magic - 4);
-            data.SetCurrentDefense(defense - 4);
+            data.SetCurrentMagic(magic - 4);  
         }
         else if (traitLevel >= 2 && traitName == "Demon")
         {
             data.SetCurrentPower(power - 6);
             data.SetCurrentMagic(magic - 6);
-            data.SetCurrentDefense(defense - 6);
         }
     }
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "All Demons gain 4 POW, MGK, and DEF";
-        else if (traitLevel == 2) return "All Demons gain 6 POW, MGK, and DEF";
+        else if (traitLevel == 1) return "All Demons gain 4 POW & MGK";
+        else if (traitLevel == 2) return "All Demons gain 6 POW & MGK";
 
         return effectText;
     }

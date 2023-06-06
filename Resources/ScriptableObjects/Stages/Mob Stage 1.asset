@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Mob Stage 1
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 587503b6015abc741ad5147fff8f4a06, type: 3}
-  enemyDeck: {fileID: 11400000, guid: c455aab55dd351446812b9df504a0a9f, type: 2}
+  enemyDeck: {fileID: 11400000, guid: 5117160a5886b9040b9e387fa990b72e, type: 2}

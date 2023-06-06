@@ -10,6 +10,8 @@ public class StageIntro : MonoBehaviour
 
     public TextMeshProUGUI playerTroopCount;
     public TextMeshProUGUI enemyTroopCount;
+
+    public TextMeshProUGUI stageNum;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +30,13 @@ public class StageIntro : MonoBehaviour
 
         playerTroopCount.SetText(playerDeck.GetTroopSize().ToString()+ " Total Troops");
         enemyTroopCount.SetText(enemyDeck.GetTroopSize().ToString()+ " Total Troops");
+
+        if (Director.Instance.stageNum == 3) stageNum.SetText("Final Stage");
+        else
+        {
+            stageNum.SetText("Stage " + Director.Instance.stageNum.ToString());
+        }
+      
     }
 
     public void GetDeck()

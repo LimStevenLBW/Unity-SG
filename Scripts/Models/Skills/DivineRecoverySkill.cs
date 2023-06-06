@@ -108,21 +108,33 @@ public class DivineRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 15);
-        float upperBound = (data.GetCurrentTroopCount() / 10);
+        float lowerBound = (data.GetCurrentTroopCount() / 6);
+        float upperBound = (data.GetCurrentTroopCount() / 4);
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic();
+        float magicModifier = data.GetCurrentMagic() * 1.5f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 
         int result = (int)UnityEngine.Random.Range(lowerBound, upperBound);
 
-        ally.data.SetCurrentTroopCount(data.GetCurrentTroopCount() + result);
+        float critValue = data.GetCurrentCrit() * 100;
+        float critCheck = UnityEngine.Random.Range(0, 100);
 
-        //Display Data
-        DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+        if (critCheck <= critValue)
+        { //Successful crit
+
+            result = (int)(result * 1.5f);
+            ally.data.SetCurrentTroopCount(ally.data.GetCurrentTroopCount() + result);
+            DamageGenerator.gen.CreatePopup(position, result.ToString() + "!", Color.green);
+        }
+        else
+        { //Run normally
+
+            ally.data.SetCurrentTroopCount(ally.data.GetCurrentTroopCount() + result);
+            DamageGenerator.gen.CreatePopup(position, result.ToString(), Color.green);
+        }
 
     }
 

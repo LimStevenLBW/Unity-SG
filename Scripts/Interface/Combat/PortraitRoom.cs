@@ -8,6 +8,7 @@ public class PortraitRoom : MonoBehaviour
     UnitController model;
     public void UpdatePortrait(UnitDataStore dataStore)
     {
+        //Debug.Log(dataStore.GetName() + " " + dataStore.faction.traitName + " " + dataStore.unitClass.traitName);
         if (this.dataStore != null) Destroy(model.gameObject);
         this.dataStore = dataStore;
         model = Instantiate(dataStore.prefab, transform);
@@ -16,7 +17,7 @@ public class PortraitRoom : MonoBehaviour
 
     public void ClearRoom()
     {
-        if (this.dataStore != null) Destroy(model.gameObject);
+        if (dataStore != null) Destroy(model.gameObject);
         dataStore = null;
     }
     // Start is called before the first frame update

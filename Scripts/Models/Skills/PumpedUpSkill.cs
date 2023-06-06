@@ -23,7 +23,7 @@ public class PumpedUpSkill : Skill
         effect = Resources.Load("Effects/Attack Aura Custom") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/power up 2");
         skillName = "Pumped Up";
-        description = "Let's gooo";
+        description = "Hype up, boosting attack greatly";
 
         auraActive = false;
         duration = 5;

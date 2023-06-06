@@ -22,7 +22,7 @@ public class ExplosionSkill : Skill
         effect = Resources.Load("Effects/CFX_Explosion_B_Smoke+Text") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/impact big 2");
         skillName = "Explosion";
-        description = "";
+        description = "Heavy magic damage to an enemy formation";
 
         baseCooldown = 9;
         currentCooldown = baseCooldown;

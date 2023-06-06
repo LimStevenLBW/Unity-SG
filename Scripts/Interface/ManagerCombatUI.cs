@@ -67,12 +67,19 @@ namespace Assets.Scripts.Interface
             //Check for mouseclick
             if (Input.GetMouseButtonDown(0))
             {
+                if (startCombatButton.IsMousedOver()) //Over UI element Start Combat Butto
+                {
+                    //Debug.Log("Moused");
+                    return; //Skip all of this if we are moused over the start combat button
+                }
+
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit) && !EventSystem.current.IsPointerOverGameObject())
+                if (Physics.Raycast(ray, out hit))
                 {
-                    //Check if the hit GameObject is controller
+
+                    //If we have no selected controller and we moused over a controller, lift it
                     if (!selectedController && hit.collider.gameObject.GetComponent<UnitController>() != null) 
                     {
                         UnitController controller = hit.collider.gameObject.GetComponent<UnitController>();
@@ -80,7 +87,7 @@ namespace Assets.Scripts.Interface
                         LiftAndSelect(controller);
                         AudioPlayer.PlayOneShot(AudioLift);
                     }
-                    else if (selectedController)
+                    else if (selectedController) //If we already have a selected controller
                     {
                         //Temporary fix, for if the player selected enemy controllers
                         if(selectedController.teamNum == -1)
@@ -99,7 +106,8 @@ namespace Assets.Scripts.Interface
                             return;
                         }
 
-                        FollowCursor following = selectedController.gameObject.GetComponent <FollowCursor>();     
+                        //Have the unit follow the cursor
+                        FollowCursor following = selectedController.gameObject.GetComponent<FollowCursor>();     
                         bool wasSet = following.Reposition();
                         if (wasSet)
                         {
@@ -111,7 +119,7 @@ namespace Assets.Scripts.Interface
                         }
 
                     }
-                    else
+                    else //Handle what happens if a cell was selected
                     {
                         HexCell cell = grid.GetCell(ray);
 

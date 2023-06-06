@@ -7,6 +7,7 @@ public class FollowCursor : MonoBehaviour
 {
     private UnitController controller;
     private HexCell cell;
+    private HexCell previous;
     private HexGrid grid;
     public float distance = 30.5f;
     float originY;
@@ -27,28 +28,31 @@ public class FollowCursor : MonoBehaviour
         //Vector3 point = ray.origin + (ray.direction * distance);
         //Debug.Log( "World point " + point );
 
-        cell = grid.GetCell(ray);
+        cell = grid.GetCellIgnoreController(ray);
         if (cell && cell.unitController == null)
         {
             if (cell.cell_ID <= 40)
             {
                 transform.position = new Vector3(cell.transform.position.x, cell.transform.position.y + 5, cell.transform.position.z);
+                if (previous != null && previous != cell)
+                {
+                    DisableHighlightPrevious();
+                    cell.EnableHighlight(Color.white, false);
+                    previous = cell;
+                }
+                else if (previous == null)
+                {
+                    previous = cell;
+                    previous.EnableHighlight(Color.white, false);
+                }
             }
         }
-        /*
-         *  if (controller.teamNum == 1)
-            {
-                
-            else if (controller.teamNum == -1)
-            {
-                if(cell.cell_ID > 40) transform.position = cell.transform.position;
-            }
-            else
-            {
-                Debug.Log("Invalid team num");
-            }
-         */
  
+    }
+
+    public void DisableHighlightPrevious()
+    {
+        previous.DisableHighlight(false);
     }
     public void GetGrid(HexGrid grid)
     {
@@ -61,11 +65,12 @@ public class FollowCursor : MonoBehaviour
 
     public bool Reposition()
     {
-        if(cell.cell_ID < 41)
+        if(cell && cell.cell_ID < 41)
         {
             if (cell.unitController != null) return false; //Occupied
             controller.Location = cell;
             controller.UpdateStartingLocation();
+            cell.DisableHighlight(false);
             Destroy(this);
             return true;
         }

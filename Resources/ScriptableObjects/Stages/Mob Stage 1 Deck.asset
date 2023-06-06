@@ -13,9 +13,29 @@ MonoBehaviour:
   m_Name: Mob Stage 1 Deck
   m_EditorClassIdentifier: 
   unitList:
-  - {fileID: 11400000, guid: 0b9a930df562ff84ba44ff095631413b, type: 2}
-  - {fileID: 11400000, guid: c1e5c511a1dc86e45a6c4a20914e2b35, type: 2}
-  - {fileID: 11400000, guid: 0b9a930df562ff84ba44ff095631413b, type: 2}
-  - {fileID: 11400000, guid: c1e5c511a1dc86e45a6c4a20914e2b35, type: 2}
-  - {fileID: 11400000, guid: 0b9a930df562ff84ba44ff095631413b, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: dbbf7e84771d816409dba08b85d25e2d, type: 2}
+  - {fileID: 11400000, guid: dbbf7e84771d816409dba08b85d25e2d, type: 2}
+  - {fileID: 11400000, guid: dbbf7e84771d816409dba08b85d25e2d, type: 2}
+  - {fileID: 11400000, guid: dbbf7e84771d816409dba08b85d25e2d, type: 2}
+  - {fileID: 11400000, guid: dbbf7e84771d816409dba08b85d25e2d, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: cb9725615e960d24ba711a1ab7136172, type: 2}
+  - {fileID: 11400000, guid: cb9725615e960d24ba711a1ab7136172, type: 2}
+  - {fileID: 11400000, guid: cb9725615e960d24ba711a1ab7136172, type: 2}
   captain: {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}

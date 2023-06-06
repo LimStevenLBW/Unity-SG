@@ -16,7 +16,7 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: a2dcf144552abbd4589e6df8e5208988, type: 2}
-  unitName: Grandmaster
+  unitName: Martial Expert
   bio: 
   rank: 3
   baseLevel: 1
@@ -39,7 +39,7 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  skill1_ID: 101
-  skill2_ID: 100
+  skill1_ID: 100
+  skill2_ID: 101
   skill3_ID: 0
   skill4_ID: 0

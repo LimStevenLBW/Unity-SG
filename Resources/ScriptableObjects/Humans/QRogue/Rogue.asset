@@ -16,7 +16,7 @@ MonoBehaviour:
   unitClass: {fileID: 11400000, guid: b8f5dc32668ca9f42a6bd0af36037465, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: e6e093c7ed0935e4581ae804de1a455e, type: 2}
-  unitName: Thieves Guild Rogue
+  unitName: Rogue
   bio: 
   rank: 4
   baseLevel: 1
@@ -39,7 +39,6 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 330000004f000000
   skill1_ID: 104
   skill2_ID: 0
   skill3_ID: 0

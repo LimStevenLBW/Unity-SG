@@ -23,7 +23,7 @@ MonoBehaviour:
   expGrowthRate: 1
   basePower: 28
   powerGrowthRate: 1
-  baseDefense: 12
+  baseDefense: 10
   defenseGrowthRate: 1
   baseMagic: 0
   magicGrowthRate: 0
@@ -39,7 +39,6 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 0000000000000000
   skill1_ID: 100
   skill2_ID: 200
   skill3_ID: 0

@@ -323,6 +323,20 @@ public class HexGrid : MonoBehaviour
         return null;
     }
 
+    public HexCell GetCellIgnoreController(Ray ray)
+    {
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(ray);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+            //SKIP ANY UNITCONTROLLERS
+            if (hit.transform.GetComponent<UnitController>() == null) return GetCell(hit.point);
+        }
+        return null;
+    }
+
     public FormationController GetFormation(Ray ray)
     {
         //return unitManager.GetUnit(ray);

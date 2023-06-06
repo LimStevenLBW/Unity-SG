@@ -24,7 +24,7 @@ public class ElectroBoltSkill : Skill
         hitSFX = (AudioClip) Resources.Load("Sounds/undertale/retro impact 6");
         hitSFX2 = (AudioClip)Resources.Load("Sounds/undertale/retro impact 7");
         skillName = "Electro Bolt";
-        description = "";
+        description = "A mid-ranged magic attack";
 
         baseCooldown = 3f;
         currentCooldown = 1.5f; //starting cooldown is reduced

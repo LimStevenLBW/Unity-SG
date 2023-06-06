@@ -63,6 +63,7 @@ public class UnitController : MonoBehaviour
         path.FaceOpponents();
         //Might have to update later, but for now, update the data with this instantiated controller.
         data.controller = this;
+        data.FindSkills();
         data.InitSkills();
 
         this.bars = bars;

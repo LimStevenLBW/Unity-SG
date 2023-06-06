@@ -13,14 +13,14 @@ public class TraitBuffsList : MonoBehaviour
 
     public int team;
 
-    private List<UnitTrait> traits = new List<UnitTrait>();
+    private List<UnitTrait> traits = new List<UnitTrait>(); //Working list of total traits
     public List<TraitBuffDataStore> dataStoreList = new List<TraitBuffDataStore>();
 
     public void GetTraitsFrom(UnitDataStore data)
     {
         ClearTraitBuffs(false);
         traits.Add(data.unitClass);
-        traits.Add(data.special);
+        //traits.Add(data.special);
         traits.Add(data.faction);
 
         traits.Sort();

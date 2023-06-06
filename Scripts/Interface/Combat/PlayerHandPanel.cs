@@ -1,6 +1,7 @@
 using Assets.Scripts.Interface;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 //Reminder, have this be inactive in the scene, need graphic raycaster and to be screen space overlay
@@ -13,6 +14,11 @@ public class PlayerHandPanel : MonoBehaviour
     public Card[] cards = new Card[5];
     public DeckCountDisplay deckCounter;
 
+    public TextMeshProUGUI traitsText;
+    public TextMeshProUGUI basicText;
+    public TextMeshProUGUI basicDescription;
+    public TextMeshProUGUI specialText;
+    public TextMeshProUGUI specialDescription;
     private int playerSelectAmount; // The amount of cards that the cpu can select
     private int cpuSelectAmount; // The amount of cards that the cpu can select
 
@@ -25,6 +31,8 @@ public class PlayerHandPanel : MonoBehaviour
             c.ClearCard();
             c.SetNumberOfSelectable(playerSelectAmount); //not used by cpu
         }
+
+        ResetText();
     }
 
     void OnEnable()
@@ -181,6 +189,42 @@ public class PlayerHandPanel : MonoBehaviour
         {
             cpuSelectAmount = amount;
         }
+    }
+
+    /*
+     * For displaying unit details in the panel
+     */
+    public void UpdateDescription(UnitDataStore data)
+    {
+        if (traitsText != null)
+        {
+            traitsText.gameObject.SetActive(true);
+            traitsText.SetText(data.faction.traitName + " " + data.unitClass.traitName);
+        }
+        if (basicText != null && data.skill1 != null)
+        {
+            basicText.gameObject.SetActive(true);
+            basicDescription.gameObject.SetActive(true);
+            basicText.SetText(data.skill1.GetSkillName());
+            basicDescription.SetText(data.skill1.GetDescription());
+        }
+        if (specialText != null && data.skill2 != null)
+        {
+            specialText.gameObject.SetActive(true);
+            specialDescription.gameObject.SetActive(true);
+            specialText.SetText(data.skill2.GetSkillName());
+            specialDescription.SetText(data.skill2.GetDescription());
+        }
+
+    }
+
+    public void ResetText()
+    {
+        if (traitsText != null) traitsText.gameObject.SetActive(false);
+        if (basicText != null) basicText.gameObject.SetActive(false);
+        if (basicDescription != null) basicDescription.gameObject.SetActive(false);
+        if (specialText != null) specialText.gameObject.SetActive(false);
+        if (specialDescription != null) specialDescription.gameObject.SetActive(false);
     }
 
 }

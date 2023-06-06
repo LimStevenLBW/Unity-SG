@@ -25,8 +25,8 @@ public class RapidFireVolleySkill : Skill
 
         fireSFX = (AudioClip)Resources.Load("Sounds/mixkit-arrow");
         hitSFX = (AudioClip)Resources.Load("Sounds/mixkit-short-explosion");
-        skillName = "Clash";
-        description = "Shoot from afar";
+        skillName = "Rapid-Fire Volley";
+        description = "Long-ranged, quick, and accurate";
 
         baseCooldown = 1f;
         currentCooldown = baseCooldown;
