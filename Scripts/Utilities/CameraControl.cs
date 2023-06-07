@@ -10,6 +10,8 @@ public class CameraControl : MonoBehaviour
     private Vector3 enemyDeployPosition;
     private Quaternion originRotation;
     public bool isControlEnabled;
+    public bool isRotationEnabled;
+    public bool isScrollingEnabled;
     public bool isXZPanningEnabled;
     public float panSpeed = 100.0f;
     public float panSpeedBoost = 2;
@@ -66,13 +68,16 @@ public class CameraControl : MonoBehaviour
     {
         if (isControlEnabled)
         {
-            //rot = transform.rotation;
-            HandleRestrictedRotation();
-
             pos = transform.position;
-            if(isXZPanningEnabled) HandlePanningXZ();
+
+            //rot = transform.rotation;
+            if (isRotationEnabled) HandleRestrictedRotation();
+
+
+            if (isXZPanningEnabled) HandlePanningXZ();
             else HandlePanning();
-            HandleScrolling();
+
+            if(isScrollingEnabled) HandleScrolling();
 
         }
     }
@@ -120,8 +125,10 @@ public class CameraControl : MonoBehaviour
 
     private void HandleRestrictedRotation()
     {
-        yaw += 1f * Input.GetAxis("Mouse X");
-        pitch -= 1f * Input.GetAxis("Mouse Y");
+        lastMouseCoordinate = Input.mousePosition;
+        Vector3 mouseDelta = Input.mousePosition - lastMouseCoordinate;
+        yaw += rotationSpeed * Input.GetAxis("Mouse X");
+        pitch -= rotationSpeed * Input.GetAxis("Mouse Y");
 
         yaw = Mathf.Clamp(yaw, -245, -239);
         //the rotation range
@@ -133,25 +140,13 @@ public class CameraControl : MonoBehaviour
 
     private void HandlePanning()
     {
-        if (Input.mousePosition.x <= panBorderThiccness)
-        {
-            transform.position += Vector3.left * Time.deltaTime * panSpeed;
-        }
+        if(MouseOnLeftEdge()) transform.position += Vector3.left * Time.deltaTime * panSpeed;
 
-        if (Input.mousePosition.x >= Screen.width - panBorderThiccness)
-        {
-            transform.position += Vector3.right * Time.deltaTime * panSpeed;
-        }
+        if (MouseOnRightEdge()) transform.position += Vector3.right * Time.deltaTime * panSpeed;
 
-        if (Input.mousePosition.y >= Screen.height - panBorderThiccness)
-        {
-            transform.position += Vector3.up * Time.deltaTime * panSpeed;
-        }
+        if (MouseOnTopEdge()) transform.position += Vector3.up * Time.deltaTime * panSpeed;
 
-        if (Input.mousePosition.y <= panBorderThiccness)
-        {
-            transform.position += Vector3.down * Time.deltaTime * panSpeed;
-        }
+        if (MouseOnBottomEdge()) transform.position += Vector3.down * Time.deltaTime * panSpeed;
 
         transform.position = pos; // Submit Result
     }
@@ -316,6 +311,28 @@ public class CameraControl : MonoBehaviour
         cameraXMaxPos = (cellCountX - 0.5f) * (2f * HexMetrics.innerRadius) -20;
        // cameraZMinPos = -30;
         cameraZMaxPos = (cellCountZ - 1) * (1.5f * HexMetrics.outerRadius) - 50;
+    }
+
+    private bool MouseOnRightEdge()
+    {
+        if (Input.mousePosition.x >= Screen.width - panBorderThiccness) return true;
+        return false;
+    }
+
+    private bool MouseOnLeftEdge()
+    {
+        if (Input.mousePosition.x <= panBorderThiccness) return true;
+        return false;
+    }
+    private bool MouseOnTopEdge()
+    {
+        if (Input.mousePosition.y >= Screen.height - panBorderThiccness) return true;
+        return false;
+    }
+    private bool MouseOnBottomEdge()
+    {
+        if (Input.mousePosition.y <= panBorderThiccness) return true;
+        return false;
     }
 
 

@@ -6,7 +6,7 @@ namespace Buttons
     /**
      *  Generic behavior for clickable buttons
      */
-   public class Button : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
+   public class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         [SerializeField] internal AudioSource AudioPlayer;
         [SerializeField] internal AudioClip AudioHover;
@@ -37,6 +37,9 @@ namespace Buttons
             //Debug.Log("Button Clicked");
         }
 
-
+        public virtual void OnPointerExit(PointerEventData eventData)
+        {
+           
+        }
     }
 }

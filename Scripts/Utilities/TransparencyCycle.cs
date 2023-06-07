@@ -14,8 +14,8 @@ public class TransparencyCycle : MonoBehaviour
     public byte minVisibility = 50;
     private TextMeshProUGUI text;
     private Image image;
-    private byte transparencyLevel = 255;
-    private bool shouldFade = true;
+    private byte transparencyLevel = 0;
+    private bool shouldFade = false;
 
     // Start is called before the first frame update
     void OnEnable()
@@ -33,10 +33,9 @@ public class TransparencyCycle : MonoBehaviour
 
     IEnumerator Cycle()
     {
-        
         while (true)
         {
-            yield return new WaitForSeconds(0.001f);
+            yield return new WaitForSecondsRealtime(0.001f);
             if (shouldFade)
             {
                 transparencyLevel -= 3;
@@ -50,7 +49,11 @@ public class TransparencyCycle : MonoBehaviour
                 if (image != null) image.color = new Color32(255, 255, 255, transparencyLevel);
             }
 
-            if (transparencyLevel >= maxVisibility) shouldFade = true;
+            if (transparencyLevel >= maxVisibility && !shouldFade)
+            {
+                yield return new WaitForSecondsRealtime(2);
+                shouldFade = true;
+            }
             if (transparencyLevel <= minVisibility) shouldFade = false;
         }
      
