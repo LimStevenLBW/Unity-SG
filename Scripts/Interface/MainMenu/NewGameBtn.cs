@@ -2,7 +2,7 @@
 using Buttons;
 using UnityEngine.EventSystems;
 
-internal sealed class NewGameBtn : Button
+internal sealed class NewGameBtn : UIButton
 {
     public override void OnPointerClick(PointerEventData e)
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Buttons
 {
-    internal class ToggleButton : Button, IPointerClickHandler
+    internal class ToggleButton : UIButton, IPointerClickHandler
     {
         public GameObject AttachedObject; 
         

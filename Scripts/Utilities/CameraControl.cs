@@ -241,6 +241,21 @@ public class CameraControl : MonoBehaviour
         //StartCoroutine(coroutineRotate);
 
     }
+
+    /*
+     * Focus, copying a target's rotation and transform, no offset used
+     */
+    public void Focus(Transform target)
+    {
+        Vector3 targetRotation = target.rotation.eulerAngles;
+        Quaternion targetRotationQ = Quaternion.Euler(targetRotation); //Convert back
+        IEnumerator coroutine = CameraJump(target.position, targetRotationQ, 0, 0);
+        StartCoroutine(coroutine);
+    }
+
+    /*
+     * Resets the camera back to its origin position based on combat phase
+     */
     public void UnFocus()
     {
         IEnumerator coroutine;
@@ -252,6 +267,16 @@ public class CameraControl : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(coroutine);
         //StartCoroutine(coroutineRotate);
+    }
+
+    /*
+     * Reset position without hassle
+     */
+    public void ResetPosition()
+    {
+        IEnumerator coroutine = CameraJump(originPosition, originRotation, 0, 0);
+        StopAllCoroutines();
+        StartCoroutine(coroutine);
     }
 
 
@@ -274,7 +299,7 @@ public class CameraControl : MonoBehaviour
         //Vector3.SqrMagnitude(targetPosition - transform.position) > 100.0f
 
         //While close enough, continue to move the camera
-        while (Vector3.Distance(transform.position, targetPosition) > 1f)
+        while (Vector3.Distance(transform.position, targetPosition) > 0.2f)
         {
 
             //Debug.Log((Vector3.SqrMagnitude(targetPosition - transform.position)));
@@ -335,6 +360,19 @@ public class CameraControl : MonoBehaviour
         return false;
     }
 
+    public void DisableAllControl()
+    {
+        isControlEnabled = false;
+        isRotationEnabled = false;
+    }
+    public void EnableControl()
+    {
+        isControlEnabled = true;
+    }
+    public void EnableRotation()
+    {
+        isRotationEnabled = true;
+    }
 
 }
 

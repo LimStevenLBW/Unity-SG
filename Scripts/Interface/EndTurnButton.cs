@@ -6,7 +6,7 @@ using GameSystems;
 
 namespace Buttons
 {
-    internal sealed class EndTurnButton : Button, IPointerClickHandler
+    internal sealed class EndTurnButton : UIButton, IPointerClickHandler
     {
         /**
          * Registered IPointerClickHandler callback

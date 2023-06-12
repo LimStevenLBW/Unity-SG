@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Buttons
 {
-    internal sealed class DisabledMenuButton : Button
+    internal sealed class DisabledMenuButton : UIButton
     {
         private Animator animator;
         private Image bg;

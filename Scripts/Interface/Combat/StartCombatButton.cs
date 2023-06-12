@@ -4,7 +4,7 @@ using UnityEngine;
 using Buttons;
 using UnityEngine.EventSystems;
 
-public class StartCombatButton : Button, IPointerClickHandler
+public class StartCombatButton : UIButton, IPointerClickHandler
 {
     private bool ready;
     /*

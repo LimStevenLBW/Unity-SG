@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace Buttons
 {
-    internal sealed class LoadButton : Button, IPointerClickHandler
+    internal sealed class LoadButton : UIButton, IPointerClickHandler
     {
         // Start is called before the first frame update
         void Start()

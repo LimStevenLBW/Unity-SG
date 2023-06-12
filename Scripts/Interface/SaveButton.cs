@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Buttons
 {
-    internal sealed class SaveButton : Button, IPointerClickHandler
+    internal sealed class SaveButton : UIButton, IPointerClickHandler
     {
         // Start is called before the first frame update
         void Start()

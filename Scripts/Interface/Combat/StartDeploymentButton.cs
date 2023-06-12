@@ -4,7 +4,7 @@ using UnityEngine;
 using Buttons;
 using UnityEngine.EventSystems;
 
-public class StartDeploymentButton : Button, IPointerClickHandler, IPointerEnterHandler
+public class StartDeploymentButton : UIButton, IPointerClickHandler, IPointerEnterHandler
 {
 
     /*
