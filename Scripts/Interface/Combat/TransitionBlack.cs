@@ -27,4 +27,9 @@ public class TransitionBlack : MonoBehaviour
     {
         animator.SetTrigger("exit");
     }
+
+    public void ResetPosition()
+    {
+        gameObject.SetActive(false);
+    }
 }

@@ -25,9 +25,6 @@ public class DeckDataStore
         }
 
         captain = new UnitDataStore(deckBase.captain);
-
-        Shuffle();
-        UpdateTroopCount();
     }
 
     public bool IsEmpty()
@@ -35,6 +32,17 @@ public class DeckDataStore
         if (unitList.Count == 0) return true;
         return false;
     }
+
+    public void SortByClassAndRank()
+    {
+        unitList.Sort();
+    }
+    public void SortByRank()
+    {
+    //    foreach (UnitDataStore unit in unitList) unit.sortByRank = true;
+        unitList.Sort();
+    }
+
 
     //Fisher yates shuffle
     public void Shuffle()
@@ -60,7 +68,7 @@ public class DeckDataStore
         return unit;
     }
 
-    void UpdateTroopCount()
+    public void UpdateTroopCount()
     {
         troopCount = 0;
         foreach (UnitDataStore unit in unitList)

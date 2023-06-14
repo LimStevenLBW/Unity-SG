@@ -32,7 +32,7 @@ public class GameSettings : MonoBehaviour
             Instance = this;
         }
 
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     void Start()

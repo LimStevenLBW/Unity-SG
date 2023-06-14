@@ -166,7 +166,12 @@ public class Director : MonoBehaviour
     {
         //Deck is available now to use by monobehaviours
         playerDeck = new DeckDataStore(playerDeckBase); //Preset currently in editor
+        playerDeck.Shuffle();
+        playerDeck.UpdateTroopCount();
+
         enemyDeck = new DeckDataStore(enemyDeckBase); //Obtained from stage
+        enemyDeck.Shuffle();
+        enemyDeck.UpdateTroopCount();
 
         stageIntro.Init(playerDeck, enemyDeck);
 

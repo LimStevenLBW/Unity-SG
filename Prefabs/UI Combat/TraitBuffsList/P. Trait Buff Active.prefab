@@ -144,7 +144,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Troops start with 20% stamina '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d9d1a0fa2bc9ca743bfd585ae6086ce8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d582e0bbb6aeb8b49bb8f4cad740d330, type: 2}
   m_sharedMaterial: {fileID: -4360129976555009484, guid: d9d1a0fa2bc9ca743bfd585ae6086ce8,
     type: 2}
   m_fontSharedMaterials: []

@@ -277,7 +277,7 @@ namespace Assets.Scripts.Interface
 
         void Focus(Transform transform)
         {
-            mainCamera.Focus(transform, 50, 50);
+            mainCamera.Focus(transform, 50, 50, 0.3f);
         }
 
         public virtual void PlayAudioClip(AudioClip clip)

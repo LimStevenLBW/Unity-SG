@@ -7,7 +7,7 @@ using UnityEngine;
  * Formation Controller and Unit Controller will receive their data from unit data store. 
  * The purpose of unitdatastore is to be a mutable version of the Unit Scriptable Object
  */
-public class UnitDataStore
+public class UnitDataStore: IComparable<UnitDataStore>
 {
     public UnitController prefab;
     public UnitController controller;
@@ -325,4 +325,22 @@ public class UnitDataStore
         return baseDefReduction;
     }
 
+    //Compare based on Rank and then classType
+    public int CompareTo(UnitDataStore other)
+    {
+        /*
+         * The method returns 0 if the data is equal to the other data. A value less than 0 is returned if the data is 
+         * less than the other data (less characters) 
+         * and a value greater than 0 if the data is greater than the other data (more characters).
+         */
+
+        int rankCompare = other.GetRank().CompareTo(GetRank());
+        int classCompare = unitClass.traitName.CompareTo(other.unitClass.traitName);
+
+        if (rankCompare == 0 && classCompare == 0) return 0; //Completely equal
+        if (rankCompare == 0 && classCompare < 0) return -1;
+        if (rankCompare == 0 && classCompare > 0) return 1;
+
+        return rankCompare;
+    }
 }

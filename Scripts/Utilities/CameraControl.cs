@@ -16,6 +16,8 @@ public class CameraControl : MonoBehaviour
     public float panSpeed = 100.0f;
     public float panSpeedBoost = 2;
     public float jumpSpeed = 370.0f; //Unused?
+    public float smoothTime = 0.3f;
+
     public float panBorderThiccness = 1.0f;
     public float scrollDistance = 25.0f;
 
@@ -227,14 +229,14 @@ public class CameraControl : MonoBehaviour
 
     }
 
-    public void Focus(Transform target, int offsetY, int offsetZ)
+    public void Focus(Transform target, int offsetY, int offsetZ, float smoothTime)
     {
         Vector3 targetRotation = transform.rotation.eulerAngles; //Get Vector 3 representation  
         targetRotation = new Vector3(targetRotation.x-15, targetRotation.y, targetRotation.z); //Adjust angle
         Quaternion targetRotationQ = Quaternion.Euler(targetRotation); //Convert back
 
        // IEnumerator coroutineRotate = RotateLerp(transform, targetRotationQ);
-        IEnumerator coroutine = CameraJump(target.position, targetRotationQ, offsetY, offsetZ);
+        IEnumerator coroutine = CameraJump(target.position, targetRotationQ, offsetY, offsetZ, smoothTime);
 
        // StopAllCoroutines();
         StartCoroutine(coroutine);
@@ -245,11 +247,11 @@ public class CameraControl : MonoBehaviour
     /*
      * Focus, copying a target's rotation and transform, no offset used
      */
-    public void Focus(Transform target)
+    public void Focus(Transform target, float smoothTime)
     {
         Vector3 targetRotation = target.rotation.eulerAngles;
         Quaternion targetRotationQ = Quaternion.Euler(targetRotation); //Convert back
-        IEnumerator coroutine = CameraJump(target.position, targetRotationQ, 0, 0);
+        IEnumerator coroutine = CameraJump(target.position, targetRotationQ, 0, 0, smoothTime);
         StartCoroutine(coroutine);
     }
 
@@ -260,10 +262,10 @@ public class CameraControl : MonoBehaviour
     {
         IEnumerator coroutine;
         // IEnumerator coroutineRotate = RotateLerp(transform, originRotation);
-        if (Director.Instance.GetPhase() == "CARDSELECT") coroutine = CameraJump(cardSelectPosition, originRotation, 0, 0);
-        else if(Director.Instance.GetPhase() == "ENEMYCARDSELECT") coroutine = CameraJump(enemyCardSelectPosition, originRotation, 0, 0);
-        else if (Director.Instance.GetPhase() == "ENEMYDEPLOYMENT") coroutine = CameraJump(enemyDeployPosition, originRotation, 0, 0);
-        else { coroutine = CameraJump(originPosition, originRotation, 0, 0); }
+        if (Director.Instance.GetPhase() == "CARDSELECT") coroutine = CameraJump(cardSelectPosition, originRotation, 0, 0, 0.3f);
+        else if(Director.Instance.GetPhase() == "ENEMYCARDSELECT") coroutine = CameraJump(enemyCardSelectPosition, originRotation, 0, 0, 0.3f);
+        else if (Director.Instance.GetPhase() == "ENEMYDEPLOYMENT") coroutine = CameraJump(enemyDeployPosition, originRotation, 0, 0, 0.3f);
+        else { coroutine = CameraJump(originPosition, originRotation, 0, 0, 0.3f); }
         StopAllCoroutines();
         StartCoroutine(coroutine);
         //StartCoroutine(coroutineRotate);
@@ -274,7 +276,7 @@ public class CameraControl : MonoBehaviour
      */
     public void ResetPosition()
     {
-        IEnumerator coroutine = CameraJump(originPosition, originRotation, 0, 0);
+        IEnumerator coroutine = CameraJump(originPosition, originRotation, 0, 0, 0.3f);
         StopAllCoroutines();
         StartCoroutine(coroutine);
     }
@@ -284,13 +286,12 @@ public class CameraControl : MonoBehaviour
      * Disables user camera control while in effect
      */
 
-    public IEnumerator CameraJump(Vector3 targetPosition, Quaternion targetRotationQ, int offsetY, int offsetZ)
+    public IEnumerator CameraJump(Vector3 targetPosition, Quaternion targetRotationQ, int offsetY, int offsetZ, float smoothTime)
     {
         targetPosition.y += offsetY;
         targetPosition.z -= offsetZ;
         bool shouldReEnable = isControlEnabled;
         isControlEnabled = false;
-        float smoothTime = 0.3F;
         Vector3 velocity = Vector3.zero;
 
         // Define a target position above and behind the target transform
