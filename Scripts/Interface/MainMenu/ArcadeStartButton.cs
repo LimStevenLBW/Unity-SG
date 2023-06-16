@@ -45,8 +45,8 @@ public class ArcadeStartButton : UIButton
         //Call Super to play attached audio clip
         base.OnPointerClick(e);
 
-      //  animator.SetBool("isHovered", false);
-        mainMenu.StartArcadeMode();
+        //  animator.SetBool("isHovered", false);
+        mainMenu.StartGuildRoster();
         gameObject.SetActive(false);
     }
 }

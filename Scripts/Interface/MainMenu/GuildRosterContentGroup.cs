@@ -20,6 +20,15 @@ public class GuildRosterContentGroup : MonoBehaviour
         }
     }
 
+    public void Clear()
+    {
+        foreach(UnitElement element in elements)
+        {
+            Destroy(element.gameObject);
+        }
+        elements.Clear();
+    }
+
     public void Display()
     {
         StartCoroutine(ConsecutiveReveal());

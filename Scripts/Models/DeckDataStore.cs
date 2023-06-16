@@ -20,11 +20,12 @@ public class DeckDataStore
         //Cycle through and create our working deck
         foreach(Unit unit in deckBase.unitList)
         {
-            if (unit == null) Debug.Log("null");   
+            if (unit == null) Debug.Log("null");
+ 
             unitList.Add(new UnitDataStore(unit));
         }
 
-        captain = new UnitDataStore(deckBase.captain);
+        //captain = new UnitDataStore(deckBase.captain);
     }
 
     public bool IsEmpty()

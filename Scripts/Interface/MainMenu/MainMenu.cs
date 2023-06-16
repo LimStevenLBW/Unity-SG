@@ -11,7 +11,9 @@ public class MainMenu : MonoBehaviour
     public GameObject promptText;
     public GameObject studioText;
     public MenuPanel menuPanel;
-    public MenuReturnButton menuReturnButton;
+    [SerializeField] private MenuReturnButton menuReturnButton;
+    [SerializeField] private ArcadeRosterStart arcadeRosterStart;
+    [SerializeField] private ArcadeRosterReroll arcadeRosterReroll;
     [SerializeField] private ArcadeStartButton arcadeStartButton;
     [SerializeField] private GameObject arcadePanel;
     [SerializeField] private SettingsMenu settingsMenu;
@@ -33,9 +35,10 @@ public class MainMenu : MonoBehaviour
         arcadePanel.SetActive(false);
         arcadeStartButton.Init(this);
         settingsMenu.Hide();
-        guildRoster.Init();
         menuPanel.Init(this);
 
+        arcadeRosterReroll.Init(this);
+        arcadeRosterStart.Init(this);
         menuReturnButton.Init(this);
         titleText.SetActive(false);
         promptText.SetActive(false);
@@ -85,7 +88,7 @@ public class MainMenu : MonoBehaviour
        // StartCoroutine(ReEnableControl());
     }
 
-    public void StartArcadeMode()
+    public void StartGuildRoster()
     {
         StartCoroutine(TransitionIntoGuildRoster());
     }
@@ -103,15 +106,39 @@ public class MainMenu : MonoBehaviour
         transition.ResetPosition();
 
         mainCamera.Focus(studyCameraView2.transform, 0.7f);
-        yield return new WaitForSeconds(0.7f);
 
-        menuReturnButton.Show();
+        yield return new WaitForSeconds(0.2f);
         guildRoster.Show();
+        guildRoster.Init();
+        yield return new WaitForSeconds(0.2f);
 
-        //SceneManager.LoadScene("Combat");
+        arcadeRosterStart.Show();
+        arcadeRosterReroll.Show();
+        menuReturnButton.Show();
+
     }
 
 
+    public void StartArcadeMode()
+    {
+        StartCoroutine(TransitionIntoArcadeMode());
+    }
+    
+    IEnumerator TransitionIntoArcadeMode()
+    {
+        arcadeRosterStart.Hide();
+        arcadeRosterReroll.Hide();
+        menuReturnButton.Hide();
+
+        transition.Enter();
+        yield return new WaitForSeconds(0.5f);
+        guildRoster.Hide();
+
+        transition.Exit();
+
+        SceneManager.LoadScene("Combat");
+        
+    }
     public void ShowSettingsMenu()
     {
         menuPanel.Hide();
@@ -136,10 +163,18 @@ public class MainMenu : MonoBehaviour
             GameSettings.Instance.Save();
         }
 
+        arcadeRosterReroll.Hide();
+        arcadeRosterStart.Hide();
         menuReturnButton.Hide();
         menuPanel.Show();
 
         mainCamera.ResetPosition();
     }
+
+    public void RerollGuildRoster()
+    {
+        guildRoster.Reroll();
+    }
+
 
 }

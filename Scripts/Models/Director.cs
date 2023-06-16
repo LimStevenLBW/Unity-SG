@@ -46,7 +46,7 @@ public class Director : MonoBehaviour
     private Phase phase = Phase.INTRO;
     private bool gameStarted = false;
 
-    public Deck playerDeckBase;
+    private Deck playerDeckBase;
     private Deck enemyDeckBase;
 
     private DeckDataStore playerDeck;
@@ -164,8 +164,9 @@ public class Director : MonoBehaviour
 
     void InitStageData()
     {
+        playerDeckBase = GamePersistentData.Instance.GetPlayerDeck();
         //Deck is available now to use by monobehaviours
-        playerDeck = new DeckDataStore(playerDeckBase); //Preset currently in editor
+        playerDeck = new DeckDataStore(playerDeckBase); //from Guild roster
         playerDeck.Shuffle();
         playerDeck.UpdateTroopCount();
 

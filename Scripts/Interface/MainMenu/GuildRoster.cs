@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class GuildRoster : MonoBehaviour
 {
-    [SerializeField] private Deck playerDeckBase;
+    [SerializeField] private Animator animator;
     [SerializeField] private GuildRosterContentGroup gridContent;
+    [SerializeField] private DropRate dropRateTool;
+    [SerializeField] private Deck playerDeckBase;
     private DeckDataStore playerDeck;
 
 
     public void Init()
     {
+        if(playerDeck == null) playerDeckBase = dropRateTool.GetRandomDeck();
         playerDeck = new DeckDataStore(playerDeckBase); //Preset currently in editor
         playerDeck.SortByClassAndRank();
 
         gridContent.Setup(playerDeck.unitList);
-        Hide();
+        gridContent.Display();
+
+        GamePersistentData.Instance.SetPlayerDeck(playerDeckBase);
     }
 
     public void Show()
@@ -30,10 +35,18 @@ public class GuildRoster : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void Reroll()
+    {
+        gridContent.Clear();
+        playerDeckBase = dropRateTool.GetRandomDeck();
+        animator.SetTrigger("rerolling");
+        Init();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
