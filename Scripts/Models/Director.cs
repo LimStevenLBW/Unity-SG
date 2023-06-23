@@ -46,7 +46,6 @@ public class Director : MonoBehaviour
     private Phase phase = Phase.INTRO;
     private bool gameStarted = false;
 
-    private Deck playerDeckBase;
     private Deck enemyDeckBase;
 
     private DeckDataStore playerDeck;
@@ -75,6 +74,7 @@ public class Director : MonoBehaviour
     public StartCombatButton startCombatButton;
 
     //Weather
+    public GameObject day;
     public GameObject rainDropSystem;
     public GameObject rainy;
     public GameObject sunset;
@@ -88,6 +88,8 @@ public class Director : MonoBehaviour
     [SerializeField] private AudioClip AudioPlayStart;
     [SerializeField] private AudioClip AudioSortie;
 
+    [SerializeField] private GameObject BGM_RAIN;
+    [SerializeField] private BGMSource BGM_SOURCE;
     [SerializeField] private bool playerTookDamage;
     [SerializeField] private bool cpuTookDamage;
 
@@ -131,8 +133,7 @@ public class Director : MonoBehaviour
 
     void StartGame()
     {
-        tempCurrentStageID = 0;
-        tempCurrentStageID++;
+        tempCurrentStageID = 1;
 
         //Setup player hearts
         playerTraitBuffs.team = 1;
@@ -164,9 +165,8 @@ public class Director : MonoBehaviour
 
     void InitStageData()
     {
-        playerDeckBase = GamePersistentData.Instance.GetPlayerDeck();
-        //Deck is available now to use by monobehaviours
-        playerDeck = new DeckDataStore(playerDeckBase); //from Guild roster
+        //Initialize player deck
+        playerDeck = new DeckDataStore(GamePersistentData.Instance.GetArcadeDeck());
         playerDeck.Shuffle();
         playerDeck.UpdateTroopCount();
 
@@ -306,17 +306,18 @@ public class Director : MonoBehaviour
     }
     IEnumerator DisplayIntroduction()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2f);
 
         route.HideRoute();
         stageIntro.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
+
+        stageIntro.gameObject.SetActive(false);
 
         combatManager.DisplayHeader();
         ResetHealth();
 
-        stageIntro.gameObject.SetActive(false);
 
         //Player Card Selection phase
         SetPhase("CARDSELECT");
@@ -419,7 +420,8 @@ public class Director : MonoBehaviour
         }
         
     }
-    //A player took damage, start a
+
+    //A player took damage
     public void TakeDamage(bool isPlayer, int damage)
     {
         if (isPlayer)
@@ -549,14 +551,24 @@ public class Director : MonoBehaviour
         timeElapsed = 0;
     }
 
+    public void ClearUnitWindow()
+    {
+        combatManager.DisableUnitWindow();
+        combatManager.HideHeader();
+        playerTraitBuffs.ClearTraitBuffs(true);
+        enemyTraitBuffs.ClearTraitBuffs(true);
+
+    }
     //Clear everything
     public void ClearStage()
     {
-        playerTraitBuffs.ClearTraitBuffs(true);
-        enemyTraitBuffs.ClearTraitBuffs(true);
-        combatManager.DisableUnitWindow();
-        combatManager.HideHeader();
         unitManager.ClearField();
+    }
+
+    //From Next Stage Button
+    public void TransitionIntoNextStage()
+    {
+        combatEndScreen.NextStage();
     }
 
     //Prepare next stage data
@@ -578,21 +590,38 @@ public class Director : MonoBehaviour
     {
         SceneManager.LoadScene("GameEnd");
     }
-
-    public void ChangeWeather(int stageID)
+    public void ChangeSong()
     {
-        if (stageID == 2)
+        if (tempCurrentStageID == 4) BGM_SOURCE.PlayCombatBGM(2, 0f, 0.05f); //CHANGE SONG on stage 3
+    }
+    public void ChangeWeather()
+    {
+        if (tempCurrentStageID == 2)
         {
             rainy.gameObject.SetActive(false);
+            day.gameObject.SetActive(true);
+        }
+        else if (tempCurrentStageID == 3) 
+        {
+            day.gameObject.SetActive(false);
+            BGM_RAIN.gameObject.SetActive(false);
             rainDropSystem.gameObject.SetActive(false);
             sunset.gameObject.SetActive(true);
         }
-        else if(stageID == 3)
+        else if(tempCurrentStageID == 4)
+        {
+            sunset.gameObject.SetActive(false);
+            night.gameObject.SetActive(true);
+        }
+        else if (tempCurrentStageID == 5)
         {
             sunset.gameObject.SetActive(false);
             night.gameObject.SetActive(true);
         }
     }
 
-
+    public DeckDataStore GetPlayerDeck()
+    {
+        return playerDeck;
+    }
 }

@@ -18,7 +18,7 @@ MonoBehaviour:
   special: {fileID: 11400000, guid: 6c8223caeae642646859e867f274499a, type: 2}
   unitName: Fishman
   bio: 
-  rank: 3
+  rank: 4
   baseLevel: 1
   expGrowthRate: 1
   basePower: 6

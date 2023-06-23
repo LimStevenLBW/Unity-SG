@@ -18,12 +18,12 @@ MonoBehaviour:
   special: {fileID: 11400000, guid: 02df44a37a6152942bfde47faf1cf2de, type: 2}
   unitName: Demon
   bio: 
-  rank: 2
+  rank: 3
   baseLevel: 1
   expGrowthRate: 1
-  basePower: 20
+  basePower: 16
   powerGrowthRate: 1
-  baseDefense: 5
+  baseDefense: 6
   defenseGrowthRate: 1
   baseMagic: 10
   magicGrowthRate: 0

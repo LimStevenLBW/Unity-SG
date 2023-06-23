@@ -13,7 +13,7 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Slider sfxVolume;
 
     // Start is called before the first frame update
-    void Awake()
+    public void Init()
     {
         GameSettings.Instance.OnSettingsChanged += UpdateSettingsDisplay;
     }

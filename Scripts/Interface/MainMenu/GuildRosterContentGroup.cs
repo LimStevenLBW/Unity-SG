@@ -5,16 +5,20 @@ using UnityEngine;
 public class GuildRosterContentGroup : MonoBehaviour
 {
     public UnitElement unitElement;
+    [SerializeField] private GuildRoster guildRoster;
+
     private List<UnitElement> elements = new List<UnitElement>();
 
     public void Setup(List<UnitDataStore> unitList)
     {
+        unitList.Sort();
         foreach(UnitDataStore unit in unitList)
         {
             UnitElement element = Instantiate(unitElement);
-            element.GetData(unit);
+            element.GetData(unit, guildRoster);
             element.gameObject.transform.SetParent(gameObject.transform);
             element.gameObject.transform.SetAsFirstSibling();
+            element.gameObject.transform.localScale = new Vector3(1, 1, 1);
             elements.Add(element);
 
         }
@@ -29,7 +33,15 @@ public class GuildRosterContentGroup : MonoBehaviour
         elements.Clear();
     }
 
-    public void Display()
+    public void DisplayImmediate()
+    {
+        foreach (UnitElement element in elements)
+        {
+            element.Idle();
+        }
+    }
+
+    public void DisplayDelayed()
     {
         StartCoroutine(ConsecutiveReveal());
     }

@@ -14,6 +14,7 @@ public class BGMSource : MonoBehaviour
 
     void Start()
     {
+        UpdateSoundSettings();
         GameSettings.Instance.OnSettingsChanged += UpdateSoundSettings;
         PlayCombatBGM(bgmSelect, startingTime);
     }
@@ -56,9 +57,22 @@ public class BGMSource : MonoBehaviour
 
     public void PlayCombatBGM(int songNum, float startTime)
     {
+        AudioPlayer.Stop();
+        if (songNum == 1) AudioPlayer.clip = BGM;
+        else if (songNum == 2) AudioPlayer.clip = BGM2;
+        AudioPlayer.time = startTime;
+
+        AudioPlayer.Play();
+    }
+
+    public void PlayCombatBGM(int songNum, float startTime, float volumeBase)
+    {
+        AudioPlayer.Stop();
         if(songNum == 1) AudioPlayer.clip = BGM;
         else if(songNum == 2) AudioPlayer.clip = BGM2;
         AudioPlayer.time = startTime;
+        baseVolumeLevel = volumeBase;
+        UpdateSoundSettings();
         AudioPlayer.Play();
     }
 }

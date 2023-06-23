@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: Man-At-Arms
   m_EditorClassIdentifier: 
-  model: {fileID: 7297535323292551013, guid: 7ebeaac46fc22194088aa35f0c2df802, type: 3}
+  model: {fileID: 5020851112382485919, guid: 60e7791cdce188640828835b72f1d6eb, type: 3}
   unitClass: {fileID: 11400000, guid: a9515dc87f76d62459a3bcb877cdffd1, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: b9820095fa37c1347a4b2ceceabc6e01, type: 2}
@@ -39,7 +39,6 @@ MonoBehaviour:
   economy: 1
   agriculture: 1
   upkeep: 0.1
-  positionSpawnPref: 330000004f000000
   skill1_ID: 100
   skill2_ID: 401
   skill3_ID: 0

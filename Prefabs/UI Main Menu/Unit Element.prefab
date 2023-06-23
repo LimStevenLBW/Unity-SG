@@ -33,11 +33,11 @@ RectTransform:
   m_Father: {fileID: 6103127099896479991}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -222.3, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 50, y: 50}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1276749625319652808
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -171,8 +171,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -16.28101, y: 0}
-  m_SizeDelta: {x: 334.0381, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 330, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1232948126925024690
 CanvasRenderer:
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -305,11 +305,11 @@ RectTransform:
   m_Father: {fileID: 6103127099896479991}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 180, y: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -30, y: 0}
   m_SizeDelta: {x: 30, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &7644359051460903521
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -434,9 +434,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6103127099896479991}
   - component: {fileID: 6103127099896479978}
+  - component: {fileID: 2262123385991249507}
   - component: {fileID: 6103127099896479977}
   - component: {fileID: 6103127099896479976}
-  - component: {fileID: 2262123385991249507}
   - component: {fileID: 2389737702081676982}
   m_Layer: 31
   m_Name: Unit Element
@@ -464,11 +464,11 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 475, y: 35}
-  m_Pivot: {x: 0.5, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6103127099896479978
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -477,6 +477,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6103127099896479990}
   m_CullTransparentMesh: 1
+--- !u!114 &2262123385991249507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6103127099896479990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a86fef44fc1104e8389c2415cebccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitName: {fileID: 2538170371791172198}
+  rank: {fileID: 4383957260047424734}
+  classImage: {fileID: 4445264824001014092}
+  factionImage: {fileID: 0}
+  elementColor:
+    serializedVersion: 2
+    rgba: 0
+  animator: {fileID: 0}
+  hoverSFX: {fileID: 8300000, guid: 3bf07181ee5331d45af0906db419f8a5, type: 3}
+  transferSFX: {fileID: 8300000, guid: 7f26dbde69a52504ba86425ea8e6e7dd, type: 3}
 --- !u!114 &6103127099896479977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527,23 +549,6 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &2262123385991249507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6103127099896479990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2a86fef44fc1104e8389c2415cebccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitName: {fileID: 2538170371791172198}
-  rank: {fileID: 4383957260047424734}
-  classImage: {fileID: 4445264824001014092}
-  factionImage: {fileID: 0}
-  animator: {fileID: 0}
 --- !u!95 &2389737702081676982
 Animator:
   serializedVersion: 5

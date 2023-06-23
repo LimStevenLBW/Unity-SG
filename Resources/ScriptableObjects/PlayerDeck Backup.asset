@@ -31,11 +31,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bcffe2f46a97f784095605e1b3f178f6, type: 2}
   - {fileID: 11400000, guid: bcffe2f46a97f784095605e1b3f178f6, type: 2}
   - {fileID: 11400000, guid: bcffe2f46a97f784095605e1b3f178f6, type: 2}
-  - {fileID: 11400000, guid: 8ca2c4834c4ed214e91c9eead1f69d80, type: 2}
-  - {fileID: 11400000, guid: 8ca2c4834c4ed214e91c9eead1f69d80, type: 2}
-  - {fileID: 11400000, guid: 8ca2c4834c4ed214e91c9eead1f69d80, type: 2}
+  - {fileID: 11400000, guid: 556f2e22a81d28842ad088940c2fb545, type: 2}
+  - {fileID: 11400000, guid: 556f2e22a81d28842ad088940c2fb545, type: 2}
+  - {fileID: 11400000, guid: cd2a681a1b01155418b4a8824491637c, type: 2}
+  - {fileID: 11400000, guid: cd2a681a1b01155418b4a8824491637c, type: 2}
   - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
   - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
   - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
-  - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
+  benchedUnitList: []
   captain: {fileID: 11400000, guid: 1891fa7fbc582714fa5c7947d1c491f4, type: 2}

@@ -23,8 +23,8 @@ public class ArcherBuff : TraitBuff
         string className = data.unitClass.traitName;
         float power = data.GetCurrentPower();
 
-        if (traitLevel == 1 && className == "Archer") data.SetCurrentPower(power + 10);
-        else if (traitLevel >= 2 && className == "Archer") data.SetCurrentPower(power + 20);
+        if (traitLevel == 1 && className == "Archer") data.SetCurrentPower(power + 5);
+        else if (traitLevel >= 2 && className == "Archer") data.SetCurrentPower(power + 15);
     }
 
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
@@ -43,15 +43,15 @@ public class ArcherBuff : TraitBuff
         UnitDataStore data = controller.data;
         string className = data.unitClass.traitName;
         float power = data.GetCurrentPower();
-        if (traitLevel == 1 && className == "Archer") data.SetCurrentPower(power - 10);
-        else if (traitLevel >= 2 && className == "Archer") data.SetCurrentPower(power - 20);
+        if (traitLevel == 1 && className == "Archer") data.SetCurrentPower(power - 5);
+        else if (traitLevel >= 2 && className == "Archer") data.SetCurrentPower(power - 15);
     }
 
     public override string GetEffectText()
     {
         if (traitLevel == 0) return "";
-        else if (traitLevel == 1) return "All Archers gain 10 POW";
-        else if (traitLevel == 2) return "All Archers gain 20 POW";
+        else if (traitLevel == 1) return "All Archers gain 5 POW";
+        else if (traitLevel == 2) return "All Archers gain 15 POW";
 
         return effectText;
     }

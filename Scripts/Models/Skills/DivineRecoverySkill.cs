@@ -16,15 +16,15 @@ public class DivineRecoverySkill : Skill
     public DivineRecoverySkill()
     {
         minRange = 0;
-        maxRange = 4;
+        maxRange = 5;
         effect = Resources.Load("Effects/Healing circle") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
         skillName = "Divine Recovery";
         description = "Who needs medicine when you have religion";
 
-        baseCooldown = 16;
+        baseCooldown = 7;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 25;
+        baseStaminaCost = 15;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }
@@ -108,12 +108,12 @@ public class DivineRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 6);
-        float upperBound = (data.GetCurrentTroopCount() / 4);
+        float lowerBound = (data.GetCurrentTroopCount() / 10);
+        float upperBound = (data.GetCurrentTroopCount() / 5);
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1.5f;
+        float magicModifier = data.GetCurrentMagic() * 1.2f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

@@ -16,13 +16,13 @@ public class SingleRecoverySkill : Skill
     public SingleRecoverySkill()
     {
         minRange = 0;
-        maxRange = 4;
+        maxRange = 5;
         effect = Resources.Load("Effects/Healing circle") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
         skillName = "Single Recovery";
         description = "Heal your injured, so they can get injured again";
 
-        baseCooldown = 3;
+        baseCooldown = 5;
         currentCooldown = baseCooldown;
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
@@ -121,12 +121,12 @@ public class SingleRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 25);
-        float upperBound = (data.GetCurrentTroopCount() / 20);
+        float lowerBound = (data.GetCurrentTroopCount() / 10);
+        float upperBound = (data.GetCurrentTroopCount() / 5);
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1.5f;
+        float magicModifier = data.GetCurrentMagic() * 2f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

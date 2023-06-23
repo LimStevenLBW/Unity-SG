@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
@@ -8,14 +6,16 @@ using System;
  * Global Game settings object persists across scenes. Data is saved to filesystem.
  * Alert all subscribed objects when settings are changed
  */
-public class GamePersistentData : MonoBehaviour
+public class GameSettings : MonoBehaviour
 {
-    private Deck playerDeck;
+    private int saveFileHeader = 0;
+    private int MASTER_VOLUME = 3;
+    private int BGM_VOLUME = 3;
+    private int SFX_VOLUME = 3;
 
-    public void SetPlayerDeck(Deck deck) { playerDeck = deck; }
-    public Deck GetPlayerDeck() { return playerDeck; }
+    public Action OnSettingsChanged;
 
-    public static GamePersistentData Instance { get; private set; }
+    public static GameSettings Instance { get; private set; }
 
     // Start is called before the first frame update
     void Awake()
@@ -33,19 +33,59 @@ public class GamePersistentData : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+
     void Start()
     {
-    
+        try
+        {
+            Load(); //Load Settings at the start
+        }
+        catch (FileNotFoundException ex)
+        {
+            //No user settings have been saved
+            Debug.LogException(ex, this);
+
+        }
 
     }
 
+    public int GetMasterVolume()
+    {
+        return MASTER_VOLUME;
+    }
+
+    public void SetMasterVolume(float volumeLevel)
+    {
+        MASTER_VOLUME = (int)volumeLevel;
+        OnSettingsChanged?.Invoke();
+    }
+
+    public int GetBGMVolume()
+    {
+        return BGM_VOLUME;
+    }
+
+    public void SetBGMVolume(float volumeLevel)
+    {
+        BGM_VOLUME = (int)volumeLevel;
+        OnSettingsChanged?.Invoke();
+    }
+
+    public void SetSFXVolume(float volumeLevel)
+    {
+        SFX_VOLUME = (int)volumeLevel;
+        OnSettingsChanged?.Invoke();
+    }
+    public int GetSFXVolume()
+    {
+        return SFX_VOLUME;
+    }
 
     /*
      * Saves game settings to application file system
      */
     public void Save()
     {
-        /*
         string path = Path.Combine(Application.persistentDataPath, "settings.sav");
         using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.Create)))
         {
@@ -55,7 +95,6 @@ public class GamePersistentData : MonoBehaviour
             writer.Write(SFX_VOLUME);
         }
         OnSettingsChanged?.Invoke();
-        */
     }
 
     /*
@@ -63,7 +102,6 @@ public class GamePersistentData : MonoBehaviour
      */
     public void Load()
     {
-        /*
         string path = Path.Combine(Application.persistentDataPath, "settings.sav");
         using (BinaryReader reader = new BinaryReader(File.OpenRead(path)))
         {
@@ -74,14 +112,13 @@ public class GamePersistentData : MonoBehaviour
         }
 
         OnSettingsChanged?.Invoke();
-        */
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-   
+
 }

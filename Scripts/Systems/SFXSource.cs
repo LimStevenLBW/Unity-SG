@@ -9,6 +9,7 @@ public class SFXSource : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UpdateSoundSettings();
         GameSettings.Instance.OnSettingsChanged += UpdateSoundSettings;
     }
 

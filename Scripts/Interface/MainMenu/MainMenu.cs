@@ -11,6 +11,8 @@ public class MainMenu : MonoBehaviour
     public GameObject promptText;
     public GameObject studioText;
     public MenuPanel menuPanel;
+
+    private bool inDifferentArea = false;
     [SerializeField] private MenuReturnButton menuReturnButton;
     [SerializeField] private ArcadeRosterStart arcadeRosterStart;
     [SerializeField] private ArcadeRosterReroll arcadeRosterReroll;
@@ -28,6 +30,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private AudioSource AudioSource;
     [SerializeField] private AudioClip AudioSelect;
     [SerializeField] private TransitionBlack transition;
+    [SerializeField] DropRate dropRateTool;
+
+    private Deck arcadeDeck;
+    private int deckSize = 25;
     // Start is called before the first frame update
 
     void Awake()
@@ -35,11 +41,15 @@ public class MainMenu : MonoBehaviour
         arcadePanel.SetActive(false);
         arcadeStartButton.Init(this);
         settingsMenu.Hide();
+        settingsMenu.Init();
+
+        guildRoster.Hide();
         menuPanel.Init(this);
 
         arcadeRosterReroll.Init(this);
         arcadeRosterStart.Init(this);
         menuReturnButton.Init(this);
+
         titleText.SetActive(false);
         promptText.SetActive(false);
         studioText.SetActive(false);
@@ -47,6 +57,7 @@ public class MainMenu : MonoBehaviour
     }
     void Start()
     {
+        arcadeDeck = RandomizeArcadeDeck();
         titleText.SetActive(true);
         StartCoroutine(Introduction());
     }    
@@ -90,6 +101,8 @@ public class MainMenu : MonoBehaviour
 
     public void StartGuildRoster()
     {
+        transition.ResetPosition();
+        inDifferentArea = true;
         StartCoroutine(TransitionIntoGuildRoster());
     }
     
@@ -109,7 +122,7 @@ public class MainMenu : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
         guildRoster.Show();
-        guildRoster.Init();
+        guildRoster.Init(arcadeDeck.unitList);
         yield return new WaitForSeconds(0.2f);
 
         arcadeRosterStart.Show();
@@ -152,6 +165,7 @@ public class MainMenu : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+
         arcadePanel.SetActive(false);
         guildRoster.Hide();
         arcadeStartButton.Hide();
@@ -168,13 +182,37 @@ public class MainMenu : MonoBehaviour
         menuReturnButton.Hide();
         menuPanel.Show();
 
-        mainCamera.ResetPosition();
+        if (inDifferentArea) StartCoroutine(Transition());
+        else mainCamera.ResetPosition();
+
     }
 
     public void RerollGuildRoster()
     {
-        guildRoster.Reroll();
+        arcadeDeck = RandomizeArcadeDeck();
+        guildRoster.Init(arcadeDeck.unitList);
+        guildRoster.AnimateReroll();
+    }
+
+    IEnumerator Transition()
+    {
+        transition.Enter();
+        yield return new WaitForSeconds(0.5f);
+        transition.Exit();
+        inDifferentArea = false;
+        mainCamera.ResetPosition();
     }
 
 
+    public Deck RandomizeArcadeDeck()
+    {
+        Deck arcadeDeck = dropRateTool.GetRandomDeck(deckSize);
+        //Store new Arcade Deck
+        GamePersistentData.Instance.SetArcadeDeck(arcadeDeck);
+
+        return arcadeDeck;
+        //DeckDataStore arcadeDeck = new DeckDataStore(playerDeckBase);
+        //arcadeDeck.SortByClassAndRank();
+
+    }
 }

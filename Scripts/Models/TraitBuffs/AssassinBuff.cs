@@ -24,7 +24,7 @@ public class AssassinBuff : TraitBuff
         string className = data.unitClass.traitName;
         float power = data.GetCurrentPower();
 
-        if (traitLevel >= 2 && className == "Assassin") data.SetCurrentPower(power + 10);
+        if (traitLevel >= 2 && className == "Assassin") data.SetCurrentPower(power + 5);
     }
     public override void ApplyEffectOnCombatEnd(UnitManager manager, UnitController controller)
     {
@@ -43,7 +43,7 @@ public class AssassinBuff : TraitBuff
         UnitDataStore data = controller.data;
         string className = data.unitClass.traitName;
         float power = data.GetCurrentPower();
-        if (traitLevel >= 2 && className == "Assassin") data.SetCurrentPower(power - 10);
+        if (traitLevel >= 2 && className == "Assassin") data.SetCurrentPower(power - 5);
     }
 
 
@@ -51,7 +51,7 @@ public class AssassinBuff : TraitBuff
     {
         if (traitLevel == 0) return "";
         else if (traitLevel == 1) return "Assassins are evasive and hard to touch";
-        else if (traitLevel == 2) return "Assassins gain 10 POW";
+        else if (traitLevel == 2) return "Assassins gain 5 POW";
 
         return effectText;
     }

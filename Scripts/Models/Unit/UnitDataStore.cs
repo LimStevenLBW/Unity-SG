@@ -186,6 +186,7 @@ public class UnitDataStore: IComparable<UnitDataStore>
             case 203: return new DivineRecoverySkill();
             case 300: return new ExplosionSkill();
             case 301: return new ElectroBoltSkill();
+            case 302: return new HolyBoltSkill();
             case 400: return new ShieldWallSkill();
             case 401: return new PumpedUpSkill();
         }
@@ -247,7 +248,10 @@ public class UnitDataStore: IComparable<UnitDataStore>
     public void SetExp(float value) { exp = value; }
 
     public float GetCurrentPower() { return currentPower; }
-    public void SetCurrentPower(float value) { currentPower = value; }
+    public void SetCurrentPower(float value) {
+        if (value < 0) value = 0;
+        currentPower = value;
+    }
     public float GetPower() { return Power; }
     public void SetPower(float value) { Power = value; }
 
@@ -336,8 +340,11 @@ public class UnitDataStore: IComparable<UnitDataStore>
 
         int rankCompare = other.GetRank().CompareTo(GetRank());
         int classCompare = unitClass.traitName.CompareTo(other.unitClass.traitName);
+        int nameCompare = unitName.CompareTo(other.unitName);
 
-        if (rankCompare == 0 && classCompare == 0) return 0; //Completely equal
+        if (rankCompare == 0 && classCompare == 0 && nameCompare == 0) return 0; //Completely equal
+        if (rankCompare == 0 && classCompare == 0 && nameCompare > 0) return 1;
+        if (rankCompare == 0 && classCompare == 0 && nameCompare < 0) return -1;
         if (rankCompare == 0 && classCompare < 0) return -1;
         if (rankCompare == 0 && classCompare > 0) return 1;
 

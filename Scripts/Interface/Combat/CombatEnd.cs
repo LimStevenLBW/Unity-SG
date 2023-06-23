@@ -12,28 +12,39 @@ public class CombatEnd : MonoBehaviour
     public TextMeshProUGUI damageTotal;
     public TextMeshProUGUI timeTotal;
     public TransitionBlack transition;
-    //private bool isInputAllowed = false;
-    //private bool restartOnInput = false;
-   // private bool nextStageOnInput = false;
 
+    public CardDropScreen cardDropScreen;
+
+    public GuildRoster guildRoster;
+    public GuildRoster guildRosterBench;
+    private bool isInputAllowed = false;
+
+    public NextStageButton nextStageButton;
+
+    //We dont use the same playerDeck as combat and director
+    private DeckDataStore playerDeck;
 
     public void SetDamageDone(float damageDone) {
         this.damageDone = damageDone;
     }
+
     public void SetTimeElapsed(float timeElapsed) {
         this.timeElapsed = timeElapsed;
         timeTotal.SetText(timeElapsed + " Seconds Elapsed");
     }
+
     public void DisplayGameOver() {
         gameObject.SetActive(true);
         gameover.gameObject.SetActive(true);
         StartCoroutine(Restart());
     }
+
     public void DisplayVictory()
     {
         gameObject.SetActive(true);
         victory.gameObject.SetActive(true);
-        StartCoroutine(NextStage());
+
+        StartCoroutine(CloseVictoryScreen());
     }
 
     IEnumerator Restart()
@@ -47,35 +58,91 @@ public class CombatEnd : MonoBehaviour
         Director.Instance.RestartGame();
     }
 
-    IEnumerator NextStage()
+    IEnumerator CloseVictoryScreen()
     {
-        //Delay before input is allowed
-        yield return new WaitForSeconds(1.0f);
+        //Delay before closing the screen
+        yield return new WaitForSeconds(2.5f);
 
-        //Delay before next stage starts
-        yield return new WaitForSeconds(1.0f);
-        transition.Enter();
-        Director.Instance.ClearStage();
-        yield return new WaitForSeconds(2f);
-
-        //Close the combat screen
+        //Close the victory screen
         victory.gameObject.SetActive(false);
         timeElapsed = 0;
         timeTotal.SetText("");
 
-        //TEMP///////
-        Director.Instance.tempCurrentStageID++;
-
-        if (Director.Instance.tempCurrentStageID > 3)
+        //TEMPORARY WAY OF CHECKING STAGES///////
+       
+        if (Director.Instance.tempCurrentStageID > 4) //End Game
         {
             Director.Instance.EndGame();
-
         }
         else
         {
-            Director.Instance.ChangeWeather(Director.Instance.tempCurrentStageID);
+            DisplayDrops();
+            Director.Instance.tempCurrentStageID++;
         }
-        //TEMP////////
+    }
+
+    public void DisplayDrops()
+    {
+        StartCoroutine(DisplayDropScreen());
+    }
+
+    IEnumerator DisplayDropScreen()
+    {
+        Director.Instance.ClearUnitWindow();
+        cardDropScreen.gameObject.SetActive(true);
+        cardDropScreen.GenerateRandomDrops();
+
+        yield return new WaitForSeconds(0.5f);
+
+        //Input enabled
+        isInputAllowed = true;
+    }
+
+    /*
+     * 
+     */
+    void ShowRosterEdit()
+    {
+        Deck playerDeckBase = GamePersistentData.Instance.GetArcadeDeck();
+        //We create a fresh copy
+        playerDeck = new DeckDataStore(playerDeckBase);
+
+        //Add drops to the playerdeck
+        List<Unit> drops = cardDropScreen.GetDrops();
+        playerDeck.AddDrops(drops);
+
+        //Display Guild Rosters
+        guildRoster.Show();
+        guildRosterBench.Show();
+        guildRoster.Init(playerDeck.unitList);
+        guildRosterBench.Init(playerDeck.benchedUnitList);
+    }
+
+    public void NextStage()
+    {
+        if (guildRoster.GetCount() == 25) StartCoroutine(NextStageTransition());
+        else
+        {
+            guildRoster.DisplayCountError();
+            nextStageButton.Show();
+        }
+    }
+
+    IEnumerator NextStageTransition()
+    {
+        nextStageButton.Hide();
+        Director.Instance.ChangeSong();
+        transition.Enter();
+        yield return new WaitForSeconds(2f);
+
+        //SAVE GUILD ROSTER CHANGES
+        GamePersistentData.Instance.SetArcadeDeck(playerDeck);
+
+        Director.Instance.ClearStage();
+
+        guildRoster.Hide();
+        guildRosterBench.Hide();
+        Director.Instance.ChangeWeather();
 
         transition.Exit();
 
@@ -99,6 +166,13 @@ public class CombatEnd : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0)) && isInputAllowed)
+        {
+            cardDropScreen.gameObject.SetActive(false);
+            ShowRosterEdit();
+            nextStageButton.Show();
+            isInputAllowed = false;
+        }
         
     }
 }

@@ -636,6 +636,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AudioPlayer: {fileID: 936927720}
   BGM: {fileID: 8300000, guid: ff3477add19e76040b08beb3620bdbd1, type: 3}
+  BGM2: {fileID: 0}
+  baseVolumeLevel: 0.05
+  bgmSelect: 1
+  startingTime: 13.21
 --- !u!82 &936927720
 AudioSource:
   m_ObjectHideFlags: 0

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6c84092c7e85ed4ba551363560a36df, type: 3}
+  m_Name: Mob Stage 1 Deck
+  m_EditorClassIdentifier: 
+  unitList:
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: 1f6bc60048de6d24da99622597b2f0d2, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: bdc7d759f0d576f439fde6640a131b7c, type: 2}
+  - {fileID: 11400000, guid: d7cb7882d647c2a43b3edae5c6757cda, type: 2}
+  - {fileID: 11400000, guid: d7cb7882d647c2a43b3edae5c6757cda, type: 2}
+  - {fileID: 11400000, guid: d7cb7882d647c2a43b3edae5c6757cda, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}
+  - {fileID: 11400000, guid: 6423bdf458cf7d24496a883b453bc65f, type: 2}
+  - {fileID: 11400000, guid: 6423bdf458cf7d24496a883b453bc65f, type: 2}
+  - {fileID: 11400000, guid: 6423bdf458cf7d24496a883b453bc65f, type: 2}
+  - {fileID: 11400000, guid: 6423bdf458cf7d24496a883b453bc65f, type: 2}
+  - {fileID: 11400000, guid: 6423bdf458cf7d24496a883b453bc65f, type: 2}
+  benchedUnitList: []
+  captain: {fileID: 11400000, guid: c87763c590078314e8f10092c66e8d42, type: 2}

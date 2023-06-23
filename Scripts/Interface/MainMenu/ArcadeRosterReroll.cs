@@ -53,9 +53,10 @@ public class ArcadeRosterReroll : UIButton
             isOnCooldown = true;
             StopAllCoroutines();
             StartCoroutine(Rerolling());
+            mainMenu.RerollGuildRoster();
         }
  
-        mainMenu.RerollGuildRoster();
+       
 
     }
 

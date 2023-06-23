@@ -42,7 +42,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     void OnEnable()
     {
-        AudioPlayer.PlayOneShot(AudioAppear);
+        if(AudioPlayer && AudioAppear) AudioPlayer.PlayOneShot(AudioAppear);
 
     }
 
@@ -106,7 +106,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void Select()
     {
-        AudioPlayer.PlayOneShot(AudioSelect); //Always play selected sound
+        if(AudioSelect != null) AudioPlayer.PlayOneShot(AudioSelect); //Always play selected sound
         cardSelectOrder = Director.Instance.IncCardSelectOrder();
         isSelected = true;
         
@@ -147,6 +147,19 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             SetupCard();
         }
     }
+
+
+    //Acquire a card without drawing from the deck
+    public void GetCard(UnitDataStore unitToStore)
+    {
+        unit = unitToStore;
+   
+        if (unit != null)
+        {
+            SetupCard();
+        }
+    }
+
 
     public void SetupCard()
     {

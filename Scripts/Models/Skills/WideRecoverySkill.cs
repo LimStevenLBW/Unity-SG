@@ -13,18 +13,19 @@ public class WideRecoverySkill : Skill
 {
     float staminaResult;
     private AudioClip hitSFX;
+
     public WideRecoverySkill()
     {
         minRange = 0;
-        maxRange = 4;
+        maxRange = 5;
         effect = Resources.Load("Effects/Healing circle") as GameObject;
         hitSFX = (AudioClip)Resources.Load("Sounds/undertale/starfalling");
         skillName = "Wide Recovery";
         description = "We come with great healthcare too!";
 
-        baseCooldown = 13;
+        baseCooldown = 6;
         currentCooldown = baseCooldown;
-        baseStaminaCost = 25;
+        baseStaminaCost = 15;
         currentStaminaCost = baseStaminaCost;
         isRunning = false;
     }
@@ -114,10 +115,10 @@ public class WideRecoverySkill : Skill
 
         //Base healing
         float lowerBound = (data.GetCurrentTroopCount() / 15);
-        float upperBound = (data.GetCurrentTroopCount() / 10);
+        float upperBound = (data.GetCurrentTroopCount() / 12);
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1.5f;
+        float magicModifier = data.GetCurrentMagic() * 1.2f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

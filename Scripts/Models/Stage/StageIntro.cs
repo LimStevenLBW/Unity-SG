@@ -31,7 +31,7 @@ public class StageIntro : MonoBehaviour
         playerTroopCount.SetText(playerDeck.GetTroopSize().ToString()+ " Total Troops");
         enemyTroopCount.SetText(enemyDeck.GetTroopSize().ToString()+ " Total Troops");
 
-        if (Director.Instance.stageNum == 3) stageNum.SetText("Final Stage");
+        if (Director.Instance.stageNum == 5) stageNum.SetText("Final Stage");
         else
         {
             stageNum.SetText("Stage " + Director.Instance.stageNum.ToString());

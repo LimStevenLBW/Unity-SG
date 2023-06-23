@@ -60,16 +60,21 @@ public class RouteColumn : MonoBehaviour
         this.id = id;
 
         //Hard coded stages for now
-        if(id == 1)
-        {
-            InstantiateRoute("Route Display/1 Stage");
+        if(id == 1) {
+            InstantiateRoute("Route Display/1 Route Stage 1");
         }
         else if(id == 2) {
-            InstantiateRoute("Route Display/1 Stage test 2");
+            InstantiateRoute("Route Display/1 Route Stage 2");
         }
-        else if(id == 3)
+        else if(id == 3) {
+            InstantiateRoute("Route Display/1 Route Stage 3");
+        }
+        else if (id == 4) {
+            InstantiateRoute("Route Display/1 Route Stage 4");
+        }
+        else if (id == 5)
         {
-            InstantiateRoute("Route Display/1 Stage test 3");
+            InstantiateRoute("Route Display/1 Route Stage 5");
         }
 
     }

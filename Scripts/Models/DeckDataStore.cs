@@ -7,7 +7,8 @@ public class DeckDataStore
     private Deck deckBase;
 
     public List<UnitDataStore> unitList;
-    public List<UnitDataStore> routedList;
+    public List<UnitDataStore> benchedUnitList; //Units that are not currently deployed in the deck
+    //public List<UnitDataStore> drawnList;
     public UnitDataStore captain;
 
     private int troopCount;
@@ -15,6 +16,8 @@ public class DeckDataStore
     public DeckDataStore(Deck deckBase)
     {
         unitList = new List<UnitDataStore>();
+        benchedUnitList = new List<UnitDataStore>();
+       // drawnList = new List<UnitDataStore>();
         this.deckBase = deckBase;
 
         //Cycle through and create our working deck
@@ -25,7 +28,24 @@ public class DeckDataStore
             unitList.Add(new UnitDataStore(unit));
         }
 
+        foreach (Unit unit in deckBase.benchedUnitList)
+        {
+            if (unit == null) Debug.Log("null");
+
+            benchedUnitList.Add(new UnitDataStore(unit));
+        }
+
+
         //captain = new UnitDataStore(deckBase.captain);
+    }
+
+    public void AddDrops(List<Unit> benchList)
+    {
+        foreach (Unit unit in benchList)
+        {
+            benchedUnitList.Add(new UnitDataStore(unit));
+        }
+
     }
 
     public bool IsEmpty()
@@ -66,7 +86,15 @@ public class DeckDataStore
         int n = unitList.Count;
         UnitDataStore unit = unitList[n - 1];
         unitList.RemoveAt(n - 1);
+
+     //   drawnList.Add(unit);
         return unit;
+    }
+
+    //Return cards that were drawn into the deck
+    public void ReturnCardsToDeck()
+    {
+      //  foreach (UnitDataStore unit in drawnList) unitList.Add(unit);
     }
 
     public void UpdateTroopCount()
@@ -91,11 +119,6 @@ public class DeckDataStore
     public int GetDeckCount()
     {
         return unitList.Count;
-    }
-
-    public int GetRoutedCount()
-    {
-        return routedList.Count;
     }
 
 }

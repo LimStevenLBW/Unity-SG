@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45986c638a0a24542b013af47eb9b13a, type: 3}
   m_Name: K Elite Archer
   m_EditorClassIdentifier: 
-  model: {fileID: 4548413487223015017, guid: 02b662c136c5e3b4a9dbc67ced8384bc, type: 3}
+  model: {fileID: 514068146033986533, guid: 0ca5f9dbe83760842adf1fe5cf8d4094, type: 3}
   unitClass: {fileID: 11400000, guid: 759bd5bc9f0f58041974945393c9e58e, type: 2}
   faction: {fileID: 11400000, guid: 1cac8b9a9a51c9e49934ec4d93da0522, type: 2}
   special: {fileID: 11400000, guid: a2dcf144552abbd4589e6df8e5208988, type: 2}
