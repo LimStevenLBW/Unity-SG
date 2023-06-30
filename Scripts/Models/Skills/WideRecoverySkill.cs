@@ -23,7 +23,7 @@ public class WideRecoverySkill : Skill
         skillName = "Wide Recovery";
         description = "We come with great healthcare too!";
 
-        baseCooldown = 6;
+        baseCooldown = 5.5f;
         currentCooldown = baseCooldown;
         baseStaminaCost = 15;
         currentStaminaCost = baseStaminaCost;
@@ -115,10 +115,10 @@ public class WideRecoverySkill : Skill
 
         //Base healing
         float lowerBound = (data.GetCurrentTroopCount() / 15);
-        float upperBound = (data.GetCurrentTroopCount() / 12);
+        float upperBound = (data.GetCurrentTroopCount() / 10);
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1.2f;
+        float magicModifier = data.GetCurrentMagic() * 1.5f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

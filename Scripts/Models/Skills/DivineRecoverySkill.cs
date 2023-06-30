@@ -22,7 +22,7 @@ public class DivineRecoverySkill : Skill
         skillName = "Divine Recovery";
         description = "Who needs medicine when you have religion";
 
-        baseCooldown = 7;
+        baseCooldown = 6;
         currentCooldown = baseCooldown;
         baseStaminaCost = 15;
         currentStaminaCost = baseStaminaCost;
@@ -108,12 +108,12 @@ public class DivineRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 10);
-        float upperBound = (data.GetCurrentTroopCount() / 5);
+        float lowerBound = (data.GetCurrentTroopCount() / 12);
+        float upperBound = (data.GetCurrentTroopCount() / 7);
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1.2f;
+        float magicModifier = data.GetCurrentMagic() * 1.5f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

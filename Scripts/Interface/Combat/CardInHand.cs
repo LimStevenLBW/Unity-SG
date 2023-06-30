@@ -1,0 +1,228 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IComparable<CardInHand>
+{
+    public int cardNum; //Identify which card in the hand
+    public bool isComparingByOrder = true; //When set to true, sort methods will compare this object by cardSelectOrder, other it will use cardValue
+    public bool isSelected = false;
+    public int cardSelectOrder = 0;
+
+    public int cardValue = 0; //How much this card will be valued by the cpu to play, todo, currently valued at random
+    private int numberOfSelectable;
+    public DetailsFooter footer;
+    public PlayerHandPanel panel;
+    public UnitDataStore unit;
+    public PortraitRoom portraitRoom;
+    public CardSelectOrder cardSelectOrderDisplay;
+
+    public Image factionImageIcon;
+    public Image specialImageIcon;
+    public Image classImageIcon;
+
+    private Image bgImage;
+    private Sprite dRankBG;
+    private Sprite cRankBG;
+    private Sprite bRankBG;
+    private Sprite aRankBG;
+    private Sprite sRankBG;
+    [SerializeField] private TextMeshProUGUI rankLetter;
+
+
+    [SerializeField] private AudioSource AudioPlayer;
+    [SerializeField] private AudioClip AudioDeselect;
+    [SerializeField] private AudioClip AudioSelect;
+    [SerializeField] private AudioClip AudioAppear;
+
+
+    void OnEnable()
+    {
+        if(AudioPlayer && AudioAppear) AudioPlayer.PlayOneShot(AudioAppear);
+
+    }
+
+    void Awake()
+    {
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Card Art/pixelCardAssest_V01");
+        bgImage = GetComponent<Image>();
+        dRankBG = sprites[2];
+        cRankBG = sprites[81];
+        bRankBG = sprites[0];
+        aRankBG = sprites[4];
+        sRankBG = sprites[4];
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Director.Instance.OnCardDeselected += UpdateSelectOrder;
+        
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //Not allowed to see enemy cards
+        if (Director.Instance.GetPhase() != "ENEMYCARDSELECT")
+        {
+            footer.UpdateData(unit);
+            panel.UpdateDescription(unit);
+        }
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if(panel != null) panel.ResetText();
+        if(footer != null) footer.ResetText();
+    }
+    public void OnPointerDown(PointerEventData eventData)
+    {
+
+        if(Director.Instance.GetPhase() == "CARDSELECT")
+        {
+
+            if (!isSelected && Director.Instance.GetCardSelectOrder() < numberOfSelectable)
+            {
+                Select();
+            }
+            else if (isSelected)
+            {
+                Director.Instance.NotifyCardDeselected(cardSelectOrder);
+                Deselected();
+                AudioPlayer.PlayOneShot(AudioDeselect); //placed here to avoid the sound being used when called outside of pointer event
+            }
+        }
+    }
+
+    public void Select()
+    {
+        if(AudioSelect != null) AudioPlayer.PlayOneShot(AudioSelect); //Always play selected sound
+        cardSelectOrder = Director.Instance.IncCardSelectOrder();
+        isSelected = true;
+        
+        cardSelectOrderDisplay.gameObject.SetActive(true);
+        cardSelectOrderDisplay.UpdateOrder(cardSelectOrder);
+
+
+        Vector3 pos = transform.position;
+        transform.position = new Vector3(pos.x, pos.y + 25, pos.z);
+    }
+
+    public void Deselected()
+    {
+        cardSelectOrder = 0;
+        isSelected = false;
+
+        Vector3 pos = transform.position;
+        transform.position = new Vector3(pos.x, pos.y - 25, pos.z);
+
+        cardSelectOrderDisplay.gameObject.SetActive(false);
+    }
+
+    public void ClearCard()
+    {
+        unit = null;
+        gameObject.SetActive(false);
+    }
+
+    public void DrawCard(DeckDataStore deck)
+    {
+        //If this unit doesnt have any data, draw a card
+        if(unit == null)
+        {
+            if(!deck.IsEmpty()) unit = deck.DrawCard();
+        }
+
+        if (unit != null) {
+            SetupCard();
+        }
+    }
+
+
+    //Acquire a card without drawing from the deck
+    public void GetCard(UnitDataStore unitToStore)
+    {
+        unit = unitToStore;
+   
+        if (unit != null)
+        {
+            SetupCard();
+        }
+    }
+
+
+    public void SetupCard()
+    {
+        gameObject.SetActive(true);
+        UpdatePortrait();
+        unit.FindSkills();
+    }
+
+    void UpdatePortrait()
+    {
+        if (portraitRoom == null) Debug.Log("null?");
+        else {
+            portraitRoom.UpdatePortrait(unit);
+
+            if(unit.faction && factionImageIcon) factionImageIcon.sprite = unit.faction.icon;
+            else return;  //Skip filling image data if it is the enemy's hand
+
+            if(unit.special && specialImageIcon) specialImageIcon.sprite = unit.special.icon;
+            if(unit.unitClass && classImageIcon) classImageIcon.sprite = unit.unitClass.icon;
+
+            if (rankLetter)
+            {
+                string rankText = unit.GetRank();
+                if (rankText == "D") rankLetter.color = Color.grey;
+                if (rankText == "C") rankLetter.color = new Color32(222, 222, 222, 255);
+                if (rankText == "B") rankLetter.color = new Color32(73, 156, 255, 255);
+                if (rankText == "A") rankLetter.color = new Color32(255, 30, 0, 255);
+
+                rankLetter.SetText(unit.GetRank());
+            }
+
+            if (unit.GetRank() == "D") bgImage.sprite = dRankBG;
+            else if (unit.GetRank() == "C") bgImage.sprite = cRankBG;
+            else if (unit.GetRank() == "B") bgImage.sprite = bRankBG;
+            else if (unit.GetRank() == "A") bgImage.sprite = aRankBG;
+            else if (unit.GetRank() == "S") bgImage.sprite = sRankBG;
+        }
+    }
+
+    void UpdateSelectOrder(int ID)
+    {
+        if(cardSelectOrder > ID)
+        {
+            cardSelectOrder--;
+            cardSelectOrderDisplay.UpdateOrder(cardSelectOrder);
+        }
+    }
+
+    public int CompareTo(CardInHand other)
+    {
+        
+        if(isComparingByOrder) return other.cardSelectOrder.CompareTo(cardSelectOrder);
+        else
+        {
+            //Compare by card value
+            //
+            //Currently the cpu won't calculate that
+            return other.cardSelectOrder.CompareTo(cardSelectOrder);
+        }
+    }
+
+    public void SetNumberOfSelectable(int selectable)
+    {
+        numberOfSelectable = selectable;
+    }
+}

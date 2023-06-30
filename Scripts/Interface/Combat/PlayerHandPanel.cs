@@ -11,7 +11,7 @@ public class PlayerHandPanel : MonoBehaviour
     public UnitManager unitManager;
 
     public DeckDataStore myDeck;
-    public Card[] cards = new Card[5];
+    public CardInHand[] cards = new CardInHand[5];
     public DeckCountDisplay deckCounter;
 
     public TextMeshProUGUI traitsText;
@@ -26,7 +26,7 @@ public class PlayerHandPanel : MonoBehaviour
     {
         myDeck = deck;
         deckCounter.UpdateCount(deck.GetDeckCount());
-        foreach (Card c in cards)
+        foreach (CardInHand c in cards)
         {
             c.ClearCard();
             c.SetNumberOfSelectable(playerSelectAmount); //not used by cpu
@@ -51,7 +51,7 @@ public class PlayerHandPanel : MonoBehaviour
     public void RearrangeCards()
     {
         List<UnitDataStore> unitList = new List<UnitDataStore>();
-        foreach(Card c in cards)
+        foreach(CardInHand c in cards)
         {
             if (c.unit != null)
             {
@@ -76,7 +76,7 @@ public class PlayerHandPanel : MonoBehaviour
     IEnumerator DrawFull()
     {
         //We draw cards from left to right 
-        foreach (Card c in cards)
+        foreach (CardInHand c in cards)
         {
             yield return new WaitForSeconds(.105f);
 
@@ -104,8 +104,8 @@ public class PlayerHandPanel : MonoBehaviour
      */
     public Queue<UnitDataStore> PlayCards()
     {
-        List<Card> selectedCards = new List<Card>();
-        foreach (Card c in cards)
+        List<CardInHand> selectedCards = new List<CardInHand>();
+        foreach (CardInHand c in cards)
         {
             if (c.isSelected)
             {
@@ -118,7 +118,7 @@ public class PlayerHandPanel : MonoBehaviour
         selectedCards.Sort();
         Queue<UnitDataStore> unitQueue = new Queue<UnitDataStore>();
 
-        foreach(Card c in selectedCards)
+        foreach(CardInHand c in selectedCards)
         {
             unitQueue.Enqueue(c.unit);
             c.ClearCard();
@@ -150,9 +150,9 @@ public class PlayerHandPanel : MonoBehaviour
         yield return new WaitForSeconds(1.1f);
         int randomValue;
 
-        List<Card> selectionPriority = new List<Card>();
+        List<CardInHand> selectionPriority = new List<CardInHand>();
         //Fill each card with a random value
-        foreach(Card c in cards)
+        foreach(CardInHand c in cards)
         {
             if (c.unit != null)
             {
@@ -180,7 +180,7 @@ public class PlayerHandPanel : MonoBehaviour
     {
         if (isPlayer) {
             playerSelectAmount = amount;
-            foreach(Card c in cards)
+            foreach(CardInHand c in cards)
             {
                 c.SetNumberOfSelectable(playerSelectAmount);
             }

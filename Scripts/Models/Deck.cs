@@ -5,8 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Deck", menuName = "Deck")]
 public class Deck : ScriptableObject
 {
+    private List<Card> cardList;
+
     public List<Unit> unitList;
+    public List<Cantrip> cantripList;
+    //public List<Relic> relicList;
+
     public List<Unit> benchedUnitList; //Units that are not currently deployed in the deck
+
     public Unit captain;
 
     private void Init(List<Unit> unitList)

@@ -122,7 +122,7 @@ public class MainMenu : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
         guildRoster.Show();
-        guildRoster.Init(arcadeDeck.unitList);
+        guildRoster.Init(arcadeDeck.cardList);
         yield return new WaitForSeconds(0.2f);
 
         arcadeRosterStart.Show();

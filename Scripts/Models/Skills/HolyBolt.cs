@@ -123,7 +123,7 @@ public class HolyBoltSkill : Skill
         upperBound = (data.GetMaxTroopCount() / 10);
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 1.2f;
+        float magicModifier = data.GetCurrentMagic() * 1f;
 
         //Setup troop count modifier
         float tcCompareMult = (data.GetCurrentTroopCount() - enemy.GetCurrentTroopCount()) * 0.05f;

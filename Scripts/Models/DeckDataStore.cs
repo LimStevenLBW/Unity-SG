@@ -5,8 +5,11 @@ using UnityEngine;
 public class DeckDataStore
 {
     private Deck deckBase;
+    private List<Card> cardList;
+    private List<Card> benchedCardList;
 
     public List<UnitDataStore> unitList;
+    public List<CantripDataStore> cantripList;
     public List<UnitDataStore> benchedUnitList; //Units that are not currently deployed in the deck
     //public List<UnitDataStore> drawnList;
     public UnitDataStore captain;
@@ -27,6 +30,8 @@ public class DeckDataStore
  
             unitList.Add(new UnitDataStore(unit));
         }
+
+        foreach (Cantrip cantrip in deckBase.cantripList) cantripList.Add(new CantripDataStore(cantrip));
 
         foreach (Unit unit in deckBase.benchedUnitList)
         {
@@ -119,6 +124,11 @@ public class DeckDataStore
     public int GetDeckCount()
     {
         return unitList.Count;
+    }
+
+    public List<Card> GetDeck()
+    {
+        return cardList;
     }
 
 }

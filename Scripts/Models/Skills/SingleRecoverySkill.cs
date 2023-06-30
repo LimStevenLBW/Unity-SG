@@ -22,7 +22,7 @@ public class SingleRecoverySkill : Skill
         skillName = "Single Recovery";
         description = "Heal your injured, so they can get injured again";
 
-        baseCooldown = 5;
+        baseCooldown = 4.5f;
         currentCooldown = baseCooldown;
         baseStaminaCost = 5;
         currentStaminaCost = baseStaminaCost;
@@ -121,12 +121,12 @@ public class SingleRecoverySkill : Skill
         position.x += (float)0.5; 
 
         //Base healing
-        float lowerBound = (data.GetCurrentTroopCount() / 10);
-        float upperBound = (data.GetCurrentTroopCount() / 5);
+        float lowerBound = (data.GetCurrentTroopCount() / 15);
+        float upperBound = (data.GetCurrentTroopCount() / 10);
 
 
         //Setup magic modifier
-        float magicModifier = data.GetCurrentMagic() * 2f;
+        float magicModifier = data.GetCurrentMagic() * 1.5f;
         lowerBound += magicModifier;
         upperBound += magicModifier;
 

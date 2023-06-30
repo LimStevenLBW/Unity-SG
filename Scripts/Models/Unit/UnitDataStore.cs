@@ -180,6 +180,8 @@ public class UnitDataStore: IComparable<UnitDataStore>
             case 102: return new VolleySkill();
             case 103: return new RapidFireVolleySkill();
             case 104: return new ThrowingDaggersSkill();
+            case 105: return new DropKickSkill();
+            case 106: return new RapidClashSkill();
             case 200: return new SelfRecoverySkill();
             case 201: return new SingleRecoverySkill();
             case 202: return new WideRecoverySkill();

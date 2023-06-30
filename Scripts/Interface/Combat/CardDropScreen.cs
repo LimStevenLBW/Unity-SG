@@ -8,9 +8,9 @@ public class CardDropScreen : MonoBehaviour
     public DropRate dropRateStage2;
     public DropRate dropRateStage3;
     public DropRate dropRateStage4;
-    public Card drop1;
-    public Card drop2;
-    public Card drop3;
+    public CardInHand drop1;
+    public CardInHand drop2;
+    public CardInHand drop3;
 
     public List<Unit> dropSelection;
 

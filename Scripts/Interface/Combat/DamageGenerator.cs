@@ -23,6 +23,16 @@ public class DamageGenerator : MonoBehaviour
         Destroy(popup, 1f); //Destroy after one second
     }
 
+    public void CreatePopup(Vector3 position, string text, Color color, int fontSizeModifier)
+    {
+        var popup = Instantiate(prefab, position, Quaternion.identity);
+        var temp = popup.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        temp.text = text;
+        temp.fontSize += fontSizeModifier;
+        temp.faceColor = color;
+        Destroy(popup, 1f); //Destroy after one second
+    }
+
     // Start is called before the first frame update
     void Start()
     {
