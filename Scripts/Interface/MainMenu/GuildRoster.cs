@@ -3,32 +3,45 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-//Guild Roster works with UnitDataStores but can still receive List<Unit>
+//Guild Roster manages one deck datastore's display
 public class GuildRoster : MonoBehaviour
 {
-    //Guild Roster can be optionally connected to another list to transfer elemenets
+    //Guild Roster can be optionally connected to another list to transfer elements
     [SerializeField] private bool editable;
     [SerializeField] private GuildRoster otherRoster;
-
     [SerializeField] private Animator animator;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip audioError;
-    [SerializeField] private GuildRosterContentGroup gridContent;
+    [SerializeField] private GuildRosterContentGroup rosterContent;
    
     [SerializeField] private TextMeshProUGUI countText;
     private int count;
 
+    private DeckDataStore deck;
+
     List<UnitDataStore> unitListDataStore = new List<UnitDataStore>();
+
+    //Receive the deck and refresh the list
+    public void Init(DeckDataStore deck)
+    {
+        this.deck = deck;
+
+        rosterContent.Clear();
+        rosterContent.Setup(deck.GetCardList());
+        rosterContent.DisplayDelayed();
+
+        UpdateCount();
+    }
 
     public void Init(List<Unit> unitList)
     {
         unitListDataStore.Clear();
         foreach(Unit unit in unitList) unitListDataStore.Add(new UnitDataStore(unit));
 
-        gridContent.Clear();
+        rosterContent.Clear();
 
-        gridContent.Setup(unitListDataStore);
-        gridContent.DisplayDelayed();
+        rosterContent.Setup(unitListDataStore);
+        rosterContent.DisplayDelayed();
 
         UpdateCount();
     }
@@ -38,10 +51,10 @@ public class GuildRoster : MonoBehaviour
         unitListDataStore.Clear();
         unitListDataStore = unitList;
 
-        gridContent.Clear();
+        rosterContent.Clear();
 
-        gridContent.Setup(unitListDataStore);
-        gridContent.DisplayDelayed();
+        rosterContent.Setup(unitListDataStore);
+        rosterContent.DisplayDelayed();
 
         UpdateCount();
     }
@@ -51,10 +64,10 @@ public class GuildRoster : MonoBehaviour
     {
         unitListDataStore.Add(data);
 
-        gridContent.Clear();
+        rosterContent.Clear();
 
-        gridContent.Setup(unitListDataStore);
-        gridContent.DisplayImmediate();
+        rosterContent.Setup(unitListDataStore);
+        rosterContent.DisplayImmediate();
 
         UpdateCount();
     }
@@ -62,10 +75,10 @@ public class GuildRoster : MonoBehaviour
     public void Transfer(UnitDataStore data)
     {
         unitListDataStore.Remove(data);
-        gridContent.Clear();
+        rosterContent.Clear();
 
-        gridContent.Setup(unitListDataStore);
-        gridContent.DisplayImmediate();
+        rosterContent.Setup(unitListDataStore);
+        rosterContent.DisplayImmediate();
 
         otherRoster.Add(data);
 
@@ -112,7 +125,7 @@ public class GuildRoster : MonoBehaviour
     {
         if(countText != null)
         {
-            count = unitListDataStore.Count;
+            count = deck.GetCardList().Count;
             countText.SetText(count + "/25");
 
             if (count < 25 || count > 25) countText.color = Color.red;

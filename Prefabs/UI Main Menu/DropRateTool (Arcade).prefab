@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &237119138234939198
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 237119138234939197}
+  - component: {fileID: 237119138234939196}
+  m_Layer: 31
+  m_Name: DropRateTool (Arcade)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &237119138234939197
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237119138234939198}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 347, y: 281}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &237119138234939196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237119138234939198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0cefbce2ee4e241b9bf0cb0a76c278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitDictionary:
+    keys:
+    - {fileID: 11400000, guid: 556f2e22a81d28842ad088940c2fb545, type: 2}
+    - {fileID: 11400000, guid: cd2a681a1b01155418b4a8824491637c, type: 2}
+    - {fileID: 11400000, guid: 8ca2c4834c4ed214e91c9eead1f69d80, type: 2}
+    - {fileID: 11400000, guid: 1891fa7fbc582714fa5c7947d1c491f4, type: 2}
+    - {fileID: 11400000, guid: 831330ba475c71440add4d6b272d27e3, type: 2}
+    - {fileID: 11400000, guid: 83dc065c3e0ea6549a1c79bc36bf4637, type: 2}
+    - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
+    - {fileID: 11400000, guid: d5389941fac985b4d9cec4434effd1ac, type: 2}
+    - {fileID: 11400000, guid: 838dedd7f0d78ac4190ef9be8a4458b0, type: 2}
+    - {fileID: 11400000, guid: 55c99018f8a0291439d6c1d55b0a3c09, type: 2}
+    - {fileID: 11400000, guid: 475de2af6edf22842bf9544f73cd6301, type: 2}
+    - {fileID: 11400000, guid: a67ba0f881dfa724eba9187d46222212, type: 2}
+    - {fileID: 11400000, guid: c63af1a1a896fd74384d439ea8c2927a, type: 2}
+    - {fileID: 11400000, guid: bcffe2f46a97f784095605e1b3f178f6, type: 2}
+    values: 03000000050000000a00000003000000050000000a000000050000000a000000050000000a000000050000000a000000050000000a000000
+  cantripDictionary:
+    keys:
+    - {fileID: 0}
+    values: 00000000
+  A_RANK_LIMIT: 3
+  B_RANK_LIMIT: 10
+  UNIT_DROP_LIMIT: 25
+  CANTRIP_DROP_LIMIT: 5

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab8b9130cac4d84c8f59e560ddc6309, type: 3}
+  m_Name: MeteorFall
+  m_EditorClassIdentifier: 
+  cantripName: Meteor Fall
+  effectText: Deal a massive amount of damage into targeted area
+  cantripCost: 2
+  controller: {fileID: 1750095741707133638, guid: e44294879c3117a4890b926fc1bd98ab,
+    type: 3}

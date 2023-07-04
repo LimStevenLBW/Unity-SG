@@ -115,7 +115,7 @@ public class CombatEnd : MonoBehaviour
         guildRoster.Show();
         guildRosterBench.Show();
         guildRoster.Init(playerDeck.unitList);
-        guildRosterBench.Init(playerDeck.benchedUnitList);
+        //guildRosterBench.Init(playerDeck.benchedUnitList);
     }
 
     public void NextStage()

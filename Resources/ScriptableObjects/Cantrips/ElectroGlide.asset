@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: ElectroGlide
   m_EditorClassIdentifier: 
   cantripName: Electro Glide
+  effectText: Deal a moderate amount of damage to all enemy units
+  cantripCost: 1
   controller: {fileID: 1750095741707133638, guid: 8ad0a60f6042fa249b31d1c7391787b5,
     type: 3}

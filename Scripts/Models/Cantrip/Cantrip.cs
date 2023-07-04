@@ -6,6 +6,8 @@ using UnityEngine;
 public class Cantrip : ScriptableObject
 {
     public string cantripName;
+    public string effectText;
+    public int cantripCost;
 
     public GameObject controller;
 }

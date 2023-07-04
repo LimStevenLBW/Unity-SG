@@ -19,10 +19,10 @@ public class CardDropScreen : MonoBehaviour
         dropSelection = new List<Unit>();
         int stageID = Director.Instance.tempCurrentStageID;
 
-        if (stageID == 1) dropSelection = dropRateStage1.GetDropSelection(3);
-        else if (stageID == 2) dropSelection = dropRateStage2.GetDropSelection(3);
-        else if (stageID == 3) dropSelection = dropRateStage3.GetDropSelection(3);
-        else if (stageID == 4) dropSelection = dropRateStage4.GetDropSelection(3);
+        if (stageID == 1) dropSelection = dropRateStage1.GetUnitDropSelection(3);
+        else if (stageID == 2) dropSelection = dropRateStage2.GetUnitDropSelection(3);
+        else if (stageID == 3) dropSelection = dropRateStage3.GetUnitDropSelection(3);
+        else if (stageID == 4) dropSelection = dropRateStage4.GetUnitDropSelection(3);
 
         drop1.GetCard(new UnitDataStore(dropSelection[0]));
         drop2.GetCard(new UnitDataStore(dropSelection[1]));

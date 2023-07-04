@@ -6,11 +6,11 @@ public class DeckDataStore
 {
     private Deck deckBase;
     private List<Card> cardList;
-    private List<Card> benchedCardList;
+   // private List<Card> benchedCardList;
 
     public List<UnitDataStore> unitList;
     public List<CantripDataStore> cantripList;
-    public List<UnitDataStore> benchedUnitList; //Units that are not currently deployed in the deck
+    //public List<UnitDataStore> benchedUnitList; //Units that are not currently deployed in the deck
     //public List<UnitDataStore> drawnList;
     public UnitDataStore captain;
 
@@ -18,37 +18,47 @@ public class DeckDataStore
 
     public DeckDataStore(Deck deckBase)
     {
-        unitList = new List<UnitDataStore>();
-        benchedUnitList = new List<UnitDataStore>();
-       // drawnList = new List<UnitDataStore>();
         this.deckBase = deckBase;
 
-        //Cycle through and create our working deck
-        foreach(Unit unit in deckBase.unitList)
-        {
-            if (unit == null) Debug.Log("null");
- 
-            unitList.Add(new UnitDataStore(unit));
-        }
+        unitList = new List<UnitDataStore>();
 
+        cantripList = new List<CantripDataStore>();
+       // benchedUnitList = new List<UnitDataStore>();
+       // drawnList = new List<UnitDataStore>();
+
+        //Cycle through and create our working deck
+        foreach (Unit unit in deckBase.unitList) unitList.Add(new UnitDataStore(unit));
         foreach (Cantrip cantrip in deckBase.cantripList) cantripList.Add(new CantripDataStore(cantrip));
 
+        //Sort our lists
+        unitList.Sort();
+        cantripList.Sort();
+        /*
         foreach (Unit unit in deckBase.benchedUnitList)
         {
             if (unit == null) Debug.Log("null");
 
             benchedUnitList.Add(new UnitDataStore(unit));
         }
+        */
 
+        FormCardList();
 
         //captain = new UnitDataStore(deckBase.captain);
+    }
+
+    private void FormCardList()
+    {
+        cardList = new List<Card>();
+        foreach (UnitDataStore data in unitList) cardList.Add(new Card(data));
+        foreach (CantripDataStore data in cantripList) cardList.Add(new Card(data));
     }
 
     public void AddDrops(List<Unit> benchList)
     {
         foreach (Unit unit in benchList)
         {
-            benchedUnitList.Add(new UnitDataStore(unit));
+            //benchedUnitList.Add(new UnitDataStore(unit));
         }
 
     }
@@ -126,7 +136,7 @@ public class DeckDataStore
         return unitList.Count;
     }
 
-    public List<Card> GetDeck()
+    public List<Card> GetCardList()
     {
         return cardList;
     }

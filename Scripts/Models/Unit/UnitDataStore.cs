@@ -90,9 +90,10 @@ public class UnitDataStore: IComparable<UnitDataStore>
         maxStamina = unitBase.baseStamina;
         currentStamina = maxStamina;
 
-        currentPower = unitBase.basePower;
-        currentMagic = unitBase.baseMagic;
-        currentDefense = unitBase.baseDefense;
+        Power = unitBase.basePower; currentPower = unitBase.basePower;
+
+        Magic = unitBase.baseMagic; currentMagic = unitBase.baseMagic;
+        Defense = unitBase.baseDefense;  currentDefense = unitBase.baseDefense;
         currentSpeed = unitBase.baseSpeed;
         currentCrit = unitBase.baseCrit;
         //CritBoost = baseCritBoost;
@@ -341,8 +342,8 @@ public class UnitDataStore: IComparable<UnitDataStore>
          */
 
         int rankCompare = other.GetRank().CompareTo(GetRank());
-        int classCompare = unitClass.traitName.CompareTo(other.unitClass.traitName);
-        int nameCompare = unitName.CompareTo(other.unitName);
+        int classCompare = other.unitClass.traitName.CompareTo(unitClass.traitName);
+        int nameCompare = other.unitName.CompareTo(unitName);
 
         if (rankCompare == 0 && classCompare == 0 && nameCompare == 0) return 0; //Completely equal
         if (rankCompare == 0 && classCompare == 0 && nameCompare > 0) return 1;

@@ -6,7 +6,7 @@ using UnityEngine;
  * Defines the base definitions for a unit
  */
 [CreateAssetMenu(fileName = "New Unit Character", menuName = "Unit/Unit")]
-public class Unit : ScriptableObject, Card
+public class Unit : ScriptableObject
 {
     public UnitController model;
     public UnitClass unitClass;

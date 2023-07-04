@@ -7,21 +7,26 @@ using UnityEngine.UI;
 
 public class UnitElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    [SerializeField] private TextMeshProUGUI unitName;
+    [SerializeField] private TextMeshProUGUI cardName;
     [SerializeField] private TextMeshProUGUI rank;
     [SerializeField] private Image classImage;
     [SerializeField] private Image factionImage;
+
+    [SerializeField] private Image cantripImage;
     [SerializeField] private Color32 elementColor;
     [SerializeField] private Animator animator;
 
     [SerializeField] private AudioClip hoverSFX;
     [SerializeField] private AudioClip transferSFX;
 
+    private CardSummaryBox cardSummaryBox;
+
     private GuildRoster guildRoster;
-    private UnitDataStore data;
+    private Card card;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (cardSummaryBox != null) cardSummaryBox.Display(card, elementColor);
         Image image = GetComponent<Image>();
         image.color = new Color32(70, 70, 70, 255);
        // guildRoster.PlaySound(hoverSFX);
@@ -29,35 +34,55 @@ public class UnitElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (cardSummaryBox != null) cardSummaryBox.Hide();
         Image image = GetComponent<Image>();
         image.color = elementColor;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(guildRoster.GetEditableStatus()){
+        /*
+        if (guildRoster.GetEditableStatus()){
             guildRoster.PlaySound(transferSFX);
-            guildRoster.Transfer(data);}
+            guildRoster.Transfer(data);
+        }
+        */
+    }
+
+    public void GetData(Card card, GuildRoster guildRoster)
+    {
+        animator = GetComponent<Animator>();
+        this.guildRoster = guildRoster;
+        this.card = card;
+
+        if (card.IsUnitType())
+        {
+            classImage.sprite = card.classIcon;
+            string rankText = card.rank;
+            rank.SetText(rankText);
+
+            if (rankText == "D") elementColor = Color.grey;
+            if (rankText == "C") elementColor = new Color32(139, 35, 136, 255);
+            if (rankText == "B") elementColor = new Color32(73, 156, 255, 255);
+            if (rankText == "A") elementColor = new Color32(205, 75, 0, 255);
+        }
+        else if (card.IsCantripType())
+        {
+            //Show cantrip type items
+            cantripImage.gameObject.SetActive(true);
+
+            //Hide unit type items
+            classImage.gameObject.SetActive(false);
+            rank.gameObject.SetActive(false);
+            elementColor = new Color32(60, 205, 0, 255);
         }
 
-    public void GetData(UnitDataStore data, GuildRoster guildRoster)
-    {
-        this.guildRoster = guildRoster;
-        this.data = data;
-
-        animator = GetComponent<Animator>();
-        unitName.SetText(data.unitName);
-        string rankText = data.GetRank();
-        rank.SetText(rankText);
-        classImage.sprite = data.unitClass.icon;
-
         Image image = GetComponent<Image>();
-        if (rankText == "D") elementColor = Color.grey;
-        if (rankText == "C") elementColor = new Color32(139, 35, 136, 255);
-        if (rankText == "B") elementColor = new Color32(73, 156, 255, 255);
-        if (rankText == "A") elementColor = new Color32(205, 75, 0, 255);
-
         image.color = elementColor;
+
+        cardName.SetText(card.cardName);
+
+
     }
 
     public void Enter()
@@ -68,6 +93,11 @@ public class UnitElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void Idle()
     {
         animator.SetTrigger("Idle");
+    }
+
+    public void SetCardSummaryBox(CardSummaryBox cardSummaryBox)
+    {
+        this.cardSummaryBox = cardSummaryBox;
     }
     // Start is called before the first frame update
     void Start()

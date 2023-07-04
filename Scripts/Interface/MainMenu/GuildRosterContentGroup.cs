@@ -6,8 +6,25 @@ public class GuildRosterContentGroup : MonoBehaviour
 {
     public UnitElement unitElement;
     [SerializeField] private GuildRoster guildRoster;
+    [SerializeField] private CardSummaryBox cardSummaryBox;
 
     private List<UnitElement> elements = new List<UnitElement>();
+
+    public void Setup(List<Card> cardList)
+    {
+        //cardList.Sort();
+        foreach (Card card in cardList)
+        {
+            UnitElement element = Instantiate(unitElement);
+            element.GetData(card, guildRoster);
+            element.gameObject.transform.SetParent(gameObject.transform);
+            element.gameObject.transform.SetAsFirstSibling();
+            element.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            if(cardSummaryBox!= null) element.SetCardSummaryBox(cardSummaryBox);
+            elements.Add(element);
+
+        }
+    }
 
     public void Setup(List<UnitDataStore> unitList)
     {
@@ -15,7 +32,7 @@ public class GuildRosterContentGroup : MonoBehaviour
         foreach(UnitDataStore unit in unitList)
         {
             UnitElement element = Instantiate(unitElement);
-            element.GetData(unit, guildRoster);
+          //element.GetData(unit, guildRoster);
             element.gameObject.transform.SetParent(gameObject.transform);
             element.gameObject.transform.SetAsFirstSibling();
             element.gameObject.transform.localScale = new Vector3(1, 1, 1);
