@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PortraitRoom : MonoBehaviour
 {
-    UnitDataStore dataStore;
-    UnitController model;
+    [SerializeField] private PortraitCamera portraitCamera;
+    private UnitDataStore dataStore;
+    private UnitController model;
+
     public void UpdatePortrait(UnitDataStore dataStore)
     {
         //Debug.Log(dataStore.GetName() + " " + dataStore.faction.traitName + " " + dataStore.unitClass.traitName);
@@ -13,6 +15,12 @@ public class PortraitRoom : MonoBehaviour
         this.dataStore = dataStore;
         model = Instantiate(dataStore.prefab, transform);
         model.transform.SetParent(transform, false);
+    }
+
+    public Texture GetRenderTexture()
+    {
+        Texture renderTexture = portraitCamera.GetRenderTexture();
+        return renderTexture;
     }
 
     public void ClearRoom()

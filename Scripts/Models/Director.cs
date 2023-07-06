@@ -224,7 +224,9 @@ public class Director : MonoBehaviour
             roundIndicator.Init();
             centerPrompt.DisplayPrompt(playerSelectable);
             playerHand.gameObject.SetActive(true);
-            playerHand.FillHand();
+            if (roundIndicator.GetRound() == 1) playerHand.Draw(5); //On the first turn, we draw 5 cards
+            else playerHand.Draw(2); //Draw 2 cards every turn
+
             playerCamera.UnFocus();
             unitManager.ResetUnitPositions();
         }

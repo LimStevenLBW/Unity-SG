@@ -60,4 +60,10 @@ public class PortraitCamera : MonoBehaviour
           
         Init();
     }
+
+    public Texture GetRenderTexture()
+    {
+        Camera camera = gameObject.GetComponent<Camera>();
+        return camera.activeTexture;
+    }
 }

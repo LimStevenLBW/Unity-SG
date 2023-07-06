@@ -25,7 +25,7 @@ public class GuildRoster : MonoBehaviour
     public void Init(DeckDataStore deck)
     {
         this.deck = deck;
-
+        this.deck.Sort();
         rosterContent.Clear();
         rosterContent.Setup(deck.GetCardList());
         rosterContent.DisplayDelayed();
@@ -126,9 +126,9 @@ public class GuildRoster : MonoBehaviour
         if(countText != null)
         {
             count = deck.GetCardList().Count;
-            countText.SetText(count + "/25");
+            countText.SetText(count + "/30");
 
-            if (count < 25 || count > 25) countText.color = Color.red;
+            if (count < 30 || count > 30) countText.color = Color.red;
             else countText.color = Color.white;
         }
 

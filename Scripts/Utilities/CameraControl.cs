@@ -45,7 +45,7 @@ public class CameraControl : MonoBehaviour
     //0 INACTIVE
     //1 MOVING (unused)
     //2 ROTATING
-    private int CAMERA_MODE = 0;
+    //private int CAMERA_MODE = 0;
     private Vector3 lastMouseCoordinate = Vector3.zero;
     public float rotationSpeed = (float)0.85;
 

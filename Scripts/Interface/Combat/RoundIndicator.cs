@@ -26,6 +26,11 @@ public class RoundIndicator : MonoBehaviour
         roundText.SetText("Round " + round);
     }
 
+    public int GetRound()
+    {
+        return round;
+    }
+
     public void Disable()
     {
         gameObject.SetActive(false);

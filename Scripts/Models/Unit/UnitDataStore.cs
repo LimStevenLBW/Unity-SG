@@ -43,7 +43,7 @@ public class UnitDataStore: IComparable<UnitDataStore>
 
     private float currentCritBoost;
     private float CritBoost;
-    private float baseCritBoost = 2; //IE. Crit damage, but more than just damage can be effected, standard for all characters
+    //private float baseCritBoost = 2; //IE. Crit damage, but more than just damage can be effected, standard for all characters
 
     private int baseTroopCount;
     private int currentTroopCount;

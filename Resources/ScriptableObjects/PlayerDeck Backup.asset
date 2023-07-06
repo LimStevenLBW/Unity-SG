@@ -38,7 +38,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
   - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
   - {fileID: 11400000, guid: 8cddd3c5c7f26ba48be631cb0e3bcd3a, type: 2}
-  cantripList:
-  - {fileID: 11400000, guid: 0253470d8c443ba4ea89ba0b9bbdd1c5, type: 2}
-  benchedUnitList: []
+  cantripList: []
   captain: {fileID: 11400000, guid: 1891fa7fbc582714fa5c7947d1c491f4, type: 2}

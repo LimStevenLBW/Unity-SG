@@ -33,7 +33,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] DropRate dropRateTool;
 
     private DeckDataStore arcadeDeck;
-    private int deckSize = 25;
+
     // Start is called before the first frame update
 
     void Awake()
@@ -186,6 +186,9 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    /*
+     * Reroll button was click, setup a new arcade deck for display and save it 
+     */
     public void RerollGuildRoster()
     {
         arcadeDeck = GetRandomArcadeDeck();
@@ -202,7 +205,9 @@ public class MainMenu : MonoBehaviour
         mainCamera.ResetPosition();
     }
 
-
+    /*
+     * Request a random arcade deck and store it, then return it as a deck datastore
+     */
     public DeckDataStore GetRandomArcadeDeck()
     {
         Deck arcadeDeck = dropRateTool.GetRandomDeck();

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class RouteColumn : MonoBehaviour
 {
     private int id;
-    private bool active;
+    //private bool active;
     Image image;
 
     private Color activeColor;
@@ -39,7 +39,7 @@ public class RouteColumn : MonoBehaviour
     public void SetActive()
     {
         image.color = activeColor;
-        active = true;
+        //active = true;
 
         if(routeOptions) routeOptions.NextStage();
         else
@@ -51,7 +51,7 @@ public class RouteColumn : MonoBehaviour
     public void SetCompleted()
     {
         image.color = completedColor;
-        active = false;
+        //active = false;
     }
 
     //Grant a prefab to the column that contains the stage display information and data

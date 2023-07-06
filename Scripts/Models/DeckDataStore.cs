@@ -21,8 +21,8 @@ public class DeckDataStore
         this.deckBase = deckBase;
 
         unitList = new List<UnitDataStore>();
-
         cantripList = new List<CantripDataStore>();
+
        // benchedUnitList = new List<UnitDataStore>();
        // drawnList = new List<UnitDataStore>();
 
@@ -30,9 +30,6 @@ public class DeckDataStore
         foreach (Unit unit in deckBase.unitList) unitList.Add(new UnitDataStore(unit));
         foreach (Cantrip cantrip in deckBase.cantripList) cantripList.Add(new CantripDataStore(cantrip));
 
-        //Sort our lists
-        unitList.Sort();
-        cantripList.Sort();
         /*
         foreach (Unit unit in deckBase.benchedUnitList)
         {
@@ -46,6 +43,7 @@ public class DeckDataStore
 
         //captain = new UnitDataStore(deckBase.captain);
     }
+
 
     private void FormCardList()
     {
@@ -84,26 +82,27 @@ public class DeckDataStore
     public void Shuffle()
     {
         System.Random _random = new System.Random();
-        UnitDataStore temp;
+        Card temp;
 
-        int n = unitList.Count;
+        int n = cardList.Count;
         for(int i = 0; i < n; i++)
         {
             int random = i + (int)(_random.NextDouble() * (n - i));
-            temp = unitList[random];
-            unitList[random] = unitList[i];
-            unitList[i] = temp;
+            temp = cardList[random];
+            cardList[random] = cardList[i];
+            cardList[i] = temp;
         }
     }
 
-    public UnitDataStore DrawCard()
+    //Draw a card from the deck and return it
+    public Card DrawCard()
     {
-        int n = unitList.Count;
-        UnitDataStore unit = unitList[n - 1];
-        unitList.RemoveAt(n - 1);
+        int n = cardList.Count;
+        Card card = cardList[n - 1];
+        cardList.RemoveAt(n - 1);
 
      //   drawnList.Add(unit);
-        return unit;
+        return card;
     }
 
     //Return cards that were drawn into the deck
@@ -139,6 +138,13 @@ public class DeckDataStore
     public List<Card> GetCardList()
     {
         return cardList;
+    }
+
+    public void Sort()
+    {
+        //Sort our lists
+        unitList.Sort();
+        cantripList.Sort();
     }
 
 }

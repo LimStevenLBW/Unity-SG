@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DetailsFooter : MonoBehaviour
 {
-    private UnitDataStore currentDisplay;
+    private UnitDataStore currentUnit;
 
     public new TextMeshProUGUI name;
     public TextMeshProUGUI rank;
@@ -32,23 +32,29 @@ public class DetailsFooter : MonoBehaviour
         
     }
 
-    public void UpdateData(UnitDataStore unit)
+    public void UpdateData(Card card)
     {
-        if (unit == null) { Debug.Log("Null"); return; }
-        if (currentDisplay == unit) return;
-        currentDisplay = unit;
+        if (card == null) { Debug.Log("Null"); return; }
 
-        name.SetText(unit.GetName());
-        rank.SetText(unit.GetRank() + " RANK");
-        troops.SetText(unit.GetMaxTroopCount().ToString() + " TROOPS");
-        attack.SetText(unit.GetCurrentPower().ToString() + " POW");
-        magic.SetText(unit.GetCurrentMagic().ToString() + " MGK");
-        defense.SetText(unit.GetCurrentDefense().ToString() + " DEF");
+        if (card.IsUnitType())
+        {
+            UnitDataStore unit = card.unit;
+            if (currentUnit == unit) return;
+            currentUnit = unit;
 
-        powIcon.gameObject.SetActive(true);
-        mgkIcon.gameObject.SetActive(true);
-        defIcon.gameObject.SetActive(true);
-        troopsIcon.gameObject.SetActive(true);
+            name.SetText(unit.GetName());
+            rank.SetText(unit.GetRank() + " RANK");
+            troops.SetText(unit.GetMaxTroopCount().ToString() + " TROOPS");
+            attack.SetText(unit.GetCurrentPower().ToString() + " POW");
+            magic.SetText(unit.GetCurrentMagic().ToString() + " MGK");
+            defense.SetText(unit.GetCurrentDefense().ToString() + " DEF");
+
+            powIcon.gameObject.SetActive(true);
+            mgkIcon.gameObject.SetActive(true);
+            defIcon.gameObject.SetActive(true);
+            troopsIcon.gameObject.SetActive(true);
+        }
+
     }
 
     public void ResetText()
@@ -59,7 +65,7 @@ public class DetailsFooter : MonoBehaviour
         attack.SetText("");
         magic.SetText("");
         defense.SetText("");
-        currentDisplay = null;
+        currentUnit = null;
         if(powIcon != null) powIcon.gameObject.SetActive(false);
         if(mgkIcon != null) mgkIcon.gameObject.SetActive(false);
         if(defIcon != null) defIcon.gameObject.SetActive(false);

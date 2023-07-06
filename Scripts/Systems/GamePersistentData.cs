@@ -10,11 +10,14 @@ using System;
  */
 public class GamePersistentData : MonoBehaviour
 {
+    //We store just deck, because we work with copies when going into combat
     private Deck arcadeDeck;
     public Deck testDeck;
-    //private DeckDataStore arcadeDeckStore;
 
-    public void SetArcadeDeck(Deck deck) {
+
+    //Set and save arcade deck
+    public void SetArcadeDeck(Deck deck)
+    {
         arcadeDeck = deck;
     }
 
@@ -27,6 +30,7 @@ public class GamePersistentData : MonoBehaviour
         if(arcadeDeck == null)
         {
             //If null, use the test deck
+            Debug.Log("Using Test Deck");
             arcadeDeck = testDeck;
         }
         return arcadeDeck;
