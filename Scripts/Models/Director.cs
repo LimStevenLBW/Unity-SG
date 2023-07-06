@@ -226,7 +226,7 @@ public class Director : MonoBehaviour
             playerHand.gameObject.SetActive(true);
             if (roundIndicator.GetRound() == 1) playerHand.Draw(5); //On the first turn, we draw 5 cards
             else playerHand.Draw(2); //Draw 2 cards every turn
-
+            // this is to test github email
             playerCamera.UnFocus();
             unitManager.ResetUnitPositions();
         }
