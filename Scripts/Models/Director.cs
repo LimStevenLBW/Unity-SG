@@ -28,13 +28,13 @@ public class Director : MonoBehaviour
     private int cpuHealth;
     public int defaultPlayerHealth;
     public int defaultCpuHealth;
+
+    public int defaultPlayerChi;
+    public int defaultCpuChi;
     public HeartBar playerHearts;
     public HeartBar cpuHearts;
-
-    private int playerSelectable = 3;
-    private int cpuSelectable = 3;
-    public int defaultPlayerSelectable;
-    public int defaultCpuSelectable;
+    public ChiContainer playerChiContainer;
+    public ChiContainer cpuChiContainer;
 
     //for counting selected cards
     private int selectedCardsCount = 0;
@@ -63,7 +63,6 @@ public class Director : MonoBehaviour
     public UnitManager unitManager;
     public PlayerHandPanel playerHand;
     public PlayerHandPanel enemyHand;
-    public CenterPrompt centerPrompt;
     public GameObject sortiePrompt;
     public GameObject repositioningPrompt;
 
@@ -162,6 +161,13 @@ public class Director : MonoBehaviour
         cpuHearts.SetHearts(defaultCpuHealth);
         cpuHearts.HealMax();
     }
+    void ResetChi()
+    {
+        playerChiContainer.Clear();
+        cpuChiContainer.Clear();
+        playerChiContainer.Setup(defaultPlayerChi);
+        cpuChiContainer.Setup(defaultCpuChi);
+    }
 
     void InitStageData()
     {
@@ -175,13 +181,6 @@ public class Director : MonoBehaviour
         enemyDeck.UpdateTroopCount();
 
         stageIntro.Init(playerDeck, enemyDeck);
-
-        //Set selectable counts
-        playerSelectable = defaultPlayerSelectable;
-        cpuSelectable = defaultCpuSelectable;
-
-        playerHand.UpdateSelectableAmount(true, playerSelectable);
-        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
 
         playerHand.Init(playerDeck);
         enemyHand.Init(enemyDeck);
@@ -212,6 +211,7 @@ public class Director : MonoBehaviour
         if (phase == "INTRO")
         {
             this.phase = Phase.INTRO;
+            roundIndicator.Init();
             StartCoroutine(DisplayIntroduction());
         }
         if (phase == "CARDSELECT")
@@ -221,19 +221,17 @@ public class Director : MonoBehaviour
             playerTookDamage = false;
             cpuTookDamage = false;
 
-            roundIndicator.Init();
-            centerPrompt.DisplayPrompt(playerSelectable);
             playerHand.gameObject.SetActive(true);
-            if (roundIndicator.GetRound() == 1) playerHand.Draw(5); //On the first turn, we draw 5 cards
-            else playerHand.Draw(2); //Draw 2 cards every turn
-            // this is to test github email
+
+            if (roundIndicator.GetRound() == 1) playerHand.Draw(true, 5); //On the first turn, we draw 5 cards
+            else playerHand.Draw(true, 3); //Draw 3 cards every turn
+   
             playerCamera.UnFocus();
             unitManager.ResetUnitPositions();
         }
         if (phase == "DEPLOYMENT")
         {
             this.phase = Phase.DEPLOYMENT;
-            centerPrompt.ResetText();
             playerCamera.UnFocus();
 
             selectedCardsCount = 0; //reset order
@@ -247,13 +245,17 @@ public class Director : MonoBehaviour
         if(phase == "ENEMYCARDSELECT")
         {
             this.phase = Phase.ENEMYCARDSELECT;
+            playerCamera.UnFocus();
             unitManager.GetActiveTraitBuffs(playerTraitBuffs); // Get buffs to allies after deployment
             unitManager.ApplyActiveTraitBuffs(1); //Apply allied buffs
 
             enemyHand.gameObject.SetActive(true);
-            enemyHand.FillHand();
-            enemyHand.CPUSelectCards();
-            playerCamera.UnFocus();
+
+            if (roundIndicator.GetRound() == 1) enemyHand.Draw(false, 5); //On the first turn, we draw 5 cards
+            else enemyHand.Draw(false, 3); //Draw 3 cards every turn
+
+            //After the CPU draws cards, a coroutine will start to select cards to play
+
         }
         if (phase == "ENEMYDEPLOYMENT")
         {
@@ -319,6 +321,7 @@ public class Director : MonoBehaviour
 
         combatManager.DisplayHeader();
         ResetHealth();
+        ResetChi();
 
 
         //Player Card Selection phase
@@ -330,18 +333,18 @@ public class Director : MonoBehaviour
     {
         sortiePrompt.SetActive(true);
         AudioPlayer.PlayOneShot(AudioSortie);
-        yield return new WaitForSeconds(1f);
 
-        sortiePrompt.SetActive(false);
-       
         timer.StartTimer();
         OnCombatStarted?.Invoke();
+
+        yield return new WaitForSeconds(0.9f);
+
+        sortiePrompt.SetActive(false);
     }
     IEnumerator EndCombat()
     {
         yield return new WaitForSeconds(1.5f);
         unitManager.RefreshStamina();
-        UpdatePlayerSelectable();
 
         if(playerHealth == 0 && cpuHealth == 0)
         {
@@ -361,6 +364,9 @@ public class Director : MonoBehaviour
         }
         else
         {
+            //Each round, gain two chi
+            GainChi(true, 2);
+            GainChi(false, 2);
             roundIndicator.NextRound();
             SetPhase("CARDSELECT");
         }
@@ -370,7 +376,7 @@ public class Director : MonoBehaviour
     public int IncCardSelectOrder()
     {
         selectedCardsCount++;
-        if (selectedCardsCount >= playerSelectable && GetPhase() == "CARDSELECT") startDeploymentButton.Display();
+        if (selectedCardsCount >= 1 && GetPhase() == "CARDSELECT") startDeploymentButton.Display();
         return selectedCardsCount;
     }
     public int GetCardSelectOrder()
@@ -380,7 +386,7 @@ public class Director : MonoBehaviour
     public void NotifyCardDeselected(int ID)
     {
         selectedCardsCount--;
-        if (selectedCardsCount < playerSelectable && GetPhase() == "CARDSELECT") startDeploymentButton.Hide();
+        if (selectedCardsCount < 1 && GetPhase() == "CARDSELECT") startDeploymentButton.Hide();
         OnCardDeselected?.Invoke(ID);
     }
     public void PlaySound(AudioClip clip)
@@ -436,73 +442,6 @@ public class Director : MonoBehaviour
             cpuHearts.TakeDamage(1);
             cpuTookDamage = true;
         }
-    }
-
-    //Process how many cards a player can use next turn
-    void UpdatePlayerSelectable()
-    {
-        //Both players ran out of units
-        if (playerTookDamage && cpuTookDamage) {
-            // Both players reset
-            cpuSelectable = defaultCpuSelectable; 
-            playerSelectable = defaultPlayerSelectable;
-            ValidatePlayerSelectable();
-
-        }
-        else if (playerTookDamage) { 
-            cpuSelectable = defaultCpuSelectable; // Reset back to default
-            playerSelectable++;
-            ValidatePlayerSelectable();
-        }
-        else if (cpuTookDamage)
-        {
-            playerSelectable = defaultPlayerSelectable;
-            cpuSelectable++;
-            ValidatePlayerSelectable();
-        }
-
-        playerHand.UpdateSelectableAmount(true, playerSelectable);
-        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
-    }
-
-    public void BoostPlayerSelectable()
-    {
-        int playerTeamSize = unitManager.playerControllers.Count;
-        int cpuTeamSize = unitManager.cpuControllers.Count;
-        playerSelectable = defaultPlayerSelectable;
-        cpuSelectable = defaultCpuSelectable;
-
-
-        if (playerTeamSize < cpuTeamSize)
-        {
-            int countDifference = cpuTeamSize - playerTeamSize;
-            playerSelectable = countDifference + 2;
-        }
-        else if (cpuTeamSize < playerTeamSize)
-        {
-            int countDifference = playerTeamSize - cpuTeamSize;
-            cpuSelectable = countDifference + 2;
-        }
-
-        playerHand.UpdateSelectableAmount(true, playerSelectable);
-        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
-    }
-
-    public void ValidatePlayerSelectable()
-    {
-        if (playerSelectable > 4) playerSelectable = 4;
-        if (playerSelectable <= 0) playerSelectable = 1;
-        if (cpuSelectable > 4) cpuSelectable = 4;
-        if (cpuSelectable <= 0) cpuSelectable = 1;
-    }
-
-    public void ResetPlayerSelectable()
-    {
-
-        playerSelectable = defaultPlayerSelectable;
-        cpuSelectable = defaultCpuSelectable;
-        playerHand.UpdateSelectableAmount(true, playerSelectable);
-        enemyHand.UpdateSelectableAmount(false, cpuSelectable);
     }
 
     //Update health after healthbars are animated, then start the end combat
@@ -625,5 +564,21 @@ public class Director : MonoBehaviour
     public DeckDataStore GetPlayerDeck()
     {
         return playerDeck;
+    }
+
+    public int GetChiCount(bool isPlayer)
+    {
+        if (isPlayer) return playerChiContainer.chi;
+        else return cpuChiContainer.chi;
+    }
+    public void SpendChi(bool isPlayer, int count)
+    {
+        if (isPlayer) playerChiContainer.Spend(count);
+        else cpuChiContainer.Spend(count);
+    }
+    public void GainChi(bool isPlayer, int count)
+    {
+        if (isPlayer) playerChiContainer.Gain(count);
+        else cpuChiContainer.Gain(count);
     }
 }

@@ -21,6 +21,7 @@ public class UnitDataStore: IComparable<UnitDataStore>
 
     public Rank rank;
 
+    public int cost { get; private set; }
     private int Level;
     private float exp;
 
@@ -82,6 +83,7 @@ public class UnitDataStore: IComparable<UnitDataStore>
         //Stats
         unitName = unitBase.unitName;
         rank = unitBase.rank;
+        cost = unitBase.cost;
 
         baseTroopCount = unitBase.baseTroopCount;
         maxTroopCount = unitBase.baseTroopCount;

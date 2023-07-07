@@ -63,7 +63,7 @@ public class DeckDataStore
 
     public bool IsEmpty()
     {
-        if (unitList.Count == 0) return true;
+        if (cardList.Count == 0) return true;
         return false;
     }
 
@@ -132,7 +132,7 @@ public class DeckDataStore
 
     public int GetDeckCount()
     {
-        return unitList.Count;
+        return cardList.Count;
     }
 
     public List<Card> GetCardList()

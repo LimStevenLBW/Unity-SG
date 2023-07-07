@@ -66,7 +66,6 @@ public class MainMenu : MonoBehaviour
     void Update()
     {
         if ((Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0)) && introControl) StartGame();
-
     }
 
     IEnumerator Introduction()
@@ -128,7 +127,6 @@ public class MainMenu : MonoBehaviour
         arcadeRosterStart.Show();
         arcadeRosterReroll.Show();
         menuReturnButton.Show();
-
     }
 
 

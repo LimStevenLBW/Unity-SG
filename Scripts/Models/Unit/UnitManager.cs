@@ -165,6 +165,9 @@ public class UnitManager : MonoBehaviour
         unit.Orientation = orientation;
     }
 
+    /*
+     * Remove a unit from the field, refund the chi cost of it
+     */
     public void RemoveUnit(UnitController controller)
     {
         int teamNum = controller.teamNum;
@@ -179,6 +182,7 @@ public class UnitManager : MonoBehaviour
         if (teamNum == 1)
         {
             playerControllers.Remove(controller);
+            Director.Instance.GainChi(true, controller.data.cost);
             if (playerControllers.Count == 0)
             {
                 Director.Instance.TakeDamage(true, 1);
@@ -187,6 +191,7 @@ public class UnitManager : MonoBehaviour
         else if (teamNum == -1)
         {
             cpuControllers.Remove(controller);
+            Director.Instance.GainChi(false, controller.data.cost);
             if (cpuControllers.Count == 0)
             {
                 Director.Instance.TakeDamage(false, 1);

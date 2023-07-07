@@ -16,7 +16,7 @@ public class Deck : ScriptableObject
     //Create an instance of this scriptable object from given lists
     public static Deck CreateInstance(List<Unit> unitList, List<Cantrip> cantripList)
     {
-        var data = ScriptableObject.CreateInstance<Deck>();
+        var data = CreateInstance<Deck>();
         data.Init(unitList, cantripList);
         return data;
     }
@@ -24,7 +24,7 @@ public class Deck : ScriptableObject
     //Converting back
     public static Deck CreateInstance(DeckDataStore deck)
     {
-        var data = ScriptableObject.CreateInstance<Deck>();
+        var data = CreateInstance<Deck>();
         data.Init(deck);
         return data;
     }

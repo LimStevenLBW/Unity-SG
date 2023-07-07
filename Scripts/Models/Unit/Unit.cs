@@ -17,6 +17,7 @@ public class Unit : ScriptableObject
     public string unitName = "";
     public string bio;
     public Rank rank = Rank.C;
+    public int cost = 1;
 
     //not yet implemented
     //public string dialogue; 

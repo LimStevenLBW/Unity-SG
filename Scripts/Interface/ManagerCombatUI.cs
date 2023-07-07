@@ -11,6 +11,9 @@ namespace Assets.Scripts.Interface
     {
         public HexGrid grid;
 
+        public RoundIndicator roundIndicator;
+        public StartCombatButton startCombatButton;
+        public CardSelectPrompt cardSelectPrompt;
         public GameObject header;
         public UnitWindow unitWindow;
         public PlayerHandPanel playerHandPanel;
@@ -21,7 +24,6 @@ namespace Assets.Scripts.Interface
         private UnitController priorController;
         private UnitController selectedController;
         private HexCell selectedCell;
-        public StartCombatButton startCombatButton;
 
         [SerializeField] private AudioSource AudioPlayer;
         [SerializeField] private AudioClip AudioClickSelect;
@@ -44,6 +46,14 @@ namespace Assets.Scripts.Interface
                 else { HandleNormalInput(); }
             }
 
+            if (Director.Instance.GetPhase() == "CARDSELECT")
+            {
+                int round = roundIndicator.GetRound();
+                if (round != 2) cardSelectPrompt.DisplayPrompt("Select cards to play");
+                if (round == 2) cardSelectPrompt.DisplayPrompt("Recall exhausted units to refund their cost");
+
+            }
+            else if (Director.Instance.GetPhase() == "DEPLOYMENT") cardSelectPrompt.Hide();
         }
 
         public void DisplayHeader()
@@ -228,7 +238,6 @@ namespace Assets.Scripts.Interface
         }
 
      
-
         public void ToggleEditMode()
         {
             //enabled = !enabled;

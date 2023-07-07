@@ -11,7 +11,6 @@ public class PlayerHandPanel : MonoBehaviour
     public ManagerCombatUI managerUI;
     public UnitManager unitManager;
     public DeckDataStore myDeck;
-    public CardInHand[] cards = new CardInHand[5];
 
     public TextMeshProUGUI traitsText;
     public TextMeshProUGUI basicText;
@@ -30,9 +29,6 @@ public class PlayerHandPanel : MonoBehaviour
     [SerializeField] private PortraitRoomContainer portraitRooms;
     [SerializeField] private DetailsFooter footer;
 
-    private int playerSelectAmount; // The amount of cards that the cpu can select
-    private int cpuSelectAmount; // The amount of cards that the cpu can select
-
     //Contain the positions that the cards in hand will use
     private PlayerHandLayout activeLayout;
     [SerializeField] private PlayerHandLayout layout5;
@@ -45,30 +41,23 @@ public class PlayerHandPanel : MonoBehaviour
     {
         myDeck = deck;
         deckCounter.UpdateCount(deck.GetDeckCount());
-        /*
-        foreach (CardInHand c in cards)
-        {
-            c.ClearCard();
-            c.SetNumberOfSelectable(playerSelectAmount); //not used by cpu
-        }
-        */
-
+        
         ResetText();
     }
 
     /*
-     * Simulates drawing from the deck, we instantiate CardInHand prefabs to contain cards pulled from the deck.
-     * 
+     * Simulates drawing from the deck, we instantiate CardInHand prefabs to contain cards pulled from the deck. 
      */
-    public void Draw(int amount)
+    public void Draw(bool isPlayer, int amount)
     {
-        //Determine the active layout
+        //Avoid drawing more then the deck contains
+        if(myDeck.GetCardList().Count < amount)
+        {
+            amount = myDeck.GetCardList().Count;
+        }
+
         int handSize = hand.Count + amount;
-        if (handSize <= 5) activeLayout = layout5;
-        else if (handSize == 6) activeLayout = layout6;
-        else if (handSize == 7) activeLayout = layout7;
-        else if (handSize == 8) activeLayout = layout8;
-        else if (handSize == 9) activeLayout = layout9;
+        UpdateActiveLayout(handSize);
 
         for (int i = 0; i < amount; i++)
         {
@@ -81,21 +70,33 @@ public class PlayerHandPanel : MonoBehaviour
             cardElement.Init(this, footer);
         }
 
+        //Debug.Break();
+
         //We have the gameobjects readied, now we animate and get the data
-        StartCoroutine(AnimateDraw(amount));
+        StartCoroutine(AnimateDraw(isPlayer));
     }
 
-    //Animate Drawing cards
-    IEnumerator AnimateDraw(int amount)
+    void UpdateActiveLayout(int handSize)
     {
+        //Determine the active layout
+        if (handSize <= 5) activeLayout = layout5;
+        else if (handSize == 6) activeLayout = layout6;
+        else if (handSize == 7) activeLayout = layout7;
+        else if (handSize == 8) activeLayout = layout8;
+        else if (handSize == 9) activeLayout = layout9;
+    }
+
+    //Acquire the data and then animate
+    IEnumerator AnimateDraw(bool isPlayer)
+    {
+        yield return new WaitForSeconds(.1f);
+
         int cardNumber = 1;
         //We draw cards from left to right 
         foreach (CardInHand c in hand)
         {
             Vector3 targetPos = activeLayout.GetPosition(cardNumber);
             Vector3 startingPos = new Vector3(1500, targetPos.y, targetPos.z);
-
-            yield return new WaitForSeconds(.105f);
 
             //If there is no card data, reveal the prefab, draw a card from the deck and update the counter display. Then animate with sound
             if (c.card == null)
@@ -107,51 +108,61 @@ public class PlayerHandPanel : MonoBehaviour
                 c.Move(startingPos, targetPos);
                 deckCounter.UpdateCount(myDeck.GetDeckCount());
                 if (AudioPlayer && AudioCardAppear) AudioPlayer.PlayOneShot(AudioCardAppear);
+
+                yield return new WaitForSeconds(.105f);
             }
             else
             {
+                c.UpdatePortrait(portraitRooms.GetPortraitRoom(cardNumber));
                 c.SetupCard();
+
+                //Reposition the card
+                c.MoveImmediate(targetPos);
             }
 
             cardNumber++;
         }
 
 
-        yield return new WaitForSeconds(.1f);
+       // yield return new WaitForSeconds(.1f);
         //PlaceCaptains();
 
+        //If this is the enemy's hand, they start to pick cards to play
+        if(!isPlayer) CPUSelectCards();
     }
 
     
-    //Move cards around so the cards that contains units are on the lefthand side
+    //Move cards around so the cards that have data are on the lefthand side
     public void RearrangeCards()
-    {
-        /*
-        List<UnitDataStore> unitList = new List<UnitDataStore>();
-        foreach(CardInHand c in cards)
+    {/*
+        List<Card> newHand = new List<Card>();
+        foreach(CardInHand c in hand)
         {
-            if (c.unit != null)
+            if (c.card != null)
             {
-                unitList.Add(c.unit);
+                newHand.Add(c.card);
                 c.ClearCard();
             }
         }
 
-        for(int i = 0; i < unitList.Count; i++)
+        for(int i = 0; i < newHand.Count; i++)
         {
-            cards[i].unit = unitList[i];
+            hand[i].SetCard(newHand[i]);
+        }*/
+
+        UpdateActiveLayout(hand.Count);
+
+        int cardNumber = 1;
+        foreach (CardInHand c in hand)
+        {
+            Vector3 targetPos = activeLayout.GetPosition(cardNumber);
+            c.MoveImmediate(targetPos);
+
+            cardNumber++;
         }
-        */
+
     }
     
-
-    // Determines how to draw
-    public void FillHand()
-    {
-        //StartCoroutine(DrawFull());
-    }
-
-
     /*
      * Create a list of units to summon based on the selection order
      */
@@ -160,7 +171,7 @@ public class PlayerHandPanel : MonoBehaviour
     {
 
         List<CardInHand> selectedCards = new List<CardInHand>();
-        foreach (CardInHand c in cards)
+        foreach (CardInHand c in hand)
         {
             if (c.isSelected)
             {
@@ -172,13 +183,14 @@ public class PlayerHandPanel : MonoBehaviour
         }
         selectedCards.Sort();
         Queue<UnitDataStore> unitQueue = new Queue<UnitDataStore>();
-        /*
+        
         foreach(CardInHand c in selectedCards)
         {
-            unitQueue.Enqueue(c.unit);
-            c.ClearCard();
+            unitQueue.Enqueue(c.card.unit);
+            hand.Remove(c);
+            Destroy(c.gameObject);
         }
-        */
+        
         return unitQueue;
 
     }
@@ -196,17 +208,17 @@ public class PlayerHandPanel : MonoBehaviour
     public void CPUSelectCards()
     {
         StartCoroutine(RandomSelect());
-      
-
     }
+
     IEnumerator RandomSelect()
     {
-        yield return new WaitForSeconds(1.1f);
+        yield return new WaitForSeconds(0.2f);
+       
         int randomValue;
 
         List<CardInHand> selectionPriority = new List<CardInHand>();
-        //Fill each card with a random value
-        foreach(CardInHand c in cards)
+        //Fill each card in hand with a random selection value
+        foreach(CardInHand c in hand)
         {
             if (c.card != null)
             {
@@ -218,33 +230,25 @@ public class PlayerHandPanel : MonoBehaviour
 
         //Sort from greatest to least, compare cards by their card value
         selectionPriority.Sort((left, right) => right.cardValue.CompareTo(left.cardValue));
-        if (cpuSelectAmount > selectionPriority.Count) cpuSelectAmount = selectionPriority.Count;
-   
 
-        for(int i=0; i < cpuSelectAmount; i++)
+        //Temporary
+        //Check current chi count
+        for (int i=0; i < selectionPriority.Count; i++)
         {
-            selectionPriority[i].Select();
+            //If they have enough chi to play the card, play it
+            if(selectionPriority[i].card.cost <= Director.Instance.GetChiCount(false))
+            {
+                PlayAudioCardSelected();
+                Director.Instance.SpendChi(false, selectionPriority[i].card.cost);
+                selectionPriority[i].Select();
+            }
+
             yield return new WaitForSeconds(0.2f);
         }
 
+        yield return new WaitForSeconds(0.1f);
         Director.Instance.SetPhase("ENEMYDEPLOYMENT");
-    }
-
-    public void UpdateSelectableAmount(bool isPlayer, int amount)
-    {
-        /*
-        if (isPlayer) {
-            playerSelectAmount = amount;
-            foreach(CardInHand c in cards)
-            {
-                c.SetNumberOfSelectable(playerSelectAmount);
-            }
-        }
-        else
-        {
-            cpuSelectAmount = amount;
-        }
-        */
+        
     }
 
     /*
@@ -282,6 +286,15 @@ public class PlayerHandPanel : MonoBehaviour
         if (basicDescription != null) basicDescription.gameObject.SetActive(false);
         if (specialText != null) specialText.gameObject.SetActive(false);
         if (specialDescription != null) specialDescription.gameObject.SetActive(false);
+    }
+
+    public void PlayAudioCardSelected()
+    {
+        if (AudioPlayer && AudioCardSelect)AudioPlayer.PlayOneShot(AudioCardSelect);
+    }
+    public void PlayAudioCardDeselected()
+    {
+        if (AudioPlayer && AudioCardDeselect) AudioPlayer.PlayOneShot(AudioCardDeselect);
     }
 
 }

@@ -13,8 +13,6 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public bool isSelected = false;
     public int cardSelectOrder = 0;
     public int cardValue = 0; //How much this card will be valued by the cpu to play, todo, currently valued at random
-    private int numberOfSelectable;
-
 
     public CardSelectOrder cardSelectOrderDisplay;
 
@@ -38,7 +36,7 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private PlayerHandPanel panel;
 
     [SerializeField] private TextMeshProUGUI rankLetter;
-    [SerializeField] private CostContainer container;
+    [SerializeField] private ChiContainer costContainer;
 
     public void Init(PlayerHandPanel panel, DetailsFooter footer)
     {
@@ -79,21 +77,26 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (panel != null) panel.ResetText();
         if(footer != null) footer.ResetText();
     }
+
     public void OnPointerDown(PointerEventData eventData)
     {
-
         if(Director.Instance.GetPhase() == "CARDSELECT")
         {
-
-            if (!isSelected && Director.Instance.GetCardSelectOrder() < numberOfSelectable)
+            if (!isSelected && card.cost <= Director.Instance.GetChiCount(true))
             {
                 Select();
+                //Spend the cost to select this card
+                Director.Instance.SpendChi(true, card.cost);
+
+                panel.PlayAudioCardSelected();
             }
             else if (isSelected)
             {
                 Director.Instance.NotifyCardDeselected(cardSelectOrder);
+                //Refund the chi used to select it earlier
+                Director.Instance.GainChi(true, card.cost);
                 Deselected();
-               // AudioPlayer.PlayOneShot(AudioDeselect); //placed here to avoid the sound being used when called outside of pointer event
+                panel.PlayAudioCardDeselected();
             }
         }
     }
@@ -121,6 +124,8 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void SetupCard()
     {
         gameObject.SetActive(true);
+        costContainer.Clear();
+        costContainer.Setup(card.cost);
         if (card.IsUnitType())
         {
             UpdateCardDataAsUnit();
@@ -132,7 +137,6 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void Select()
     {
-       // if(AudioSelect != null) AudioPlayer.PlayOneShot(AudioSelect); //Always play selected sound
         cardSelectOrder = Director.Instance.IncCardSelectOrder();
         isSelected = true;
         
@@ -147,6 +151,7 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void Deselected()
     {
         cardSelectOrder = 0;
+
         isSelected = false;
 
         Vector3 pos = transform.position;
@@ -175,6 +180,12 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             SetupCard();
         }
         */
+    }
+
+    //Set the card without interacting with the deck
+    public void SetCard(Card card)
+    {
+        this.card = card;
     }
 
     public void UpdatePortrait(PortraitRoom room)
@@ -238,10 +249,9 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             return other.cardSelectOrder.CompareTo(cardSelectOrder);
         }
     }
-
-    public void SetNumberOfSelectable(int selectable)
+    public void MoveImmediate(Vector3 targetPos)
     {
-        numberOfSelectable = selectable;
+        transform.position = targetPos;
     }
 
     public void Move(Vector3 startingPos, Vector3 targetPos)
